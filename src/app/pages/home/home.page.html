@@ -1,0 +1,12 @@
+<app-header titulo="App Barberos"> </app-header>
+
+<ion-content class="login">
+
+  <ion-img class="imagen" src="assets/logo.png"></ion-img>
+  <form [formGroup]="formLogin" (ngSubmit)="login(formLogin)">
+
+    <ion-input formControlName="phone" maxlength="10" type="number" placeholder="Ingrese su teléfono">  </ion-input>  
+    <ion-button [disabled]="formLogin.invalid" type="submit"> Iniciar sesión </ion-button>
+  </form>
+
+</ion-content>
