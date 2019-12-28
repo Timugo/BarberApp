@@ -16,28 +16,45 @@ export class HomePage implements OnInit {
 
   constructor(private router: Router,
               private loginService: LoginService,
-              public alertController: AlertController,
-              private fb: FormBuilder
+              private fb: FormBuilder,
+              public alertController: AlertController
               ) { }
 
   ngOnInit() {
     this.formLogin = this.fb.group({
-      phone: [null, Validators.required]
+      phone: [null, Validators.compose([Validators.required, Validators.minLength(10)])]
     });
   }
 
-  login(formLogin: FormGroup){
-    this.loginService.postBarber(formLogin.value.phone).subscribe( async res => {
+  async Alert(titulo: string, mensaje: string, accion: number) {
+    const alert = await this.alertController.create({
+      header: titulo,
+      // subHeader: 'Subtitle',
+      message: mensaje,
+      // buttons: ['OK']
+      buttons: [
+        {
+          text: 'OK',
+          handler: ( ) => {
+            if ( accion === 1 ) {
+              this.formLogin.reset();
+            }
+            console.log('Confirm Okay');
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+
+  }
+
+  login(formLogin: FormGroup) {
+    this.loginService.postBarber(formLogin.value.phone).subscribe( res => {
       this.mensaje = res;
       if (this.mensaje.response === 1) {
-        const alert = await this.alertController.create({
-          header: 'UPS Parcero',
-          // subHeader: 'Parcero',
-          message: 'No encontramos ningun barbero con ese Celular',
-          buttons: ['OK']
-        });
-        await alert.present();
-      } else {
+        this.Alert('Timugo alerta', this.mensaje.content, 1);
+      } else if ( this.mensaje.response === 2 ) {
         this.router.navigate(['/orders']);
         console.log(formLogin.value.phone);
       }
