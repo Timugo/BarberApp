@@ -1,8 +1,10 @@
+import { Barber } from './../../interfaces/barber';
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../services/login.service';
 import { AlertController } from '@ionic/angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { DataLocalService } from '../../services/data-local.service';
 
 @Component({
   selector: 'app-home',
@@ -13,11 +15,13 @@ export class HomePage implements OnInit {
 
   mensaje: any;
   formLogin: FormGroup;
+  barbero: Barber;
 
   constructor(private router: Router,
               private loginService: LoginService,
               private fb: FormBuilder,
-              public alertController: AlertController
+              public alertController: AlertController,
+              private datalocalService: DataLocalService
               ) { }
 
   ngOnInit() {
@@ -55,8 +59,13 @@ export class HomePage implements OnInit {
       if (this.mensaje.response === 1) {
         this.Alert('Timugo alerta', this.mensaje.content, 1);
       } else if ( this.mensaje.response === 2 ) {
+        this.barbero = {
+          name: this.mensaje.content.barber.name,
+          lastName: this.mensaje.content.barber.lastName,
+          city: this.mensaje.content.barber.city,
+        };
+        this.datalocalService.guardarInfoBarbero(this.barbero);
         this.router.navigate(['/orders']);
-        console.log(formLogin.value.phone);
       }
     });
   }

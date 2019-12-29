@@ -12,8 +12,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/orders/orders.module').then( m => m.OrdersPageModule)
   },
   {
-    path: 'action-sheet',
-    loadChildren: () => import('./pages/action-sheet/action-sheet.module').then( m => m.ActionSheetPageModule)
+    path: 'current-order',
+    loadChildren: () => import('./pages/current-order/current-order.module').then( m => m.CurrentOrderPageModule)
   }
 ];
 

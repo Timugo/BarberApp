@@ -1,5 +1,7 @@
 {
   "name": "barbersApp",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
