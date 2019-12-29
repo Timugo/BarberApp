@@ -2,6 +2,15 @@
 
 <ion-content>
 
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      pullingText="Desliza para refrescar"
+      refreshingSpinner="circles"
+      refreshingText="Refrescando...">
+    </ion-refresher-content>  
+  </ion-refresher>
+
   <ion-list>
 
     <ion-item-sliding *ngFor="let orden of ordenes">

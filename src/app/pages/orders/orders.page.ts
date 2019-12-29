@@ -63,11 +63,20 @@ export class OrdersPage implements OnInit {
     this.ordersService.getAvailableOrders(this.datalocalService.barbero.city).subscribe( res => {
       this.mensaje = res;
       this.ordenes = this.mensaje.content;
-      console.log(res);
     });
   }
 
   tomarOrden(){
     this.router.navigate(['/current-order']);
+  }
+
+  doRefresh(event) {
+    console.log('Begin async operation');
+
+    this.ordersService.getAvailableOrders(this.datalocalService.barbero.city).subscribe( res => {
+      this.mensaje = res;
+      this.ordenes = this.mensaje.content;
+      event.target.complete();
+    });
   }
 }
