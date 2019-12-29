@@ -11,36 +11,39 @@ import { OrdersService } from '../../services/orders.service';
 })
 export class OrdersPage implements OnInit {
 
-  ordenes: any[] = [
-    {
-      nombre: 'Andres achury',
-      direccion: 'carrera 74A #11A - 40',
-      servicio: 'Corte de cabello',
-      celular: 3146727146,
-      precio: 15000
-    },
-    {
-      nombre: 'Anderson laverde',
-      direccion: 'carrera 118 # 34 - 50',
-      servicio: 'Corte de cabello',
-      celular: 3186727146,
-      precio: 15000
-    },
-    {
-      nombre: 'Stiven santacruz',
-      direccion: 'carrera 30 #1 - 40',
-      servicio: 'Corte de cabello/barba',
-      celular: 3116727146,
-      precio: 18000
-    },
-    {
-      nombre: 'David achury',
-      direccion: 'carrera 74A #11A - 40',
-      servicio: 'Corte de cabello',
-      celular: 3166727146,
-      precio: 15000
-    }
-  ];
+  ordenes: any[];
+  mensaje: any;
+
+  // ordenes: any[] = [
+  //   {
+  //     nombre: 'Andres achury',
+  //     direccion: 'carrera 74A #11A - 40',
+  //     servicio: 'Corte de cabello',
+  //     celular: 3146727146,
+  //     precio: 15000
+  //   },
+  //   {
+  //     nombre: 'Anderson laverde',
+  //     direccion: 'carrera 118 # 34 - 50',
+  //     servicio: 'Corte de cabello',
+  //     celular: 3186727146,
+  //     precio: 15000
+  //   },
+  //   {
+  //     nombre: 'Stiven santacruz',
+  //     direccion: 'carrera 30 #1 - 40',
+  //     servicio: 'Corte de cabello/barba',
+  //     celular: 3116727146,
+  //     precio: 18000
+  //   },
+  //   {
+  //     nombre: 'David achury',
+  //     direccion: 'carrera 74A #11A - 40',
+  //     servicio: 'Corte de cabello',
+  //     celular: 3166727146,
+  //     precio: 15000
+  //   }
+  // ];
 
   barbero: Barber;
   titulo: string;
@@ -57,6 +60,11 @@ export class OrdersPage implements OnInit {
   }
 
   ngOnInit() {
+    this.ordersService.getAvailableOrders(this.datalocalService.barbero.city).subscribe( res => {
+      this.mensaje = res;
+      this.ordenes = this.mensaje.content;
+      console.log(res);
+    });
   }
 
   tomarOrden(){

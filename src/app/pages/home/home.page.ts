@@ -56,9 +56,11 @@ export class HomePage implements OnInit {
   login(formLogin: FormGroup) {
     this.loginService.postBarber(formLogin.value.phone).subscribe( res => {
       this.mensaje = res;
+      console.log(res);
       if (this.mensaje.response === 1) {
         this.Alert('Timugo alerta', this.mensaje.content, 1);
-      } else if ( this.mensaje.response === 2 ) {
+      } else if ( this.mensaje.response === 2 && !(this.mensaje.content.message === "Barbero logeado, pero con pedido en curso") ) {
+        console.log(this.mensaje.content.message);
         this.barbero = {
           name: this.mensaje.content.barber.name,
           lastName: this.mensaje.content.barber.lastName,
@@ -66,6 +68,8 @@ export class HomePage implements OnInit {
         };
         this.datalocalService.guardarInfoBarbero(this.barbero);
         this.router.navigate(['/orders']);
+      } else if ( this.mensaje.response === 2 && this.mensaje.content.message === "Barbero logeado, pero con pedido en curso" ) {
+        this.router.navigate(['/current-order']);
       }
     });
   }
