@@ -51,7 +51,7 @@ export class OrdersPage implements OnInit {
 
   constructor( private datalocalService: DataLocalService,
                private router: Router,
-               private ordersService: OrdersService
+               private ordersService: OrdersService,
               ) {
 
     // console.log('re barbero', this.datalocalService.barbero);
@@ -66,8 +66,10 @@ export class OrdersPage implements OnInit {
     });
   }
 
-  tomarOrden(){
-    this.router.navigate(['/current-order']);
+  tomarOrden(codigoOrden: number){
+    console.log(codigoOrden);
+    this.datalocalService.guardarInfoCurrentOrder(codigoOrden);
+    // this.router.navigate(['/current-order']);
   }
 
   doRefresh(event) {

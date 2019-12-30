@@ -69,6 +69,7 @@ export class HomePage implements OnInit {
         this.datalocalService.guardarInfoBarbero(this.barbero);
         this.router.navigate(['/orders']);
       } else if ( this.mensaje.response === 2 && this.mensaje.content.message === "Barbero logeado, pero con pedido en curso" ) {
+        this.datalocalService.guardarInfoCurrentOrder(this.mensaje.content.order.id);
         this.router.navigate(['/current-order']);
       }
     });
