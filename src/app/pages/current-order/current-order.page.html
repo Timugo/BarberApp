@@ -1,7 +1,7 @@
 <app-header titulo="Orden actual"></app-header>
 
 <ion-content>
-  <form>
+  <form [formGroup]="formfinishOrder">
     <ion-list>
       <ion-list-header>
         <h1> Datos de la orden </h1>
@@ -34,10 +34,10 @@
         <ion-label>        
           <h2> Comentario </h2>
         </ion-label>
-        <ion-textarea placeholder="Agrega los comentarios de tu orden aquí..."></ion-textarea>
+        <ion-textarea formControlName="comment" placeholder="Agrega los comentarios de tu orden aquí..."></ion-textarea>
       </ion-item>
     </ion-list>
-    <ion-button type="submit"> Cancelar </ion-button>
-    <ion-button type="submit"> Finalizar </ion-button>
+    <ion-button type="submit" (click)="cancelOrfinish(0)"> Cancelar </ion-button>
+    <ion-button type="submit" (click)="cancelOrfinish(1)"> Finalizar </ion-button>
   </form>
 </ion-content>
