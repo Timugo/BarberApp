@@ -101,6 +101,8 @@ export class OrdersPage implements OnInit {
               this.mensaje2 = res;
               if (this.mensaje2.response === 2 ) {
                 this.router.navigate(['/current-order']);
+              } else {
+                
               }
             });
           }
