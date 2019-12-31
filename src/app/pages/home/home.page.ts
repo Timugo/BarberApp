@@ -62,10 +62,12 @@ export class HomePage implements OnInit {
       } else if ( this.mensaje.response === 2 && !(this.mensaje.content.message === "Barbero logeado, pero con pedido en curso") ) {
         console.log(this.mensaje.content.message);
         this.barbero = {
+          idBarber: this.mensaje.content.barber.id,
           name: this.mensaje.content.barber.name,
           lastName: this.mensaje.content.barber.lastName,
           city: this.mensaje.content.barber.city,
         };
+        console.log('BARBERO',this.barbero);
         this.datalocalService.guardarInfoBarbero(this.barbero);
         this.router.navigate(['/orders']);
       } else if ( this.mensaje.response === 2 && this.mensaje.content.message === "Barbero logeado, pero con pedido en curso" ) {

@@ -1,6 +1,6 @@
 <app-header [titulo]="titulo"></app-header>
 
-<ion-content>
+<ion-content >
 
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content
@@ -11,7 +11,7 @@
     </ion-refresher-content>  
   </ion-refresher>
 
-  <ion-list>
+  <ion-list *ngIf="flagOrdenes"> 
 
     <ion-item-sliding *ngFor="let orden of ordenes">
 
@@ -39,4 +39,8 @@
 
   </ion-list>
 
-</ion-content>
+  <ion-text *ngIf="flagNoOrdenes" color="primary">
+    <h1> No hay servicios disponibles </h1>
+  </ion-text>
+
+</ion-content >

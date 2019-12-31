@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataLocalService } from '../../services/data-local.service';
 import { Router } from '@angular/router';
 import { OrdersService } from '../../services/orders.service';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-orders',
@@ -12,7 +13,11 @@ import { OrdersService } from '../../services/orders.service';
 export class OrdersPage implements OnInit {
 
   ordenes: any[];
+  flagOrdenes: boolean;
+  flagNoOrdenes: boolean;
   mensaje: any;
+  mensaje2: any;
+
 
   // ordenes: any[] = [
   //   {
@@ -52,6 +57,7 @@ export class OrdersPage implements OnInit {
   constructor( private datalocalService: DataLocalService,
                private router: Router,
                private ordersService: OrdersService,
+               public alertController: AlertController
               ) {
 
     // console.log('re barbero', this.datalocalService.barbero);
@@ -62,14 +68,51 @@ export class OrdersPage implements OnInit {
   ngOnInit() {
     this.ordersService.getAvailableOrders(this.datalocalService.barbero.city).subscribe( res => {
       this.mensaje = res;
-      this.ordenes = this.mensaje.content;
+      console.log('ordenes',this.mensaje);
+      if(this.mensaje.response === 1) {
+        this.flagOrdenes = false;
+        this.flagNoOrdenes = true;
+        console.log('response',this.mensaje.response);
+      } else if ( this.mensaje.response === 2 ) {
+        console.log('response',this.mensaje.response);
+        this.ordenes = this.mensaje.content;
+        this.flagOrdenes = true;
+        this.flagNoOrdenes = false;
+      }
     });
   }
 
+  async presentAlertConfirm(titulo: string, mensaje: string, codigoOrden: number) {
+    const alert = await this.alertController.create({
+      header: titulo,
+      message: mensaje,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+          }
+        }, {
+          text: 'Tomar',
+          handler: () => {
+            this.datalocalService.guardarInfoCurrentOrder(codigoOrden);
+            this.ordersService.assingBarberToOrder(codigoOrden,this.datalocalService.barbero.idBarber).subscribe( res => {
+              this.mensaje2 = res;
+              if (this.mensaje2.response === 2 ) {
+                this.router.navigate(['/current-order']);
+              }
+            });
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }  
+
+
   tomarOrden(codigoOrden: number){
-    console.log(codigoOrden);
-    this.datalocalService.guardarInfoCurrentOrder(codigoOrden);
-    // this.router.navigate(['/current-order']);
+    this.presentAlertConfirm('Timugo confirmacion','¿Desea tomar la orden?',codigoOrden);
   }
 
   doRefresh(event) {
@@ -77,7 +120,14 @@ export class OrdersPage implements OnInit {
 
     this.ordersService.getAvailableOrders(this.datalocalService.barbero.city).subscribe( res => {
       this.mensaje = res;
-      this.ordenes = this.mensaje.content;
+      if(this.mensaje.response === 1) {
+        this.flagOrdenes = true;
+        this.flagNoOrdenes = false;
+      } else if ( this.mensaje.response === 2 ) {
+        this.ordenes = this.mensaje.content;
+        this.flagOrdenes = false;
+        this.flagNoOrdenes = true;
+      }
       event.target.complete();
     });
   }
