@@ -82,6 +82,26 @@ export class OrdersPage implements OnInit {
     });
   }
 
+  async Alert(titulo: string, mensaje: string) {
+    const alert = await this.alertController.create({
+      header: titulo,
+      // subHeader: 'Subtitle',
+      message: mensaje,
+      // buttons: ['OK']
+      buttons: [
+        {
+          text: 'OK',
+          handler: ( ) => {
+            console.log('Confirm Okay');
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+
+  }
+
   async presentAlertConfirm(titulo: string, mensaje: string, codigoOrden: number) {
     const alert = await this.alertController.create({
       header: titulo,
@@ -101,8 +121,8 @@ export class OrdersPage implements OnInit {
               this.mensaje2 = res;
               if (this.mensaje2.response === 2 ) {
                 this.router.navigate(['/current-order']);
-              } else {
-                
+              } else if (this.mensaje2.response === 1) {
+                this.Alert('Timugo informa','La orden no se encontro o fue tomada por otro barbero. Por favor desliza la pantalla hacia abajo para recargar.') 
               }
             });
           }
