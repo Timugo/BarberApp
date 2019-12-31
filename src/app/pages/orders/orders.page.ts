@@ -121,12 +121,12 @@ export class OrdersPage implements OnInit {
     this.ordersService.getAvailableOrders(this.datalocalService.barbero.city).subscribe( res => {
       this.mensaje = res;
       if(this.mensaje.response === 1) {
-        this.flagOrdenes = true;
-        this.flagNoOrdenes = false;
-      } else if ( this.mensaje.response === 2 ) {
-        this.ordenes = this.mensaje.content;
         this.flagOrdenes = false;
         this.flagNoOrdenes = true;
+      } else if ( this.mensaje.response === 2 ) {
+        this.ordenes = this.mensaje.content;
+        this.flagOrdenes = true;
+        this.flagNoOrdenes = false;
       }
       event.target.complete();
     });
