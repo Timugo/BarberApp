@@ -66,11 +66,51 @@ export class CurrentOrderPage implements OnInit {
     await alert.present();
   }
 
+  async presentAlertPrompt(titulo: string, mensaje: string, idOrder: number, nameBarber: string) {
+    const alert = await this.alertController.create({
+      header: titulo,
+      message: mensaje,
+      inputs: [
+        {
+          name: 'cancelComment',
+          type: 'text',
+          placeholder: ''
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel');
+          }
+        }, {
+          text: 'Ok',
+          handler: (data) => {
+            var comment = data.cancelComment;
+            var status = false;
+            this.currentorderService.finishOrder(idOrder, nameBarber, comment, status).subscribe( res => {
+              this.mensaje2 = res;
+              console.log(res);
+              if ( this.mensaje2.response === 2 ) {
+                this.Alert('Timugo informa','Su orden se cancelo con exito',1);
+              } 
+              console.log(res);
+            });            
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
   cancelOrfinish(option: number) {
+    var idOrder = this.datalocalService.codigo;
+    var nameBarber = this.datalocalService.barbero.name + ' ' + this.datalocalService.barbero.lastName;
 
     if(option == 1) {
-      var idOrder = this.datalocalService.codigo;
-      var nameBarber = this.datalocalService.barbero.name + ' ' + this.datalocalService.barbero.lastName;
       var comment = this.formfinishOrder.value.comment;
       var status = true;
       this.currentorderService.finishOrder(idOrder, nameBarber, comment, status).subscribe( res => {
@@ -81,7 +121,7 @@ export class CurrentOrderPage implements OnInit {
         console.log(res);
       });
     } else {
-      console.log("opcion cancelar");
+      this.presentAlertPrompt('Timugo Alerta','¿Por que cancelas tu orden?',idOrder,nameBarber);
     }
   }
 
