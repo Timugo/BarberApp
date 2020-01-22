@@ -1,9 +1,9 @@
 import { Barber } from './../../interfaces/barber';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataLocalService } from '../../services/data-local.service';
 import { Router } from '@angular/router';
 import { OrdersService } from '../../services/orders.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, IonList } from '@ionic/angular';
 
 @Component({
   selector: 'app-orders',
@@ -11,7 +11,9 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['./orders.page.scss'],
 })
 export class OrdersPage implements OnInit {
-
+  
+  @ViewChild('lista', {static: false}) lista: IonList;
+  
   ordenes: any[];
   flagOrdenes: boolean;
   flagNoOrdenes: boolean;
@@ -52,6 +54,7 @@ export class OrdersPage implements OnInit {
 
   barbero: Barber;
   titulo: string;
+
 
 
   constructor( private datalocalService: DataLocalService,
@@ -121,6 +124,7 @@ export class OrdersPage implements OnInit {
               this.mensaje2 = res;
               if (this.mensaje2.response === 2 ) {
                 this.router.navigate(['/current-order']);
+                this.lista.closeSlidingItems();
               } else if (this.mensaje2.response === 1) {
                 this.Alert('Timugo informa','La orden no se encontro o fue tomada por otro barbero. Por favor desliza la pantalla hacia abajo para recargar.') 
               }
