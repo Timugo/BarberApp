@@ -70,13 +70,13 @@ export class CurrentOrderPage implements OnInit {
     const alert = await this.alertController.create({
       header: titulo,
       message: mensaje,
-      inputs: [
-        {
-          name: 'cancelComment',
-          type: 'text',
-          placeholder: ''
-        }
-      ],
+      // inputs: [
+      //   {
+      //     name: 'cancelComment',
+      //     type: 'text',
+      //     placeholder: ''
+      //   }
+      // ],
       buttons: [
         {
           text: 'Cancel',
@@ -87,17 +87,24 @@ export class CurrentOrderPage implements OnInit {
           }
         }, {
           text: 'Ok',
-          handler: (data) => {
-            var comment = data.cancelComment;
-            var status = false;
-            this.currentorderService.finishOrder(idOrder, nameBarber, comment, status).subscribe( res => {
+          handler: () => {
+          // handler: (data) => {
+            // var comment = data.cancelComment;
+            // var status = false;
+            this.currentorderService.cancelOrder(idOrder,this.datalocalService.barbero.idBarber).subscribe(res => {
               this.mensaje2 = res;
-              console.log(res);
-              if ( this.mensaje2.response === 2 ) {
-                this.Alert('Timugo informa','Su orden se cancelo con exito',1);
-              } 
-              console.log(res);
-            });            
+              if ( this.mensaje2.response === 2 || this.mensaje2.response === 1) {
+                this.Alert('Timugo informa','Su orden se cancelo con exito',1);  
+              }
+            });
+            // this.currentorderService.finishOrder(idOrder, nameBarber, comment, status).subscribe( res => {
+            //   this.mensaje2 = res;
+            //   console.log(res);
+            //   if ( this.mensaje2.response === 2 ) {
+            //     this.Alert('Timugo informa','Su orden se cancelo con exito',1);
+            //   } 
+            //   console.log(res);
+            // });            
           }
         }
       ]
@@ -121,7 +128,7 @@ export class CurrentOrderPage implements OnInit {
         console.log(res);
       });
     } else {
-      this.presentAlertPrompt('Timugo Alerta','¿Por que cancelas tu orden?',idOrder,nameBarber);
+      this.presentAlertPrompt('Timugo Alerta','¿Desea cancelar su orden?',idOrder,nameBarber);
     }
   }
 

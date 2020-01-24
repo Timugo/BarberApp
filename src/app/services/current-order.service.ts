@@ -26,10 +26,9 @@ export class CurrentOrderService {
     return this.http.post(this.URL_API + '/finishOrder', {idOrder: id, nameBarber: nameBarber, comment: comment, status: status } ,httpOptions);
   }
 
-  cancelOrder(idOrder: number, idBarber: number) {
+  cancelOrder(idOrder: number, idUser: number) {
     var id = idOrder.toString();
-    var idbar = idBarber.toString();
-    return this.http.put(this.URL_API + '/cancelOrderBarber', {idOrder: id, idBarber: idbar }, httpOptions );
+    return this.http.put(this.URL_API + '/cancelOrderBarber', {idOrder: id, idUser: idUser }, httpOptions );
   }
   
 }
