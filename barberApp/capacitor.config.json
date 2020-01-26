@@ -1,0 +1,8 @@
+{
+  "appId": "com.timugo.barberApp",
+  "appName": "barberApp",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "cordova": {}
+}
