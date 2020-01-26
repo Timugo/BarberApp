@@ -1,5 +1,7 @@
 {
   "name": "barberApp",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular"
 }
