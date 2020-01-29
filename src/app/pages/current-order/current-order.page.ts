@@ -91,10 +91,14 @@ export class CurrentOrderPage implements OnInit {
           // handler: (data) => {
             // var comment = data.cancelComment;
             // var status = false;
+            console.log(idOrder);
+            console.log(this.datalocalService.barbero.idBarber);
             this.currentorderService.cancelOrder(idOrder,this.datalocalService.barbero.idBarber).subscribe(res => {
               this.mensaje2 = res;
-              if ( this.mensaje2.response === 2 || this.mensaje2.response === 1) {
+              if ( this.mensaje2.response === 2) {
                 this.Alert('Timugo informa','Su orden se cancelo con exito',1);  
+              }else if (this.mensaje2.response === 1){
+                this.Alert('Timugo informa','La orden no se pudo cancelar porque el cliente no recibió notificación. Por favor contactar a soporte para cancelarla',2);
               }
             });
             // this.currentorderService.finishOrder(idOrder, nameBarber, comment, status).subscribe( res => {

@@ -12,8 +12,9 @@ const httpOptions = {
 })
 export class CurrentOrderService {
 
-  readonly URL_API = 'http://167.172.216.181:3000';
+  // readonly URL_API = 'http://167.172.216.181:3000';
   //readonly URL_API = 'http://localhost:3000';
+  readonly URL_API = 'https://www.timugo.tk';
 
   constructor(private http: HttpClient) { }
 
@@ -28,6 +29,7 @@ export class CurrentOrderService {
 
   cancelOrder(idOrder: number, idUser: number) {
     var id = idOrder.toString();
+    console.log("aqui",idOrder,idUser);
     return this.http.put(this.URL_API + '/cancelOrderBarber', {idOrder: id, idUser: idUser }, httpOptions );
   }
   

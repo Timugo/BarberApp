@@ -115,6 +115,7 @@ export class OrdersPage implements OnInit {
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
+            this.lista.closeSlidingItems();
           }
         }, {
           text: 'Tomar',

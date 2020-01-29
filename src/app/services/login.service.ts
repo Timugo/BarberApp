@@ -12,8 +12,9 @@ const httpOptions = {
 })
 export class LoginService {
 
-  readonly URL_API = 'http://167.172.216.181:3000';
+  // readonly URL_API = 'http://167.172.216.181:3000';
   //readonly URL_API = 'http://localhost:3000';
+  readonly URL_API = 'https://www.timugo.tk';
 
   constructor( private http: HttpClient) { }
 
