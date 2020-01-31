@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../services/login.service';
 import { AlertController } from '@ionic/angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 import { DataLocalService } from '../../services/data-local.service';
 
 @Component({
@@ -60,7 +60,12 @@ export class HomePage implements OnInit {
       if (this.mensaje.response === 1) {
         this.Alert('Timugo alerta', this.mensaje.content, 1);
       } else if ( this.mensaje.response === 2 && !(this.mensaje.content.message === "Barbero logeado, pero con pedido en curso") ) {
-        console.log(this.mensaje.content.message);
+        // console.log(this.mensaje.content.message);
+        let navigationExtras : NavigationExtras = {
+          queryParams: {
+            city: this.mensaje.content.barber.city
+          }
+        }  
         this.barbero = {
           idBarber: this.mensaje.content.barber.id,
           name: this.mensaje.content.barber.name,
@@ -69,8 +74,9 @@ export class HomePage implements OnInit {
         };
         console.log('BARBERO',this.barbero);
         this.datalocalService.guardarInfoBarbero(this.barbero);
-        this.router.navigate(['/orders']);
+        this.router.navigate(['/orders'], navigationExtras);
       } else if ( this.mensaje.response === 2 && this.mensaje.content.message === "Barbero logeado, pero con pedido en curso" ) {
+        console.log("orden actual:",this.mensaje.content.order.id);
         this.datalocalService.guardarInfoCurrentOrder(this.mensaje.content.order.id);
         this.router.navigate(['/current-order']);
       }

@@ -18,9 +18,10 @@ export class CurrentOrderPage implements OnInit {
     nameClient: 'Timugo',
     address: 'Timugo Address',
     phoneClient: 1111111111,
-    price: 15000,     
+    price: 15000
   }
   formfinishOrder: FormGroup;
+  servicios: any[];
 
   constructor(private currentorderService: CurrentOrderService,
               private datalocalService: DataLocalService,
@@ -36,11 +37,13 @@ export class CurrentOrderPage implements OnInit {
     });
     this.currentorderService.getInfoCurrentOrder(this.datalocalService.codigo).subscribe(res => {
       this.mensaje = res;
+      this.servicios = this.mensaje.content.order.services;
+      console.log("orden actual",res);
       this.currentOrder = {
-        nameClient: this.mensaje.content.nameClient,
-        address: this.mensaje.content.address,
-        phoneClient: this.mensaje.content.phoneClient,
-        price: this.mensaje.content.price, 
+        nameClient: this.mensaje.content.order.nameClient,
+        address: this.mensaje.content.order.address,
+        phoneClient: this.mensaje.content.order.phoneClient,
+        price: this.mensaje.content.order.price, 
       };
       console.log('orden actual',this.currentOrder);
     });

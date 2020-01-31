@@ -19,7 +19,7 @@ export class CurrentOrderService {
   constructor(private http: HttpClient) { }
 
   getInfoCurrentOrder(currentOrder: number){
-    return this.http.get(this.URL_API + '/getInfoCurrentOrder' + '?idOrder=' + currentOrder);
+    return this.http.get(this.URL_API + '/getInfoTemporalOrder' + '?idOrder=' + currentOrder);
   }
 
   finishOrder(idOrder: number, nameBarber: string, comment: string, status: boolean) {

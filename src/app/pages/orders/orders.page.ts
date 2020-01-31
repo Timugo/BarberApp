@@ -1,7 +1,7 @@
 import { Barber } from './../../interfaces/barber';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataLocalService } from '../../services/data-local.service';
-import { Router } from '@angular/router';
+import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
 import { OrdersService } from '../../services/orders.service';
 import { AlertController, IonList } from '@ionic/angular';
 
@@ -19,8 +19,8 @@ export class OrdersPage implements OnInit {
   flagNoOrdenes: boolean;
   mensaje: any;
   mensaje2: any;
-
-
+  city: string;
+  
   // ordenes: any[] = [
   //   {
   //     nombre: 'Andres achury',
@@ -60,16 +60,22 @@ export class OrdersPage implements OnInit {
   constructor( private datalocalService: DataLocalService,
                private router: Router,
                private ordersService: OrdersService,
-               public alertController: AlertController
+               public alertController: AlertController,
+               private route: ActivatedRoute
               ) {
 
     // console.log('re barbero', this.datalocalService.barbero);
     this.titulo = 'Ordenes' + ' ' + this.datalocalService.barbero.city ;
+    this.route.queryParams.subscribe(params => {
+      if(params){
+        this.city = params.city;
+      }
+    });
 
   }
 
   ngOnInit() {
-    this.ordersService.getAvailableOrders(this.datalocalService.barbero.city).subscribe( res => {
+    this.ordersService.getAvailableOrders(this.city).subscribe( res => {
       this.mensaje = res;
       console.log('ordenes',this.mensaje);
       if(this.mensaje.response === 1) {
