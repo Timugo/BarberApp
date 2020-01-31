@@ -1,6 +1,6 @@
 {
   "appId": "com.timugo.barberApp",
-  "appName": "barberApp",
+  "appName": "Soy Timugo",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",

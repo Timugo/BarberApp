@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">barberApp</string>
-    <string name="title_activity_main">barberApp</string>
+    <string name="app_name">Soy Timugo</string>
+    <string name="title_activity_main">Soy Timugo</string>
     <string name="package_name">com.timugo.barberApp</string>
     <string name="custom_url_scheme">com.timugo.barberApp</string>
 </resources>
