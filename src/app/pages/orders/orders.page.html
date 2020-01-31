@@ -18,11 +18,14 @@
       <ion-item>
         <ion-label>
           <h3> {{orden.nameClient}} </h3>
-          <h4> {{orden.address}} </h4>
-          <h4> {{orden.precio}} </h4>    
+          <h4> {{orden.services.nameService}} </h4>
+          <h4> {{orden.price | currency}} </h4>    
           <p>
-            {{orden.typeService}}
+            <b>Servicios</b>
           </p>
+          <ion-label *ngFor="let servicio of orden.services">
+            <h4> {{servicio.nameService}} x {{servicio.quantity}} </h4>
+          </ion-label>
         </ion-label>
         <ion-label slot="end" class="ion-text-right">
           <p>Desliza para tomar</p>
