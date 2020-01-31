@@ -24,8 +24,7 @@
             <b>Servicios</b>
           </p>
           <ion-label *ngFor="let servicio of orden.services">
-            <h4> {{servicio.nameService}} </h4>
-            <h4> {{servicio.quantity}} </h4>
+            <h4> {{servicio.nameService}} x {{servicio.quantity}} </h4>
           </ion-label>
         </ion-label>
         <ion-label slot="end" class="ion-text-right">
