@@ -14,12 +14,13 @@ export class CurrentOrderPage implements OnInit {
 
   mensaje: any;
   mensaje2: any;
-  currentOrder: CurrentOrder = {
-    nameClient: 'Timugo',
-    address: 'Timugo Address',
-    phoneClient: 1111111111,
-    price: 15000
-  }
+  currentOrder: any;
+  // currentOrder: CurrentOrder = {
+  //   nameClient: 'Timugo',
+  //   address: 'Timugo Address',
+  //   phoneClient: 1111111111,
+  //   price: 15000
+  // }
   formfinishOrder: FormGroup;
   servicios: any[];
 
