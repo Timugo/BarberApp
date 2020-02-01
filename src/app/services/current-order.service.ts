@@ -22,9 +22,9 @@ export class CurrentOrderService {
     return this.http.get(this.URL_API + '/getInfoTemporalOrder' + '?idOrder=' + currentOrder);
   }
 
-  finishOrder(idOrder: number, nameBarber: string, comment: string, status: boolean) {
+  finishOrder(idOrder: number, comment: string, status: string) {
     var id = idOrder.toString();
-    return this.http.post(this.URL_API + '/finishOrder', {idOrder: id, nameBarber: nameBarber, comment: comment, status: status } ,httpOptions);
+    return this.http.post(this.URL_API + '/finishOrder', {idOrder: id, comment: comment, status: status } ,httpOptions);
   }
 
   cancelOrder(idOrder: number, idUser: number) {
