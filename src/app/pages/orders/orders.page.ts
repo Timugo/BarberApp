@@ -91,10 +91,6 @@ export class OrdersPage implements OnInit {
     });
   }
 
-  toArray(services: object){
-    return Object.keys(services).map(key => services[key])
-  }
-
   async Alert(titulo: string, mensaje: string) {
     const alert = await this.alertController.create({
       header: titulo,

@@ -15,12 +15,6 @@ export class CurrentOrderPage implements OnInit {
   mensaje: any;
   mensaje2: any;
   currentOrder: any;
-  // currentOrder: CurrentOrder = {
-  //   nameClient: 'Timugo',
-  //   address: 'Timugo Address',
-  //   phoneClient: 1111111111,
-  //   price: 15000
-  // }
   formfinishOrder: FormGroup;
   servicios: any[];
 
@@ -127,8 +121,8 @@ export class CurrentOrderPage implements OnInit {
 
     if(option == 1) {
       var comment = this.formfinishOrder.value.comment;
-      var status = true;
-      this.currentorderService.finishOrder(idOrder, nameBarber, comment, status).subscribe( res => {
+      var status = "Finished";
+      this.currentorderService.finishOrder(idOrder, comment, status).subscribe( res => {
         this.mensaje2 = res;
         if ( this.mensaje2.response === 2 ) {
           this.Alert('Timugo informa','Su orden finalizo con exito',1);
@@ -139,5 +133,4 @@ export class CurrentOrderPage implements OnInit {
       this.presentAlertPrompt('Timugo Alerta','¿Desea cancelar su orden?',idOrder,nameBarber);
     }
   }
-
 }
