@@ -58,6 +58,6 @@ export class HomePage implements OnInit {
   }
 
   login(formLogin: FormGroup) {
-    this.loginService.postBarber(formLogin.value.phone);
+    this.loginService.login(formLogin.value.phone);
   }
 }
