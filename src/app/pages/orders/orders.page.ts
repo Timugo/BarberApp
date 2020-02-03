@@ -4,7 +4,10 @@ import { DataLocalService } from '../../services/data-local.service';
 import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
 import { OrdersService } from '../../services/orders.service';
 import { AlertController, IonList } from '@ionic/angular';
+import { Plugins } from '@capacitor/core';
+import { async } from '@angular/core/testing';
 
+const { Storage } = Plugins;
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.page.html',
@@ -20,38 +23,6 @@ export class OrdersPage implements OnInit {
   mensaje: any;
   mensaje2: any;
   city: string;
-  
-  // ordenes: any[] = [
-  //   {
-  //     nombre: 'Andres achury',
-  //     direccion: 'carrera 74A #11A - 40',
-  //     servicio: 'Corte de cabello',
-  //     celular: 3146727146,
-  //     precio: 15000
-  //   },
-  //   {
-  //     nombre: 'Anderson laverde',
-  //     direccion: 'carrera 118 # 34 - 50',
-  //     servicio: 'Corte de cabello',
-  //     celular: 3186727146,
-  //     precio: 15000
-  //   },
-  //   {
-  //     nombre: 'Stiven santacruz',
-  //     direccion: 'carrera 30 #1 - 40',
-  //     servicio: 'Corte de cabello/barba',
-  //     celular: 3116727146,
-  //     precio: 18000
-  //   },
-  //   {
-  //     nombre: 'David achury',
-  //     direccion: 'carrera 74A #11A - 40',
-  //     servicio: 'Corte de cabello',
-  //     celular: 3166727146,
-  //     precio: 15000
-  //   }
-  // ];
-
   barbero: Barber;
   titulo: string;
 
@@ -64,17 +35,34 @@ export class OrdersPage implements OnInit {
                private route: ActivatedRoute
               ) {
 
-    // console.log('re barbero', this.datalocalService.barbero);
-    this.titulo = 'Ordenes' + ' ' + this.datalocalService.barbero.city ;
-    this.route.queryParams.subscribe(params => {
-      if(params){
-        this.city = params.city;
-      }
+    //console.log('re barbero', this.datalocalService.barbero);
+    //this.getBarber();//get barber info
+    this.getCity();
+  }
+  async getCity() {
+    const { value } = await Storage.get({ key: 'city' });
+    this.city = value;
+    console.log('Got item: ', value);
+  }
+  async getBarber() {
+    var object;
+    const ret = await Storage.get({ key: 'barber' }).then(function(res){
+      object = JSON.parse(res.value);
+      this.city = object.city;
+      console.log("Del Storage",object);
     });
-
   }
 
   ngOnInit() {
+    // var none = this.getBarber();
+    // console.log("from database",n)
+
+    // this.route.queryParams.subscribe(params => {
+    //   if(params){
+    //     this.city = params.city;
+    //   }
+    // });
+    this.titulo = 'Ordenes' + ' ' + this.city;
     this.ordersService.getAvailableOrders(this.city).subscribe( res => {
       this.mensaje = res;
       console.log('ordenes',this.mensaje);
@@ -145,13 +133,13 @@ export class OrdersPage implements OnInit {
 
 
   tomarOrden(codigoOrden: number){
-    this.presentAlertConfirm('Timugo confirmacion','¿Desea tomar la orden?',codigoOrden);
+    this.presentAlertConfirm('Confirmacion la Orden','¿Deseas tomarla?',codigoOrden);
   }
 
   doRefresh(event) {
     console.log('Begin async operation');
 
-    this.ordersService.getAvailableOrders(this.datalocalService.barbero.city).subscribe( res => {
+    this.ordersService.getAvailableOrders(this.city).subscribe( res => {
       this.mensaje = res;
       if(this.mensaje.response === 1) {
         this.flagOrdenes = false;
