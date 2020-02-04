@@ -5,6 +5,10 @@ import { CurrentOrder } from 'src/app/interfaces/current-order';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { Plugins } from '@capacitor/core';
+import { Barber } from 'src/app/interfaces/barber';
+
+const { Storage } = Plugins;
 @Component({
   selector: 'app-current-order',
   templateUrl: './current-order.page.html',
@@ -17,6 +21,8 @@ export class CurrentOrderPage implements OnInit {
   currentOrder: any;
   formfinishOrder: FormGroup;
   servicios: any[];
+  barber:Barber;
+  idCurrentOrder :string;
 
   constructor(private currentorderService: CurrentOrderService,
               private datalocalService: DataLocalService,
@@ -26,24 +32,48 @@ export class CurrentOrderPage implements OnInit {
               ) { }
 
   ngOnInit() {
-    console.log('currentOrder:',this.datalocalService.codigo);
     this.formfinishOrder = this.fb.group({
       comment: ['']
     });
-    this.currentorderService.getInfoCurrentOrder(this.datalocalService.codigo).subscribe(res => {
+    this.checkIfOrderExists();
+    this.loadCurrentOrder();
+  }
+
+  getInfoOrder(idOrder:number){
+    this.idCurrentOrder = idOrder.toString();
+    console.log("aca voy ",idOrder);
+    
+
+    this.currentorderService.getInfoCurrentOrder(idOrder).subscribe(res => {
       this.mensaje = res;
       this.servicios = this.mensaje.content.order.services;
-      console.log("orden actual",res);
       this.currentOrder = {
         nameClient: this.mensaje.content.order.nameClient,
         address: this.mensaje.content.order.address,
         phoneClient: this.mensaje.content.order.phoneClient,
         price: this.mensaje.content.order.price, 
       };
-      console.log('orden actual',this.currentOrder);
+      
     });
   }
-
+  async loadCurrentOrder(){
+    const { value } = await Storage.get({ key: 'currentOrder' });
+    this.getInfoOrder(parseInt(value));
+  }
+  async checkIfOrderExists(){
+    const { value } = await Storage.get({ key: 'currentOrder' });
+    if(!value){
+      this.router.navigate(['/orders']);
+    }
+  }
+  async clearCurrentOrder() {
+    await Storage.remove({ key: 'currentOrder' });
+  }
+  async cancelOrder() {
+    const ret = await Storage.get({ key: 'barber' });
+    const user = JSON.parse(ret.value);
+    this.cancelOrder2(user.idBarber);
+  }
   async Alert(titulo: string, mensaje: string, accion: number) {
     const alert = await this.alertController.create({
       header: titulo,
@@ -63,18 +93,11 @@ export class CurrentOrderPage implements OnInit {
     });
     await alert.present();
   }
-
-  async presentAlertPrompt(titulo: string, mensaje: string, idOrder: number, nameBarber: string) {
+  async modalCancelOrder() {
     const alert = await this.alertController.create({
-      header: titulo,
-      message: mensaje,
-      // inputs: [
-      //   {
-      //     name: 'cancelComment',
-      //     type: 'text',
-      //     placeholder: ''
-      //   }
-      // ],
+      header: "Cancelar",
+      subHeader:" Realmente deseas cancelar la orden?",
+      message: "Recuerda que cancelar ordenes repetidamente resta puntos",
       buttons: [
         {
           text: 'Cancel',
@@ -86,27 +109,8 @@ export class CurrentOrderPage implements OnInit {
         }, {
           text: 'Ok',
           handler: () => {
-          // handler: (data) => {
-            // var comment = data.cancelComment;
-            // var status = false;
-            console.log(idOrder);
-            console.log(this.datalocalService.barbero.idBarber);
-            this.currentorderService.cancelOrder(idOrder,this.datalocalService.barbero.idBarber).subscribe(res => {
-              this.mensaje2 = res;
-              if ( this.mensaje2.response === 2) {
-                this.Alert('Timugo informa','Su orden se cancelo con exito',1);  
-              }else if (this.mensaje2.response === 1){
-                this.Alert('Timugo informa','La orden no se pudo cancelar porque el cliente no recibió notificación. Por favor contactar a soporte para cancelarla',2);
-              }
-            });
-            // this.currentorderService.finishOrder(idOrder, nameBarber, comment, status).subscribe( res => {
-            //   this.mensaje2 = res;
-            //   console.log(res);
-            //   if ( this.mensaje2.response === 2 ) {
-            //     this.Alert('Timugo informa','Su orden se cancelo con exito',1);
-            //   } 
-            //   console.log(res);
-            // });            
+            this.cancelOrder();
+            
           }
         }
       ]
@@ -114,23 +118,56 @@ export class CurrentOrderPage implements OnInit {
 
     await alert.present();
   }
+  async modalFinishOrder() {
+    const alert = await this.alertController.create({
+      header: "Terminal la Orden",
+      message: "Finaliza la orden solamente si ya recibiste el dinero por parte del cliente",
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Abort Cancellation');
+          }
+        }, {
+          text: 'Finalizar',
+          handler: () => {
+            this.finishOrder();
+          }
+        }
+      ]
+    });
 
-  cancelOrfinish(option: number) {
-    var idOrder = this.datalocalService.codigo;
-    var nameBarber = this.datalocalService.barbero.name + ' ' + this.datalocalService.barbero.lastName;
-
-    if(option == 1) {
-      var comment = this.formfinishOrder.value.comment;
-      var status = "Finished";
-      this.currentorderService.finishOrder(idOrder, comment, status).subscribe( res => {
-        this.mensaje2 = res;
-        if ( this.mensaje2.response === 2 ) {
-          this.Alert('Timugo informa','Su orden finalizo con exito',1);
-        } 
-        console.log(res);
-      });
-    } else {
-      this.presentAlertPrompt('Timugo Alerta','¿Desea cancelar su orden?',idOrder,nameBarber);
-    }
+    await alert.present();
+  }
+  cancelOrder2(idBarber : string){
+    console.log("idBarber",idBarber);
+    var idOrder = this.idCurrentOrder;
+    this.currentorderService.cancelOrder(parseInt(this.idCurrentOrder),parseInt(idBarber)).subscribe(res => {
+      this.mensaje2 = res;
+      if ( this.mensaje2.response === 2) {
+        this.Alert('Timugo informa','Su orden se cancelo con exito',1);  
+        this.clearCurrentOrder();
+      }else if (this.mensaje2.response === 1){
+        this.Alert('Timugo informa','La orden no se pudo cancelar porque el cliente no recibió notificación. Por favor contactar a soporte para cancelarla',2);
+      }
+    });  
+  }
+  finishOrder() {
+    var idOrder = this.idCurrentOrder;
+    var comment = this.formfinishOrder.value.comment || "sin comentario";
+    var status = "Finished";
+    console.log(idOrder,comment);
+    this.currentorderService.finishOrder(parseInt(idOrder), comment, status).subscribe( res => {
+      this.mensaje2 = res;
+      if ( this.mensaje2.response === 2 ) {
+        this.Alert('Tu Orden','Tu orden finalizo con exito, acumulaste 50 puntos',1);
+        //clear key Order
+        this.clearCurrentOrder();
+      } 
+      console.log(res);
+    });
+    
   }
 }

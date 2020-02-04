@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataLocalService } from '../../services/data-local.service';
 import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
 import { OrdersService } from '../../services/orders.service';
-import { AlertController, IonList } from '@ionic/angular';
+import { AlertController, IonList, NavController } from '@ionic/angular';
 import { Plugins } from '@capacitor/core';
 import { async } from '@angular/core/testing';
 
@@ -23,7 +23,7 @@ export class OrdersPage implements OnInit {
   mensaje: any;
   mensaje2: any;
   city: string;
-  barbero: Barber;
+  barber: Barber;
   titulo: string;
 
 
@@ -32,38 +32,40 @@ export class OrdersPage implements OnInit {
                private router: Router,
                private ordersService: OrdersService,
                public alertController: AlertController,
-               private route: ActivatedRoute
+               private route: ActivatedRoute,
+               private navCtrl: NavController,
               ) {
 
     //console.log('re barbero', this.datalocalService.barbero);
     //this.getBarber();//get barber info
-    this.getCity();
+    
+  }
+  
+  ngOnInit() {
+    this.checkExistsOrderInProgress();
+    this.getBarber2(); 
   }
   async getCity() {
     const { value } = await Storage.get({ key: 'city' });
     this.city = value;
     console.log('Got item: ', value);
   }
-  async getBarber() {
-    var object;
-    const ret = await Storage.get({ key: 'barber' }).then(function(res){
-      object = JSON.parse(res.value);
-      this.city = object.city;
-      console.log("Del Storage",object);
-    });
+  async getBarber2() {
+    const ret = await Storage.get({ key: 'barber' });
+    const user = JSON.parse(ret.value);
+    this.getOrders(user);
   }
+  async checkExistsOrderInProgress(){
+    const { value } = await Storage.get({ key: 'currentOrder' });
+    if(value){
+      this.navCtrl.navigateRoot('/current-order',{animated:true});
 
-  ngOnInit() {
-    // var none = this.getBarber();
-    // console.log("from database",n)
-
-    // this.route.queryParams.subscribe(params => {
-    //   if(params){
-    //     this.city = params.city;
-    //   }
-    // });
-    this.titulo = 'Ordenes' + ' ' + this.city;
-    this.ordersService.getAvailableOrders(this.city).subscribe( res => {
+    }
+  }
+  getOrders(barber:Barber){
+    this.barber = barber;
+    this.titulo = 'Hola' + ' ' + barber.name;
+    this.ordersService.getAvailableOrders(barber.city).subscribe( res => {
       this.mensaje = res;
       console.log('ordenes',this.mensaje);
       if(this.mensaje.response === 1) {
@@ -77,14 +79,12 @@ export class OrdersPage implements OnInit {
         this.flagNoOrdenes = false;
       }
     });
-  }
 
+  }
   async Alert(titulo: string, mensaje: string) {
     const alert = await this.alertController.create({
       header: titulo,
-      // subHeader: 'Subtitle',
       message: mensaje,
-      // buttons: ['OK']
       buttons: [
         {
           text: 'OK',
@@ -100,6 +100,7 @@ export class OrdersPage implements OnInit {
   }
 
   async presentAlertConfirm(titulo: string, mensaje: string, codigoOrden: number) {
+
     const alert = await this.alertController.create({
       header: titulo,
       message: mensaje,
@@ -114,8 +115,8 @@ export class OrdersPage implements OnInit {
         }, {
           text: 'Tomar',
           handler: () => {
-            this.datalocalService.guardarInfoCurrentOrder(codigoOrden);
-            this.ordersService.assingBarberToOrder(codigoOrden,this.datalocalService.barbero.idBarber).subscribe( res => {
+            this.datalocalService.saveInfoCurrentOrder(codigoOrden);
+            this.ordersService.assingBarberToOrder(codigoOrden,this.barber.idBarber).subscribe( res => {
               this.mensaje2 = res;
               if (this.mensaje2.response === 2 ) {
                 this.router.navigate(['/current-order']);
@@ -137,9 +138,7 @@ export class OrdersPage implements OnInit {
   }
 
   doRefresh(event) {
-    console.log('Begin async operation');
-
-    this.ordersService.getAvailableOrders(this.city).subscribe( res => {
+    this.ordersService.getAvailableOrders(this.barber.city).subscribe( res => {
       this.mensaje = res;
       if(this.mensaje.response === 1) {
         this.flagOrdenes = false;

@@ -34,13 +34,15 @@ export class DataLocalService {
 
   
   
-  guardarInfoCurrentOrder(codigo: number){
+  async saveInfoCurrentOrder(idOrder : number) {
+    await Storage.set({
+      key: 'currentOrder',
+      value: idOrder.toString()
+    });
+  }
     //this.storage.set('currentorder', codigo);
-  }
+  
 
-  async cargarCurrentOrder(){
-    //const id = await this.storage.get('currentorder');
-    //this.codigo = id;
-  }
+  
 
 }
