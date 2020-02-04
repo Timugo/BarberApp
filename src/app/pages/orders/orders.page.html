@@ -4,7 +4,7 @@
 
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content
-      pullingIcon="arrow-dropdown"
+      pullingIcon="refresh"
       pullingText="Desliza para refrescar"
       refreshingSpinner="circles"
       refreshingText="Refrescando...">
@@ -43,7 +43,7 @@
   </ion-list>
 
   <ion-text class="noOrders" *ngIf="flagNoOrdenes" color="primary">
-    <h1> No hay servicios disponibles </h1>
+    <h1> No hay servicios disponibles, desliza para volver a buscar.</h1>
   </ion-text>
 
 </ion-content >
