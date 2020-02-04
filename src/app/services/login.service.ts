@@ -34,8 +34,6 @@ export class LoginService {
         console.log(res);
         if (res['response'] === 1) {
           //failed login
-
-          this.Alert('Timugo alerta', res['content'], 1);
           this.token = null; //clean  the token
           this.clear();//clean the storage
           resolve(false);
@@ -73,24 +71,7 @@ export class LoginService {
     
   }
 
-  async Alert(titulo: string, mensaje: string, accion: number) {
-    const alert = await this.alertController.create({
-      header: titulo,
-      message: mensaje,
-      buttons: [
-        {
-          text: 'OK',
-          handler: ( ) => {
-            // if ( accion === 1 ) {
-            //   this.formLogin.reset();
-            // }
-            console.log('Confirm Okay');
-          }
-        }
-      ]
-    });
-    await alert.present();
-  }
+  
   /* Storage Management */
   async saveInfoBarber(barbero: Barber){
     await Storage.set({
