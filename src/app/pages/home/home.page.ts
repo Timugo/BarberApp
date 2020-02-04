@@ -1,11 +1,12 @@
 import { Barber } from './../../interfaces/barber';
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../services/login.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, NavigationExtras } from '@angular/router';
 import { DataLocalService } from '../../services/data-local.service';
 import { Plugins } from '@capacitor/core';
+import { UiServiceService } from 'src/app/services/ui-service.service';
 
 const { Storage } = Plugins;
 
@@ -24,40 +25,35 @@ export class HomePage implements OnInit {
               private loginService: LoginService,
               private fb: FormBuilder,
               public alertController: AlertController,
-              private datalocalService: DataLocalService,
+              private navCtrl: NavController,
+              private uiService :UiServiceService
               ) { }
 
   ngOnInit() {
+    this.getBarber();
     this.formLogin = this.fb.group({
       phone: [null, Validators.compose([Validators.required, Validators.minLength(10)])]
     });
     
   }
 
-  async getObject() {
+  async getBarber() {
     const ret = await Storage.get({ key: 'barber' });
     const user = JSON.parse(ret.value);
+    if(user){
+      this.navCtrl.navigateRoot('/orders',{animated:true});
+    }
   }
-  async Alert(titulo: string, mensaje: string, accion: number) {
-    const alert = await this.alertController.create({
-      header: titulo,
-      message: mensaje,
-      buttons: [
-        {
-          text: 'OK',
-          handler: ( ) => {
-            // if ( accion === 1 ) {
-            //   this.formLogin.reset();
-            // }
-            console.log('Confirm Okay');
-          }
-        }
-      ]
-    });
-    await alert.present();
-  }
+  
+  
 
-  login(formLogin: FormGroup) {
-    this.loginService.login(formLogin.value.phone);
+  async login(formLogin: FormGroup) {
+    
+    const valid = await this.loginService.login(formLogin.value.phone);
+    if(valid){
+      this.navCtrl.navigateRoot('/orders',{animated:true});
+    }else{
+      this.uiService.Alert("Login","No encontramos ese Celular.",1)
+    }
   }
 }
