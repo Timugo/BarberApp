@@ -20,6 +20,11 @@ export class CurrentOrderService {
   getInfoCurrentOrder(currentOrder: number){
     return this.http.get(this.URL_API + '/getInfoTemporalOrder' + '?idOrder=' + currentOrder);
   }
+  
+  validateIfExistsOrder(idBarber : number){
+    return this.http.get(this.URL_API + '/checkBarberOrder' + '?idBarber=' + idBarber);
+
+  }
 
   finishOrder(idOrder: number, comment: string, status: string) {
     var id = idOrder.toString();

@@ -3,7 +3,7 @@ import { CurrentOrderService } from 'src/app/services/current-order.service';
 import { DataLocalService } from 'src/app/services/data-local.service';
 import { CurrentOrder } from 'src/app/interfaces/current-order';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { Barber } from 'src/app/interfaces/barber';
@@ -28,14 +28,16 @@ export class CurrentOrderPage implements OnInit {
               private datalocalService: DataLocalService,
               private fb: FormBuilder,
               public alertController: AlertController,
-              private router: Router
+              private router: Router,
+              private navCtrl : NavController
               ) { }
 
   ngOnInit() {
     this.formfinishOrder = this.fb.group({
       comment: ['']
     });
-    this.checkIfOrderExists();
+    this.checkIfOrderExistsInLocal();
+    this.checkIfOrderExistsInServer();
     this.loadCurrentOrder();
   }
 
@@ -60,11 +62,26 @@ export class CurrentOrderPage implements OnInit {
     const { value } = await Storage.get({ key: 'currentOrder' });
     this.getInfoOrder(parseInt(value));
   }
-  async checkIfOrderExists(){
+  async checkIfOrderExistsInLocal(){
     const { value } = await Storage.get({ key: 'currentOrder' });
     if(!value){
       this.router.navigate(['/orders']);
     }
+    
+  }
+
+  async checkIfOrderExistsInServer(){
+    const ret = await Storage.get({ key: 'barber' });
+    const user = JSON.parse(ret.value);
+    if(user){
+      this.currentorderService.validateIfExistsOrder(user.idBarber).subscribe(res =>{
+        if(res['response'] == 1){
+          this.navCtrl.navigateRoot('/orders',{animated:true});
+        }
+      });
+      
+    }
+    
   }
   async clearCurrentOrder() {
     await Storage.remove({ key: 'currentOrder' });
