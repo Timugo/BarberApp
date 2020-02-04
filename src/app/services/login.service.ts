@@ -38,16 +38,9 @@ export class LoginService {
           this.clear();//clean the storage
           resolve(false);
         } else{
-            //if ( this.mensaje.response === 2 && !(this.mensaje.content.message === "Barbero logeado, pero con pedido en curso") ) {
             if(res['response']===2){
               //if the barber doesnt have a order in progress, then we need to redirect to order pages to take an order
               this.token = res['content']['barber']['phone'];
-              let navigationExtras : NavigationExtras = {
-                //sending the city name by url params to the other page
-                queryParams: {
-                  city: res['content']['barber']['city']
-                }
-              }  
               this.barber = {
                 idBarber: res['content']['barber']['id'],
                 name: res['content']['barber']['name'],
@@ -57,15 +50,8 @@ export class LoginService {
               console.log('Barber From Server',this.barber);
               this.saveInfoBarber(this.barber);//save the information of the barber Async function
               resolve(true); //promise handling
-              //this.router.navigate(['/orders'], navigationExtras);
             }
-          }/* else if ( this.mensaje.response === 2 && this.mensaje.content.message === "Barbero logeado, pero con pedido en curso" ) {
-          //if the barber have a order in progress, then we need to redirect to the order in progress page to see the details
-          console.log("orden actual:",this.mensaje.content.order.id);
-          //this.datalocalService.guardarInfoCurrentOrder(this.mensaje.content.order.id);
-        
-          //this.router.navigate(['/current-order']);
-        }*/
+          }
       });
     });
     
