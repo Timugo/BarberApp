@@ -1,0 +1,15 @@
+[
+    {
+      "icon":"contact",
+      "name":"Perfil",
+      "redirectTo":"/current-order"
+
+    },
+    {
+      "icon":"headset",
+      "name":"Soporte ",
+      "redirectTo":"/current-order"
+
+    }
+
+]
