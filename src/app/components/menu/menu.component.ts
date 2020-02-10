@@ -41,8 +41,11 @@ export class MenuComponent implements OnInit {
     this.nameBarber =user.name;
   }
   async contactSupport(){
-    var message = "Hola, soy "+this.nameBarber +" barbero de timugo  con id: "+this.barberId+" y tengo el siguiente problema: (describir el problema)";
+    var message = "Hola, soy "+this.nameBarber +" barbero de timugo  con ID: "+this.barberId+" y tengo el siguiente problema: (describir el problema)";
     await Browser.open({ url: 'https://wa.me/573162452663?text='+message });
+  }
+  async rateApp(){
+    await Browser.open({ url: 'https://play.google.com/store/apps/details?id=com.timugo.barberApp&hl=es' });
   }
 
 }
