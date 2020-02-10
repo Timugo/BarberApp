@@ -6,6 +6,11 @@ import { Observable } from 'rxjs';
 import { Plugins } from '@capacitor/core';
 import { LoginService } from 'src/app/services/login.service';
 import { environment } from 'src/environments/environment';
+
+
+const { Browser } = Plugins;
+
+
 const { Storage } = Plugins;
 const URL = environment.url;
 @Component({
@@ -16,8 +21,9 @@ const URL = environment.url;
 export class MenuComponent implements OnInit {
   componentes : Observable<Componente[]>;
   nameBarber : string ="Barber";
-  imgBarber : string = "/assets/logo.png"
-  pointsBarber :string = "0"
+  imgBarber : string = "/assets/logo.png";
+  pointsBarber :string = "0";
+  barberId: string = "0";
   constructor(private dataService : UiServiceService,private loginService : LoginService) { }
 
   ngOnInit() {
@@ -30,8 +36,13 @@ export class MenuComponent implements OnInit {
     this.loginService.getBarberInfo(user.phone).subscribe((res)=>{
         this.pointsBarber = res['content']['points']
         this.imgBarber = URL +"/"+ res['content']['urlImg']
-    });
+        this.barberId = res['content']['id']
+      });
     this.nameBarber =user.name;
+  }
+  async contactSupport(){
+    var message = "Hola, soy "+this.nameBarber +" barbero de timugo  con id: "+this.barberId+" y tengo el siguiente problema: (describir el problema)";
+    await Browser.open({ url: 'https://wa.me/573162452663?text='+message });
   }
 
 }
