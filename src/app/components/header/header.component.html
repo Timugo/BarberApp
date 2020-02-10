@@ -1,10 +1,10 @@
 <ion-header no-border>
-<!-- <ion-header translucent>   -->
-  <ion-toolbar>
-    <ion-buttons [hidden]=paginaBandera slot="start">
-      <!-- Si existe una historia de páginas regresaa la anterior -->
-      <ion-back-button defaultHref="/"> </ion-back-button>
+  <ion-toolbar color="primary">
+    <ion-buttons slot=start> 
+      <ion-back-button defaultHref="/" >
+      </ion-back-button>
+      
     </ion-buttons>
-    <ion-title>{{titulo}}</ion-title>
+    <ion-title class="ion-text-capitalize">{{titulo}}</ion-title>
   </ion-toolbar>
 </ion-header>
