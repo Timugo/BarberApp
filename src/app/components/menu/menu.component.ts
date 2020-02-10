@@ -49,7 +49,7 @@ export class MenuComponent implements OnInit {
   }
   async showToast() {
     await Toast.show({
-      text: 'Proximamente Conoceras los beneficios de tus Puntos :)'
+      text: 'Sigue obteniendo mas puntos y obtendras beneficios :)'
     });
   }
   async getAppVersion(){
