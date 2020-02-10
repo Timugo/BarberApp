@@ -71,7 +71,7 @@ export class OrdersPage implements OnInit {
   }
   getOrders(barber:Barber){
     this.barber = barber;
-    this.titulo = 'Hola' + ' ' + barber.name + " - Servicios";
+    this.titulo = "Servicios";
     this.ordersService.getAvailableOrders(barber.city).subscribe( res => {
       this.mensaje = res;
       console.log('ordenes',this.mensaje);
