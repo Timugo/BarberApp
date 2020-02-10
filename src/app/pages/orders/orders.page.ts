@@ -1,4 +1,4 @@
-import { Barber } from './../../interfaces/barber';
+import { Barber, Componente } from './../../interfaces/barber';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataLocalService } from '../../services/data-local.service';
 import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
@@ -6,6 +6,8 @@ import { OrdersService } from '../../services/orders.service';
 import { AlertController, IonList, NavController } from '@ionic/angular';
 import { Plugins } from '@capacitor/core';
 import { async } from '@angular/core/testing';
+import { Observable } from 'rxjs';
+import { UiServiceService } from 'src/app/services/ui-service.service';
 
 const { Storage } = Plugins;
 @Component({
@@ -25,7 +27,9 @@ export class OrdersPage implements OnInit {
   city: string;
   barber: Barber;
   titulo: string;
+  nameBarber:string="none"
 
+  componentes: Observable<Componente[]>; //listo of components in the menu
 
 
   constructor( private datalocalService: DataLocalService,
@@ -34,6 +38,7 @@ export class OrdersPage implements OnInit {
                public alertController: AlertController,
                private route: ActivatedRoute,
                private navCtrl: NavController,
+               private dataService : UiServiceService
               ) {
 
     //console.log('re barbero', this.datalocalService.barbero);
@@ -42,6 +47,7 @@ export class OrdersPage implements OnInit {
   }
   
   ngOnInit() {
+    this.componentes = this.dataService.getMenuOpts();  
     this.checkExistsOrderInProgress();
     this.getBarber2(); 
   }
@@ -53,6 +59,7 @@ export class OrdersPage implements OnInit {
   async getBarber2() {
     const ret = await Storage.get({ key: 'barber' });
     const user = JSON.parse(ret.value);
+    //this.name
     this.getOrders(user);
   }
   async checkExistsOrderInProgress(){
@@ -64,7 +71,7 @@ export class OrdersPage implements OnInit {
   }
   getOrders(barber:Barber){
     this.barber = barber;
-    this.titulo = 'Hola' + ' ' + barber.name;
+    this.titulo = 'Hola' + ' ' + barber.name + " - Servicios";
     this.ordersService.getAvailableOrders(barber.city).subscribe( res => {
       this.mensaje = res;
       console.log('ordenes',this.mensaje);

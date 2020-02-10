@@ -6,3 +6,8 @@ export interface Barber {
     city: string;
 
 }
+export interface Componente{
+    icon:string;
+    name:string;
+    redirectTo:string;
+  }
