@@ -1,21 +1,21 @@
-<app-header titulo="Barberos Timugo" paginaBandera=true> </app-header>
-
+<br>
 <ion-content class="login">
 
-  <ion-img class="imagen" src="assets/logob.png"></ion-img>
-  <form [formGroup]="formLogin" (ngSubmit)="login(formLogin)">
+  <ion-card class="card">
+    <ion-img class="imagen" src="assets/logob.png"></ion-img>
+    <form [formGroup]="formLogin" (ngSubmit)="login(formLogin)">
 
-    <ion-list>
+      <ion-list>
 
-      <ion-item>
-        <!-- <ion-label position="floating"> Número de celular </ion-label> -->
-        <ion-input inputmode="numeric" max="10" formControlName="phone" maxlength="10" type="number" placeholder="Ingrese su teléfono">  </ion-input>  
-      </ion-item>
+        <ion-item>
+          <ion-input inputmode="numeric"  formControlName="phone"  type="number" placeholder="Ingrese su teléfono">  </ion-input>  
+        </ion-item>
 
-    </ion-list>
+      </ion-list>
 
-    <ion-button [disabled]="formLogin.invalid" type="submit"> Iniciar sesión </ion-button>
-  
-  </form>
+      <ion-button [disabled]="formLogin.invalid" expand="block" type="submit"> Iniciar sesión </ion-button>
+    
+    </form>
+  </ion-card>
 
 </ion-content>
