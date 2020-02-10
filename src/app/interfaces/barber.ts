@@ -4,6 +4,7 @@ export interface Barber {
     name: string;
     lastName: string;
     city: string;
+    phone:string;
 
 }
 export interface Componente{

@@ -46,6 +46,7 @@ export class LoginService {
                 name: res['content']['barber']['name'],
                 lastName: res['content']['barber']['lastName'],
                 city: res['content']['barber']['city'],
+                phone: res['content']['barber']['phone']
               };
               console.log('Barber From Server',this.barber);
               this.saveInfoBarber(this.barber);//save the information of the barber Async function
@@ -55,6 +56,9 @@ export class LoginService {
       });
     });
     
+  }
+  getBarberInfo(phone : string){
+    return this.http.get("https://timugo.tk/getBarberByPhone?phoneBarber="+phone);
   }
 
   

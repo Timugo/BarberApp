@@ -29,7 +29,8 @@ export class UiServiceService {
   }
 
   getMenuOpts(){
-    console.log(this.http.get<Componente[]>("/assets/data/menu.json"));
+    
     return this.http.get<Componente[]>("/assets/data/menu.json");
   }
+  
 }
