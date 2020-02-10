@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Barber } from '../interfaces/barber';
+import { Barber, DeviceInfo } from '../interfaces/barber';
 import { NavigationExtras } from '@angular/router';
 import { DataLocalService } from './data-local.service';
 import { Plugins, ClipboardPluginWeb } from '@capacitor/core';
 import { AlertController } from '@ionic/angular';
 
 
-const { Storage } = Plugins;
+const { Storage,Device } = Plugins;
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type':  'application/json'
@@ -23,6 +23,7 @@ export class LoginService {
   mensaje: any;
   token :string = null;
   barber: Barber;
+  device : DeviceInfo;
 
   constructor( private http: HttpClient,private datalocalService: DataLocalService,public alertController: AlertController,) { }
 
@@ -50,6 +51,7 @@ export class LoginService {
               };
               console.log('Barber From Server',this.barber);
               this.saveInfoBarber(this.barber);//save the information of the barber Async function
+              this.saveDeviceInfo();
               resolve(true); //promise handling
             }
           }
@@ -60,7 +62,6 @@ export class LoginService {
   getBarberInfo(phone : string){
     return this.http.get("https://timugo.tk/getBarberByPhone?phoneBarber="+phone);
   }
-
   
   /* Storage Management */
   async saveInfoBarber(barbero: Barber){
@@ -71,6 +72,15 @@ export class LoginService {
   }
   async clear() {
     await Storage.clear();
+  }
+
+  async saveDeviceInfo(){
+    var device = await Device.getInfo();
+    device['phone']=this.barber.phone;
+    console.log(device);
+    this.http.put(URL + '/saveBarberDeviceInfo', device, httpOptions).subscribe((res)=>{
+      console.log("respuesta al guardar la info del telefono",res);
+    });
   }
    
 

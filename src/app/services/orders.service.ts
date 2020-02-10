@@ -23,6 +23,7 @@ export class OrdersService {
     return this.http.get(URL + '/getAvailableOrdersByCity' + '?city=' + city);
   }
 
+  
   assingBarberToOrder(idOrder: number, idBarber: number){
     console.log('orden', idOrder, 'barbero', idBarber);
     var order = idOrder.toString();

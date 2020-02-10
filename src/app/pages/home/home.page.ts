@@ -8,7 +8,9 @@ import { DataLocalService } from '../../services/data-local.service';
 import { Plugins } from '@capacitor/core';
 import { UiServiceService } from 'src/app/services/ui-service.service';
 
-const { Storage } = Plugins;
+const { Storage,Device } = Plugins;
+
+
 
 @Component({
   selector: 'app-home',
@@ -56,4 +58,5 @@ export class HomePage implements OnInit {
       this.uiService.Alert("Login","No encontramos ese Celular.",1)
     }
   }
+  
 }
