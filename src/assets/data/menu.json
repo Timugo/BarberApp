@@ -1,6 +1,6 @@
 [
     {
-      "icon":"contact",
+      "icon":"person-outline",
       "name":"Perfil",
       "redirectTo":"/profile"
 
