@@ -1,0 +1,21 @@
+<br>
+<ion-content class="login">
+
+  <ion-card class="card">
+    <ion-img class="imagen" src="assets/logob.png"></ion-img>
+    <form [formGroup]="formLogin" (ngSubmit)="login(formLogin)">
+
+      <ion-list>
+
+        <ion-item>
+          <ion-input inputmode="numeric"  formControlName="phone"  type="number" placeholder="Ingrese su teléfono">  </ion-input>  
+        </ion-item>
+
+      </ion-list>
+
+      <ion-button [disabled]="formLogin.invalid" expand="block" type="submit"> Iniciar sesión </ion-button>
+    
+    </form>
+  </ion-card>
+
+</ion-content>

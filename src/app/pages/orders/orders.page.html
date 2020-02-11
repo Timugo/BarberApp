@@ -1,0 +1,60 @@
+<!--Personal header NO CUSTOM-->
+<ion-header no-border>
+  <ion-toolbar color="primary">
+      <ion-buttons slot="start">
+          <ion-menu-button menu="first"></ion-menu-button>
+      </ion-buttons>
+      <ion-title>{{titulo}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+<!--Menu component in conponents/menu-->
+<app-menu></app-menu>
+<!--content of the page id="principal" here and no in router-link -->
+
+<ion-content id="container">
+
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="refresh"
+      pullingText="Desliza para refrescar"
+      refreshingSpinner="circles"
+      refreshingText="Refrescando...">
+    </ion-refresher-content>  
+  </ion-refresher>
+
+  <ion-list *ngIf="flagOrdenes" #lista> 
+
+    <ion-item-sliding *ngFor="let orden of ordenes">
+
+      <ion-item>
+        <ion-label>
+          <h3> <ion-icon name="logo-tux"></ion-icon>{{orden.nameClient}}</h3>
+          <h4> {{orden.services.nameService}}</h4>
+          <h4><ion-icon name="cash"></ion-icon>{{orden.price | currency}} <ion-icon name="cash"></ion-icon></h4>    
+          <p>
+            <b>Servicios</b>
+          </p>
+          <ion-label *ngFor="let servicio of orden.services">
+            <h4><i class="fas fa-cut"></i>{{servicio.nameService}} x {{servicio.quantity}} </h4>
+          </ion-label>
+        </ion-label>
+        <ion-label slot="end" class="ion-text-right">
+          <p>Desliza para tomar</p><ion-icon name="arrow-forward"></ion-icon>
+        </ion-label>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option (click)="tomarOrden(orden.id)">
+          <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+
+    </ion-item-sliding>
+
+  </ion-list>
+
+  <ion-text class="noOrders" *ngIf="flagNoOrdenes" color="primary">
+    <h1> No hay servicios disponibles, desliza para volver a buscar.</h1>
+  </ion-text>
+
+</ion-content >
