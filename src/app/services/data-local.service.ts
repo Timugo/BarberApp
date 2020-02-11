@@ -1,7 +1,8 @@
 import { Barber } from './../interfaces/barber';
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage';
+import { Plugins } from '@capacitor/core';
 
+const { Storage } = Plugins;
 @Injectable({
   providedIn: 'root'
 })
@@ -10,28 +11,38 @@ export class DataLocalService {
   barbero: Barber;
   codigo: number;
 
-  constructor(private storage: Storage) {
-    this.cargarInfoBarber();
-    this.cargarCurrentOrder();
+  constructor() {
   }
 
-  guardarInfoBarbero(barbero: Barber){
-    this.storage.set('barbero', barbero);
+  async saveInfoBarber(barbero: Barber){
+    await Storage.set({
+      key: 'barber',
+      value:JSON.stringify(barbero)
+    });
+  }
+  async saveCity(city:string) {
+    await Storage.set({
+      key: 'city',
+      value: city
+    });
   }
 
-  async cargarInfoBarber(){
-    const barbero = await this.storage.get('barbero');
-
-    this.barbero = barbero;
+  async getBarber() {
+    const ret = await Storage.get({ key: 'barber' });
+    const user = JSON.parse(ret.value);
   }
 
-  guardarInfoCurrentOrder(codigo: number){
-    this.storage.set('currentorder', codigo);
+  
+  
+  async saveInfoCurrentOrder(idOrder : number) {
+    await Storage.set({
+      key: 'currentOrder',
+      value: idOrder.toString()
+    });
   }
+    //this.storage.set('currentorder', codigo);
+  
 
-  async cargarCurrentOrder(){
-    const id = await this.storage.get('currentorder');
-    this.codigo = id;
-  }
+  
 
 }

@@ -12,22 +12,28 @@ const httpOptions = {
 })
 export class CurrentOrderService {
 
-  // readonly URL_API = 'http://167.172.216.181:3000';
-  readonly URL_API = 'http://localhost:3000';
+  
+  readonly URL_API = 'https://www.timugo.tk';
 
   constructor(private http: HttpClient) { }
 
   getInfoCurrentOrder(currentOrder: number){
-    return this.http.get(this.URL_API + '/getInfoCurrentOrder' + '?idOrder=' + currentOrder);
+    return this.http.get(this.URL_API + '/getInfoTemporalOrder' + '?idOrder=' + currentOrder);
+  }
+  
+  validateIfExistsOrder(idBarber : number){
+    return this.http.get(this.URL_API + '/checkBarberOrder' + '?idBarber=' + idBarber);
+
   }
 
-  finishOrder(idOrder: number, nameBarber: string, comment: string, status: boolean) {
+  finishOrder(idOrder: number, comment: string, status: string) {
     var id = idOrder.toString();
-    return this.http.post(this.URL_API + '/finishOrder', {idOrder: id, nameBarber: nameBarber, comment: comment, status: status } ,httpOptions);
+    return this.http.post(this.URL_API + '/finishOrder', {idOrder: id, comment: comment, status: status } ,httpOptions);
   }
 
   cancelOrder(idOrder: number, idUser: number) {
     var id = idOrder.toString();
+    console.log("aqui",idOrder,idUser);
     return this.http.put(this.URL_API + '/cancelOrderBarber', {idOrder: id, idUser: idUser }, httpOptions );
   }
   

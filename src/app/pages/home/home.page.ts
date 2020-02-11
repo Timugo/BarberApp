@@ -1,10 +1,16 @@
 import { Barber } from './../../interfaces/barber';
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../services/login.service';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 import { DataLocalService } from '../../services/data-local.service';
+import { Plugins } from '@capacitor/core';
+import { UiServiceService } from 'src/app/services/ui-service.service';
+
+const { Storage,Device } = Plugins;
+
+
 
 @Component({
   selector: 'app-home',
@@ -21,59 +27,36 @@ export class HomePage implements OnInit {
               private loginService: LoginService,
               private fb: FormBuilder,
               public alertController: AlertController,
-              private datalocalService: DataLocalService
+              private navCtrl: NavController,
+              private uiService :UiServiceService
               ) { }
 
   ngOnInit() {
+    this.getBarber();
     this.formLogin = this.fb.group({
       phone: [null, Validators.compose([Validators.required, Validators.minLength(10)])]
     });
+    
   }
 
-  async Alert(titulo: string, mensaje: string, accion: number) {
-    const alert = await this.alertController.create({
-      header: titulo,
-      // subHeader: 'Subtitle',
-      message: mensaje,
-      // buttons: ['OK']
-      buttons: [
-        {
-          text: 'OK',
-          handler: ( ) => {
-            if ( accion === 1 ) {
-              this.formLogin.reset();
-            }
-            console.log('Confirm Okay');
-          }
-        }
-      ]
-    });
-
-    await alert.present();
-
+  async getBarber() {
+    const ret = await Storage.get({ key: 'barber' });
+    const user = JSON.parse(ret.value);
+    if(user){
+      this.navCtrl.navigateRoot('/orders',{animated:true});
+    }
   }
+  
+  
 
-  login(formLogin: FormGroup) {
-    this.loginService.postBarber(formLogin.value.phone).subscribe( res => {
-      this.mensaje = res;
-      console.log(res);
-      if (this.mensaje.response === 1) {
-        this.Alert('Timugo alerta', this.mensaje.content, 1);
-      } else if ( this.mensaje.response === 2 && !(this.mensaje.content.message === "Barbero logeado, pero con pedido en curso") ) {
-        console.log(this.mensaje.content.message);
-        this.barbero = {
-          idBarber: this.mensaje.content.barber.id,
-          name: this.mensaje.content.barber.name,
-          lastName: this.mensaje.content.barber.lastName,
-          city: this.mensaje.content.barber.city,
-        };
-        console.log('BARBERO',this.barbero);
-        this.datalocalService.guardarInfoBarbero(this.barbero);
-        this.router.navigate(['/orders']);
-      } else if ( this.mensaje.response === 2 && this.mensaje.content.message === "Barbero logeado, pero con pedido en curso" ) {
-        this.datalocalService.guardarInfoCurrentOrder(this.mensaje.content.order.id);
-        this.router.navigate(['/current-order']);
-      }
-    });
+  async login(formLogin: FormGroup) {
+    
+    const valid = await this.loginService.login(formLogin.value.phone);
+    if(valid){
+      this.navCtrl.navigateRoot('/orders',{animated:true});
+    }else{
+      this.uiService.Alert("Login","No encontramos ese Celular.",1)
+    }
   }
+  
 }
