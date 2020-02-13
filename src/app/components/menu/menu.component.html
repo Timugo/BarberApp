@@ -1,85 +1,87 @@
-
-  <ion-menu side="start" menuId="first" contentId="container">
-    <ion-header no-border>
-      <ion-toolbar color="white">
-        <ion-title>   </ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content>
-      <ion-grid>
-        <ion-row>
-          <ion-col size="1">
-          </ion-col>
-          <ion-col size="4">
-            <ion-avatar>
-              <img src={{imgBarber}}>
-            </ion-avatar>
-          </ion-col>
-          <ion-col>
-            <h3>{{nameBarber}}</h3>
-            <p>Tus Puntos : {{pointsBarber}}</p>
-          </ion-col>
-
-        </ion-row>
-        <ion-row>
-          <ion-col size="1">
-          </ion-col>
-          <ion-col >
-            <ion-list lines="none">
-
-              <ion-menu-toggle *ngFor="let c of componentes | async" >
-                
-                <ion-item [routerLink] = "c.redirectTo">
-                  <ion-icon slot="start" [name]="c.icon"></ion-icon>
-                  <ion-label>{{c.name}}</ion-label>  
-                  
-                </ion-item>
-                <ion-item (click)="contactSupport()">  
-                  <ion-icon slot="start" name="logo-whatsapp"></ion-icon>
-                  <ion-label>Soporte</ion-label>  
-                  
-                </ion-item>
-                <ion-item (click)="showToast()">  
-                  <ion-icon slot="start" name="star-outline"></ion-icon>
-                  <ion-label>Beneficios Puntos</ion-label>  
-                  
-                </ion-item>
-                <ion-item (click)="rateApp()">  
-                  <ion-icon slot="start" name="thumbs-up-outline"></ion-icon>
-                  <ion-label>Calificanos</ion-label>  
-                  
-                </ion-item>
-              </ion-menu-toggle>
-              
-              
-            </ion-list>      
-          </ion-col>
-
-        </ion-row>
-      </ion-grid>
-      
-    </ion-content>
-    <ion-footer no-border>
-      <ion-grid>
-        <ion-row>
-          <ion-col size="8">
-            <ion-chip color="primary" outline=true>
+<ion-split-pane contentId="container2">
+    <ion-menu side="start" menuId="first" contentId="container2" type="overlay">
+      <ion-header no-border>
+        <ion-toolbar color="white">
+          <ion-title>   </ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="1">
+            </ion-col>
+            <ion-col size="4">
               <ion-avatar>
-                <img src="/assets/logo.png">
+                <img src={{imgBarber}}>
               </ion-avatar>
-              <ion-text>Timugo 2019-2020</ion-text>
-            </ion-chip>
-          </ion-col>
-          <ion-col size="4">
-            <ion-text>
-              Version
-            </ion-text>
-            <br>
-            <ion-text color="primary">
-              {{appVersion}}
-            </ion-text>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-footer>
-  </ion-menu>
+            </ion-col>
+            <ion-col>
+              <h3>{{nameBarber}}</h3>
+              <p>Tus Puntos : {{pointsBarber}}</p>
+            </ion-col>
+    
+          </ion-row>
+          <ion-row>
+            <ion-col size="1">
+            </ion-col>
+            <ion-col >
+              <ion-list lines="none">
+    
+                <ion-menu-toggle *ngFor="let c of componentes | async" >
+                  
+                  <ion-item [routerLink] = "c.redirectTo">
+                    <ion-icon slot="start" [name]="c.icon"></ion-icon>
+                    <ion-label>{{c.name}}</ion-label>  
+                    
+                  </ion-item>
+                  <ion-item (click)="contactSupport()">  
+                    <ion-icon slot="start" name="logo-whatsapp"></ion-icon>
+                    <ion-label>Soporte</ion-label>  
+                    
+                  </ion-item>
+                  <ion-item (click)="showToast()">  
+                    <ion-icon slot="start" name="star-outline"></ion-icon>
+                    <ion-label>Beneficios Puntos</ion-label>  
+                    
+                  </ion-item>
+                  <ion-item (click)="rateApp()">  
+                    <ion-icon slot="start" name="thumbs-up-outline"></ion-icon>
+                    <ion-label>Calificanos</ion-label>  
+                    
+                  </ion-item>
+                </ion-menu-toggle>
+                
+                
+              </ion-list>      
+            </ion-col>
+    
+          </ion-row>
+        </ion-grid>
+        
+      </ion-content>
+      <ion-footer no-border>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="8">
+              <ion-chip color="primary" outline=true>
+                <ion-avatar>
+                  <img src="/assets/logo.png">
+                </ion-avatar>
+                <ion-text>Timugo 2019-2020</ion-text>
+              </ion-chip>
+            </ion-col>
+            <ion-col size="4">
+              <ion-text>
+                Version
+              </ion-text>
+              <br>
+              <ion-text color="primary">
+                {{appVersion}}
+              </ion-text>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-footer>
+    </ion-menu>
+    <ion-router-outlet id="container2"></ion-router-outlet>
+</ion-split-pane>
