@@ -17,7 +17,7 @@ const { Storage } = Plugins;
 })
 export class OrdersPage implements OnInit {
   
-  @ViewChild('lista', {static: false}) lista: IonList;
+  @ViewChild('lista') lista: IonList;
   
   ordenes: any[];
   flagOrdenes: boolean;
