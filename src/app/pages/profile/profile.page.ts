@@ -12,4 +12,10 @@ export class ProfilePage implements OnInit {
   ngOnInit() {
   }
 
+  getBackButtonText() {
+    const win = window as any;
+    const mode = win && win.Ionic && win.Ionic.mode;
+    return mode === 'ios' ? 'Servicios' : '';
+  }
+
 }
