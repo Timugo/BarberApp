@@ -1,13 +1,13 @@
 import { Barber, Componente } from './../../interfaces/barber';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataLocalService } from '../../services/data-local.service';
-import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { OrdersService } from '../../services/orders.service';
 import { AlertController, IonList, NavController, ToastController } from '@ionic/angular';
 import { Plugins,PushNotification,PushNotificationToken,PushNotificationActionPerformed } from '@capacitor/core';
-import { async } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 import { UiServiceService } from 'src/app/services/ui-service.service';
+import { Platform } from '@ionic/angular';
 
 const { Storage,PushNotifications } = Plugins;
 @Component({
@@ -39,7 +39,8 @@ export class OrdersPage implements OnInit {
                private route: ActivatedRoute,
                private navCtrl: NavController,
                private dataService : UiServiceService,
-               private toastCtrl : ToastController
+               private toastCtrl : ToastController,
+               public platform: Platform
               ) {
 
     //console.log('re barbero', this.datalocalService.barbero);
@@ -51,38 +52,41 @@ export class OrdersPage implements OnInit {
     this.componentes = this.dataService.getMenuOpts();  
     this.checkExistsOrderInProgress();
     this.getBarber2(); 
+    
+    //Try to register the device in all platforms except mobile web in the browser
+    if(!this.platform.is("mobileweb")){
+      // Register with Apple / Google to receive push via APNS/FCM
+      PushNotifications.register();
 
+      // On succcess, we should be able to receive notifications
+      PushNotifications.addListener('registration',
+        (token: PushNotificationToken) => {
+          console.log('======= FCM TOKEN =========');
+          console.log(token.value);
+        }
+      );
+      // Some issue with our setup and push will not work
+      PushNotifications.addListener('registrationError',
+        (error: any) => {
+          alert('Error on registration: ' + JSON.stringify(error));
+        }
+      );
 
-    // Register with Apple / Google to receive push via APNS/FCM
-    PushNotifications.register();
-
-    // On succcess, we should be able to receive notifications
-    PushNotifications.addListener('registration',
-      (token: PushNotificationToken) => {
-        alert('Push registration success, token: ' + token.value);
-        console.log('Push registration success, token: '+ token.value);
-      }
-    );
-    // Some issue with our setup and push will not work
-    PushNotifications.addListener('registrationError',
-      (error: any) => {
-        alert('Error on registration: ' + JSON.stringify(error));
-      }
-    );
-
-    // Show us the notification payload if the app is open on our device
-    PushNotifications.addListener('pushNotificationReceived',
-      (notification: PushNotification) => {
-        //alert('Push received: ' + JSON.stringify(notification));
-        this.menssage(notification.body);
-      }
-    );
-    // Method called when tapping on a notification
-    PushNotifications.addListener('pushNotificationActionPerformed',
-      (notification: PushNotificationActionPerformed) => {
-        alert('Push action performed: ' + JSON.stringify(notification));
-      }
-    );
+      // Show us the notification payload if the app is open on our device
+      PushNotifications.addListener('pushNotificationReceived',
+        (notification: PushNotification) => {
+          //alert('Push received: ' + JSON.stringify(notification));
+          this.menssage(notification.body);
+        }
+      );
+      // Method called when tapping on a notification
+      PushNotifications.addListener('pushNotificationActionPerformed',
+        (notification: PushNotificationActionPerformed) => {
+          alert('Push action performed: ' + JSON.stringify(notification));
+        }
+      );
+    }
+    
 
     /************************************************ */
   }
