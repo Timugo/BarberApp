@@ -3,13 +3,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataLocalService } from '../../services/data-local.service';
 import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
 import { OrdersService } from '../../services/orders.service';
-import { AlertController, IonList, NavController } from '@ionic/angular';
-import { Plugins } from '@capacitor/core';
+import { AlertController, IonList, NavController, ToastController } from '@ionic/angular';
+import { Plugins,PushNotification,PushNotificationToken,PushNotificationActionPerformed } from '@capacitor/core';
 import { async } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 import { UiServiceService } from 'src/app/services/ui-service.service';
 
-const { Storage } = Plugins;
+const { Storage,PushNotifications } = Plugins;
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.page.html',
@@ -38,7 +38,8 @@ export class OrdersPage implements OnInit {
                public alertController: AlertController,
                private route: ActivatedRoute,
                private navCtrl: NavController,
-               private dataService : UiServiceService
+               private dataService : UiServiceService,
+               private toastCtrl : ToastController
               ) {
 
     //console.log('re barbero', this.datalocalService.barbero);
@@ -50,6 +51,48 @@ export class OrdersPage implements OnInit {
     this.componentes = this.dataService.getMenuOpts();  
     this.checkExistsOrderInProgress();
     this.getBarber2(); 
+
+
+    // Register with Apple / Google to receive push via APNS/FCM
+    PushNotifications.register();
+
+    // On succcess, we should be able to receive notifications
+    PushNotifications.addListener('registration',
+      (token: PushNotificationToken) => {
+        //alert('Push registration success, token: ' + token.value);
+      }
+    );
+    // Some issue with our setup and push will not work
+    PushNotifications.addListener('registrationError',
+      (error: any) => {
+        alert('Error on registration: ' + JSON.stringify(error));
+      }
+    );
+
+    // Show us the notification payload if the app is open on our device
+    PushNotifications.addListener('pushNotificationReceived',
+      (notification: PushNotification) => {
+        //alert('Push received: ' + JSON.stringify(notification));
+        this.menssage(notification.body);
+      }
+    );
+    // Method called when tapping on a notification
+    PushNotifications.addListener('pushNotificationActionPerformed',
+      (notification: PushNotificationActionPerformed) => {
+        alert('Push action performed: ' + JSON.stringify(notification));
+      }
+    );
+
+    /************************************************ */
+  }
+  async menssage(mensaje: string) {
+    const toast = await this.toastCtrl.create({
+      message: mensaje,
+      duration: 8000,
+      color: 'primary',
+      position: 'top'
+    });
+    toast.present();
   }
   async getCity() {
     const { value } = await Storage.get({ key: 'city' });
