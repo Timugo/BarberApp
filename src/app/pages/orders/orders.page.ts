@@ -59,7 +59,8 @@ export class OrdersPage implements OnInit {
     // On succcess, we should be able to receive notifications
     PushNotifications.addListener('registration',
       (token: PushNotificationToken) => {
-        //alert('Push registration success, token: ' + token.value);
+        alert('Push registration success, token: ' + token.value);
+        console.log('Push registration success, token: '+ token.value);
       }
     );
     // Some issue with our setup and push will not work
