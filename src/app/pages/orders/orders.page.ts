@@ -188,7 +188,7 @@ export class OrdersPage implements OnInit {
     });
     await alert.present();
   }  
-
+  
 
   tomarOrden(codigoOrden: number){
     this.presentAlertConfirm('Confirmacion la Orden','¿Deseas tomarla?',codigoOrden);
