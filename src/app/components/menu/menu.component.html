@@ -1,4 +1,4 @@
-<ion-split-pane contentId="container2">
+<!--<ion-split-pane contentId="container2">-->
     <ion-menu side="start" menuId="first" contentId="container2" type="overlay">
       <ion-header class="ion-no-border">
         <ion-toolbar color="white">
@@ -54,7 +54,7 @@
                   <ion-label>
                     Dark Theme
                   </ion-label>
-                  <ion-toggle [(ngModel)]="dark"></ion-toggle>
+                  <ion-toggle></ion-toggle>
                 </ion-item>
                 
               </ion-list>      
@@ -88,5 +88,6 @@
         </ion-grid>
       </ion-footer>
     </ion-menu>
-    <ion-router-outlet id="container2"></ion-router-outlet>
-</ion-split-pane>
+  <ion-router-outlet id="container2"></ion-router-outlet>
+    
+<!-- </ion-split-pane> -->

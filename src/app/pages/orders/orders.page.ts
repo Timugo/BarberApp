@@ -3,7 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataLocalService } from '../../services/data-local.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OrdersService } from '../../services/orders.service';
-import { AlertController, IonList, NavController, ToastController } from '@ionic/angular';
+import { AlertController, IonList, NavController, ToastController, MenuController } from '@ionic/angular';
 import { Plugins,PushNotification,PushNotificationToken,PushNotificationActionPerformed } from '@capacitor/core';
 import { Observable } from 'rxjs';
 import { UiServiceService } from 'src/app/services/ui-service.service';
@@ -18,7 +18,7 @@ const { Storage,PushNotifications } = Plugins;
 export class OrdersPage implements OnInit {
   
   @ViewChild('lista') lista: IonList;
-  
+  activeMenu :string;
   ordenes: any[];
   flagOrdenes: boolean;
   flagNoOrdenes: boolean;
@@ -40,15 +40,16 @@ export class OrdersPage implements OnInit {
                private navCtrl: NavController,
                private dataService : UiServiceService,
                private toastCtrl : ToastController,
-               public platform: Platform
+               public platform: Platform,
+               private menu:MenuController
               ) {
-
-    //console.log('re barbero', this.datalocalService.barbero);
-    //this.getBarber();//get barber info
+                this.activeMenu = 'first';
+                this.menu.enable(true, this.activeMenu);
     
-  }
+              }
   
   ngOnInit() {
+      
     this.componentes = this.dataService.getMenuOpts();  
     this.checkExistsOrderInProgress();
     this.getBarber2(); 
@@ -102,13 +103,16 @@ export class OrdersPage implements OnInit {
   async getCity() {
     const { value } = await Storage.get({ key: 'city' });
     this.city = value;
-    console.log('Got item: ', value);
+   
   }
   async getBarber2() {
     const ret = await Storage.get({ key: 'barber' });
     const user = JSON.parse(ret.value);
-    //this.name
-    this.getOrders(user);
+    if(user){
+      this.getOrders(user);
+    }else{
+      this.navCtrl.navigateRoot('/home',{animated:true},);
+    }
   }
   async checkExistsOrderInProgress(){
     const { value } = await Storage.get({ key: 'currentOrder' });
@@ -122,13 +126,11 @@ export class OrdersPage implements OnInit {
     this.titulo = "Servicios";
     this.ordersService.getAvailableOrders(barber.city).subscribe( res => {
       this.mensaje = res;
-      console.log('ordenes',this.mensaje);
+      console.log('Fetch de Ordenes',this.mensaje);
       if(this.mensaje.response === 1) {
         this.flagOrdenes = false;
         this.flagNoOrdenes = true;
-        console.log('response',this.mensaje.response);
       } else if ( this.mensaje.response === 2 ) {
-        console.log('response',this.mensaje.response);
         this.ordenes = this.mensaje.content;
         this.flagOrdenes = true;
         this.flagNoOrdenes = false;

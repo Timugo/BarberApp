@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Barber, DeviceInfo } from '../interfaces/barber';
-import { NavigationExtras } from '@angular/router';
-import { DataLocalService } from './data-local.service';
-import { Plugins, ClipboardPluginWeb } from '@capacitor/core';
-import { AlertController } from '@ionic/angular';
+import { NavigationExtras, Router } from '@angular/router';
+import { Plugins } from '@capacitor/core';
+import { AlertController, NavController } from '@ionic/angular';
+import { UiServiceService } from './ui-service.service';
+
 
 
 const { Storage,Device } = Plugins;
@@ -25,21 +26,62 @@ export class LoginService {
   barber: Barber;
   device : DeviceInfo;
 
-  constructor( private http: HttpClient,private datalocalService: DataLocalService,public alertController: AlertController,) { }
+  constructor( private http: HttpClient,
+              public alertController: AlertController,
+              private navCtrl: NavController,
+              private uiService :UiServiceService,
+              private router:Router
+              ) { }
 
   
-  login(telefono: number) {
+  // login(telefono: number) {
 
-    return new Promise(resolve=>{
-      this.http.post(URL + '/loginBarber', {phone: telefono}, httpOptions).subscribe( res => {
+  //   return new Promise(resolve=>{
+  //     this.http.post(URL + '/loginBarber', {phone: telefono}, httpOptions).subscribe( res => {
+  //       console.log(res);
+  //       if (res['response'] === 1) {
+  //         //failed login
+  //         this.token = null; //clean  the token
+  //         this.clear();//clean the storage
+  //         resolve(false);
+  //       } else{
+  //           if(res['response']===2){
+  //             //if the barber doesnt have a order in progress, then we need to redirect to order pages to take an order
+  //             this.token = res['content']['barber']['phone'];
+  //             this.barber = {
+  //               idBarber: res['content']['barber']['id'],
+  //               name: res['content']['barber']['name'],
+  //               lastName: res['content']['barber']['lastName'],
+  //               city: res['content']['barber']['city'],
+  //               phone: res['content']['barber']['phone']
+  //             };
+  //             console.log('Barber From Server',this.barber);
+  //             this.saveInfoBarber(this.barber);//save the information of the barber Async function
+  //             this.saveDeviceInfo();
+  //             resolve(true);
+              
+  //           }
+  //         }
+  //     },);
+  //   });
+    
+  // }
+  async login(telefono: number) {
+    try{
+      await this.http.post(URL + '/loginBarber', {phone: telefono}, httpOptions).subscribe( res => {
         console.log(res);
         if (res['response'] === 1) {
           //failed login
+          this.uiService.Alert("Login","Ups, no encontramos ese celular",1);
           this.token = null; //clean  the token
           this.clear();//clean the storage
-          resolve(false);
         } else{
             if(res['response']===2){
+
+              
+              
+              
+              
               //if the barber doesnt have a order in progress, then we need to redirect to order pages to take an order
               this.token = res['content']['barber']['phone'];
               this.barber = {
@@ -51,12 +93,22 @@ export class LoginService {
               };
               console.log('Barber From Server',this.barber);
               this.saveInfoBarber(this.barber);//save the information of the barber Async function
-              this.saveDeviceInfo();
-              resolve(true); //promise handling
+              this.saveDeviceInfo();              
+              let navigationExtras : NavigationExtras ={
+                queryParams:{
+                  barber: JSON.stringify(this.barber)
+                }
+              }
+              //this.navCtrl.setDirection('root');
+              //this.router.navigateByUrl('/orders',navigationExtras);
+              this.navCtrl.navigateRoot('/orders',{animated:true},);
             }
           }
-      });
-    });
+      },);
+      return true;
+    } catch (err) {
+      return false;
+    }
     
   }
   getBarberInfo(phone : string){
