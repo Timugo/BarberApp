@@ -69,7 +69,6 @@ export class CurrentOrderPage implements OnInit {
     }
     
   }
-
   async checkIfOrderExistsInServer(){
     const ret = await Storage.get({ key: 'barber' });
     const user = JSON.parse(ret.value);
