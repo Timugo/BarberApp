@@ -3,11 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../services/login.service';
 import { AlertController, NavController, MenuController } from '@ionic/angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router,} from '@angular/router';
 import { Plugins } from '@capacitor/core';
-import { UiServiceService } from 'src/app/services/ui-service.service';
 
-const { Storage,Device } = Plugins;
+
+const { Storage} = Plugins;
 
 
 
@@ -33,7 +32,7 @@ export class HomePage implements OnInit {
               }
 
   ngOnInit() {
-    this.getBarber();
+    
     this.formLogin = this.fb.group({
       phone: [null, Validators.compose([Validators.required, Validators.minLength(10)])]
     });
@@ -46,25 +45,7 @@ export class HomePage implements OnInit {
   
   }
 
-  async getBarber() {
-    const ret = await Storage.get({ key: 'barber' });
-    const user = JSON.parse(ret.value);
-    if(user){
-      this.navCtrl.navigateRoot('/orders',{animated:true});
-    }
-  }
-  
-  
-
-  // async login(formLogin: FormGroup) {
-    
-  //   const valid = await this.loginService.login(formLogin.value.phone);
-  //   if(valid){
-  //     this.navCtrl.navigateRoot('/orders',{animated:true});
-  //   }else{
-  //     this.uiService.Alert("Login","No encontramos ese Celular.",1)
-  //   }
-  // }
+ 
   login(formLogin: FormGroup) {
     this.loginService.login(formLogin.value.phone);
   }
