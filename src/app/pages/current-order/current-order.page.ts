@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CurrentOrderService } from 'src/app/services/current-order.service';
-import { DataLocalService } from 'src/app/services/data-local.service';
-import { CurrentOrder } from 'src/app/interfaces/current-order';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder,} from '@angular/forms';
 import { AlertController, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { Barber } from 'src/app/interfaces/barber';
+import { ToastController } from '@ionic/angular';
 
-const { Storage } = Plugins;
+const { Storage,Clipboard } = Plugins;
 @Component({
   selector: 'app-current-order',
   templateUrl: './current-order.page.html',
@@ -25,11 +24,11 @@ export class CurrentOrderPage implements OnInit {
   idCurrentOrder :string;
 
   constructor(private currentorderService: CurrentOrderService,
-              private datalocalService: DataLocalService,
               private fb: FormBuilder,
-              public alertController: AlertController,
+              private alertController: AlertController,
               private router: Router,
-              private navCtrl : NavController
+              private navCtrl : NavController,
+              private toastController: ToastController
               ) { }
 
   ngOnInit() {
@@ -57,6 +56,12 @@ export class CurrentOrderPage implements OnInit {
       };
       
     });
+  }
+  copyToCLipboard(){
+    Clipboard.write({
+      string: this.currentOrder.phoneClient.toString()
+    });
+    this.presentToast("Numero Copiado!");
   }
   async loadCurrentOrder(){
     const { value } = await Storage.get({ key: 'currentOrder' });
@@ -89,6 +94,13 @@ export class CurrentOrderPage implements OnInit {
     const ret = await Storage.get({ key: 'barber' });
     const user = JSON.parse(ret.value);
     this.cancelOrder2(user.idBarber);
+  }
+  async presentToast(message:string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000
+    });
+    toast.present();
   }
   async Alert(titulo: string, mensaje: string, accion: number) {
     const alert = await this.alertController.create({
