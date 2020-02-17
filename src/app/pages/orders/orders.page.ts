@@ -8,7 +8,8 @@ import { Plugins,PushNotification,PushNotificationToken,PushNotificationActionPe
 import { Observable } from 'rxjs';
 import { UiServiceService } from 'src/app/services/ui-service.service';
 import { Platform } from '@ionic/angular';
-
+import { Gesture, GestureConfig, createGesture } from '@ionic/core';
+//import { Gesture, GestureController } from '@ionic/angular';
 const { Storage,PushNotifications } = Plugins;
 @Component({
   selector: 'app-orders',
