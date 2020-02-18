@@ -2,7 +2,7 @@
     {
       "icon":"person-outline",
       "name":"Perfil",
-      "redirectTo":"/profile"
+      "redirectTo":"/orders"
 
     }
 

@@ -198,4 +198,12 @@ export class CurrentOrderPage implements OnInit {
     });
     
   }
+  doRefresh(event) {
+    
+    this.loadCurrentOrder();
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      event.target.complete();
+    }, 1000);
+  }
 }
