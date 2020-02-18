@@ -7,6 +7,7 @@ import { Plugins } from '@capacitor/core';
 import { LoginService } from 'src/app/services/login.service';
 import { environment } from 'src/environments/environment';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Platform } from '@ionic/angular';
 
 //Native SDK plugins
 const { Toast,Browser,Storage,Device} = Plugins;
@@ -27,7 +28,8 @@ export class MenuComponent implements OnInit {
   constructor(private route :ActivatedRoute,
               private dataService : UiServiceService,
               private loginService : LoginService,
-              private router : Router) {
+              private router : Router,
+              public platform: Platform,) {
                 
 
                 // this.route.queryParams.subscribe(params =>{
@@ -77,7 +79,14 @@ export class MenuComponent implements OnInit {
     await Browser.open({ url: 'https://wa.me/573162452663?text='+message });
   }
   async rateApp(){
-    await Browser.open({ url: 'https://play.google.com/store/apps/details?id=com.timugo.barberApp&hl=es' });
+    if(this.platform.is("android")){
+      await Browser.open({ url: 'https://play.google.com/store/apps/details?id=com.timugo.barberApp&hl=es' });
+    }
+    else{
+      if(this.platform.is("ios")){
+        await Browser.open({ url: 'https://apps.apple.com/es/app/somos-timugo/id1497415210?ls=1' });
+      }
+    }
   }
   async showToast() {
     await Toast.show({
