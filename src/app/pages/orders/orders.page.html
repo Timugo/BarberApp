@@ -32,7 +32,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-list *ngIf="flagOrdenes" #lista> 
+  <ion-list *ngIf="flagOrdenes" #lista  style="background-color: #f2f2f2;"> 
     <ion-item-sliding *ngFor="let orden of ordenes">
       <ion-card>
         <ion-item>
@@ -72,11 +72,10 @@
   <ion-text class="noOrders" *ngIf="flagNoOrdenes" color="primary">
     <h1> Desliza para buscar Ordenes</h1>
   </ion-text>
-  
 
+ 
+</ion-content>
+<ion-footer class="ion-no-border">
+  <app-slide-drawer></app-slide-drawer>
+</ion-footer>
 
-
-
-  
-
-</ion-content >
