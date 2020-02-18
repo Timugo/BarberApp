@@ -1,8 +1,42 @@
-<ion-card>
+<!-- <ion-card>
   <ion-card-header>
     hola
   </ion-card-header>
   <ion-card-content>
     Al A VERGA DEL MICO
   </ion-card-content>
-</ion-card>
+</ion-card> -->
+<ion-header mode="ios"  class="ion-no-border">
+  <ion-toolbar mode="ios" >
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-title><ion-icon name="chevron-up-outline"></ion-icon></ion-title>
+
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col></ion-col>
+      </ion-row>
+      
+      <ion-row>
+        <ion-col size="1"></ion-col>
+        <ion-col size="2">
+            <p>Estas {{activate}}</p>
+        </ion-col>
+        <ion-col size="6">
+          <ion-text color="primary">
+            <p >ACTIVO</p>
+          </ion-text>
+      </ion-col>
+        <ion-col size="3">
+          <ion-toggle checked="true" disabled="true"></ion-toggle>
+        </ion-col>
+      </ion-row>
+
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+ <ion-content id="header">
+   <ng-content></ng-content>
+</ion-content>
