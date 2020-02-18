@@ -51,7 +51,7 @@ export class OrdersPage implements OnInit {
   ngOnInit() {
       
     this.componentes = this.dataService.getMenuOpts();  
-    this.checkExistsOrderInProgress();
+    //this.checkExistsOrderInProgress();
     this.getBarber2(); 
     
     //Try to register the device in all platforms except mobile web in the browser

@@ -20,10 +20,15 @@ export class AppComponent {
     this.getBarber();
   }
   async getBarber() {
+    const { value } = await Storage.get({ key: 'currentOrder' });
     const ret = await Storage.get({ key: 'barber' });
     const user = JSON.parse(ret.value);
-    if(user){
-      this.navCtrl.navigateRoot('/orders',{animated:true});
+    if(value){
+      this.navCtrl.navigateRoot('/current-order',{animated:true});
+    }else{
+      if(user){
+        this.navCtrl.navigateRoot('/orders',{animated:true});
+      }
     }
   }
   initializeApp() {
