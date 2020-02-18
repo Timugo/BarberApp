@@ -205,7 +205,9 @@ export class OrdersPage implements OnInit {
         this.flagOrdenes = true;
         this.flagNoOrdenes = false;
       }
-      event.target.complete();
+      setTimeout(() => {
+        event.target.complete();
+      }, 3000);
     });
   }
 }

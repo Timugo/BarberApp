@@ -12,14 +12,14 @@
 <app-menu></app-menu>
 <!--content of the page id="principal" here and no in router-link -->
 
-<ion-content  fullscreen>
+<ion-content>
 
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content
-      pullingIcon="refresh"
+      pullingIcon="arrow-down-outline"
       pullingText="Desliza para refrescar"
       refreshingSpinner="circles"
-      refreshingText="Refrescando...">
+      refreshingText="Buscando Ordenes...">
     </ion-refresher-content>  
   </ion-refresher>
 
@@ -32,7 +32,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-list *ngIf="flagOrdenes" #lista  style="background-color: #f2f2f2;"> 
+  <ion-list *ngIf="flagOrdenes" #lista  style="background-color: #f9f8f8;"> 
     <ion-item-sliding *ngFor="let orden of ordenes">
       <ion-card>
         <ion-item>
@@ -75,7 +75,7 @@
 
  
 </ion-content>
-<ion-footer class="ion-no-border">
-  <app-slide-drawer></app-slide-drawer>
-</ion-footer>
+
+<app-slide-drawer>
+</app-slide-drawer>
 
