@@ -84,7 +84,7 @@ export class MenuComponent implements OnInit {
     }
     else{
       if(this.platform.is("ios")){
-        await Browser.open({ url: 'https://apps.apple.com/es/app/somos-timugo/id1497415210?ls=1' });
+        await Browser.open({ url: 'https://apps.apple.com/co/app/somos-timugo/id1497415210?ls=1' });
       }
     }
   }
