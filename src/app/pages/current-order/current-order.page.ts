@@ -123,6 +123,7 @@ export class CurrentOrderPage implements OnInit {
   }
   async modalCancelOrder() {
     const alert = await this.alertController.create({
+      mode:"ios",
       header: "Cancelar",
       subHeader:" Realmente deseas cancelar la orden?",
       message: "Recuerda que cancelar ordenes repetidamente resta puntos",
@@ -148,6 +149,7 @@ export class CurrentOrderPage implements OnInit {
   }
   async modalFinishOrder() {
     const alert = await this.alertController.create({
+      mode:"ios",
       header: "Terminal la Orden",
       message: "Finaliza la orden solamente si ya recibiste el dinero por parte del cliente",
       buttons: [
