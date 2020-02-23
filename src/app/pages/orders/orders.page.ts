@@ -19,7 +19,7 @@ export class OrdersPage implements OnInit {
   
   @ViewChild('lista') lista: IonList;
   activeMenu :string;
-  ordenes: any[];
+  ordenes: Observable<any>;
   flagOrdenes: boolean;
   flagNoOrdenes: boolean;
   mensaje: any;
@@ -159,6 +159,8 @@ export class OrdersPage implements OnInit {
   async presentAlertConfirm(titulo: string, mensaje: string, codigoOrden: number) {
 
     const alert = await this.alertController.create({
+      mode:"ios",
+      translucent:false,
       header: titulo,
       message: mensaje,
       buttons: [

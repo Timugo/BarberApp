@@ -1,6 +1,6 @@
 <!--Personal ANDROID header  NO CUSTOM-->
 
-<ion-header translucent class="ion-no-border">
+<ion-header translucent="true" mode="ios" class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button menu="first"></ion-menu-button>
@@ -12,16 +12,7 @@
 <app-menu></app-menu>
 <!--content of the page id="principal" here and no in router-link -->
 
-<ion-content>
-
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content
-      pullingIcon="arrow-down-outline"
-      pullingText="Desliza para refrescar"
-      refreshingSpinner="circles"
-      refreshingText="Buscando Ordenes...">
-    </ion-refresher-content>  
-  </ion-refresher>
+<ion-content fullscreen="true">
 
   <!--Personal IOS header  NO CUSTOM-->
   <ion-header collapse="condense" class="ion-no-border">
@@ -31,10 +22,18 @@
       </ion-title>
     </ion-toolbar>
   </ion-header>
+   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="arrow-down-outline"
+      pullingText="Desliza para refrescar"
+      refreshingSpinner="circles"
+      refreshingText="Buscando Ordenes...">
+    </ion-refresher-content>  
+  </ion-refresher>
 
-  <ion-list *ngIf="flagOrdenes" #lista  style="background-color: #f9f8f8;"> 
+  <ion-list *ngIf="flagOrdenes" #lista  style="background-color: #f9f8f8;" mode="ios" class="animated fadeIn fast"> 
     <ion-item-sliding *ngFor="let orden of ordenes">
-      <ion-card>
+      <ion-card mode="ios">
         <ion-item>
           <ion-label>
             <ion-text color="primary">
@@ -67,6 +66,23 @@
     </ion-item-sliding>
     
   </ion-list>
+  <ion-list mode="ios" *ngIf="(ordenes) == null">
+    <ion-card mode="ios"  *ngFor="let item of [1,1,1,1]">
+      <ion-item>
+        <ion-label>
+          <h3> <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text></h3>
+          <h1> <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text></h1>
+          <h2> <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text></h2>
+          <p><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></p>
+          <h4><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></h4>
+        </ion-label>
+        <!-- <ion-label slot="end" >
+          <ion-skeleton-text animated style="width: 90px"></ion-skeleton-text>
+        </ion-label> -->
+      </ion-item>
+    </ion-card>
+    
+  </ion-list>
   
 
   <ion-text class="noOrders" *ngIf="flagNoOrdenes" color="primary">
@@ -75,7 +91,6 @@
 
  
 </ion-content>
-
-<app-slide-drawer>
-</app-slide-drawer>
+<!-- <app-slide-drawer>
+</app-slide-drawer> -->
 
