@@ -8,7 +8,7 @@ import { OrdersPageRoutingModule } from './orders-routing.module';
 
 import { OrdersPage } from './orders.page';
 import { ComponentsModule } from '../../components/components.module';
-import { SlideDrawerComponent } from 'src/app/components/slide-drawer/slide-drawer.component';
+
 
 @NgModule({
   imports: [

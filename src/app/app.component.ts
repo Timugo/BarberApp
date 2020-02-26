@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { NavController } from '@ionic/angular';
 import { Plugins } from '@capacitor/core';
+import { CurrentOrderService } from './services/current-order.service';
 
 
 const { SplashScreen } = Plugins
@@ -13,23 +14,28 @@ const { Storage} = Plugins;
 })
 export class AppComponent {
   constructor(
-   
-    private navCtrl : NavController
+              private navCtrl : NavController,
+              private currentorderService: CurrentOrderService,
   ) {
     this.initializeApp();
     this.getBarber();
   }
   async getBarber() {
-    const { value } = await Storage.get({ key: 'currentOrder' });
+    
     const ret = await Storage.get({ key: 'barber' });
     const user = JSON.parse(ret.value);
-    if(value){
-      this.navCtrl.navigateRoot('/current-order',{animated:true});
+    if(user){
+      this.currentorderService.validateIfExistsOrder(user.idBarber).subscribe(res =>{
+        if(res['response'] == 2){
+          this.navCtrl.navigateRoot('/current-order',{animated:true});
+        }else{
+          this.navCtrl.navigateRoot('/orders',{animated:true});  
+        }
+      });  
     }else{
-      if(user){
-        this.navCtrl.navigateRoot('/orders',{animated:true});
-      }
+      this.navCtrl.navigateRoot('/home',{animated:true});  
     }
+    
   }
   initializeApp() {
     SplashScreen.show({
