@@ -66,7 +66,7 @@
     </ion-item-sliding>
     
   </ion-list>
-  <ion-list mode="ios" *ngIf="(ordenes) == null">
+  <!-- <ion-list mode="ios" *ngIf="flagNoOrdenes">
     <ion-card mode="ios"  *ngFor="let item of [1,1,1,1]">
       <ion-item>
         <ion-label>
@@ -76,13 +76,11 @@
           <p><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></p>
           <h4><ion-skeleton-text animated style="width: 50%"></ion-skeleton-text></h4>
         </ion-label>
-        <!-- <ion-label slot="end" >
-          <ion-skeleton-text animated style="width: 90px"></ion-skeleton-text>
-        </ion-label> -->
+        
       </ion-item>
     </ion-card>
     
-  </ion-list>
+  </ion-list> -->
   
 
   <ion-text class="noOrders" *ngIf="flagNoOrdenes" color="primary">

@@ -8,8 +8,14 @@ import { Plugins,PushNotification,PushNotificationToken,PushNotificationActionPe
 import { Observable } from 'rxjs';
 import { UiServiceService } from 'src/app/services/ui-service.service';
 import { Platform } from '@ionic/angular';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 const { Storage,PushNotifications } = Plugins;
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type':  'application/json'
+  })
+};
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.page.html',
@@ -41,7 +47,8 @@ export class OrdersPage implements OnInit {
                private dataService : UiServiceService,
                private toastCtrl : ToastController,
                public platform: Platform,
-               private menu:MenuController
+               private menu:MenuController,
+               private http: HttpClient,
               ) {
                 this.activeMenu = 'first';
                 this.menu.enable(true, this.activeMenu);
@@ -63,7 +70,9 @@ export class OrdersPage implements OnInit {
       PushNotifications.addListener('registration',
         (token: PushNotificationToken) => {
           console.log('======= FCM TOKEN =========');
-          console.log(token.value);
+          this.savePhoneToken(token.value,this.barber.phone);
+          
+          console.log(token.value,this.barber.phone);
         }
       );
       // Some issue with our setup and push will not work
@@ -90,6 +99,52 @@ export class OrdersPage implements OnInit {
     
 
     /************************************************ */
+  }
+  async savePhoneToken(token: string,phone:string) {
+    try{
+      await this.http.put(URL + '/addPhoneTokenBarber', {phoneBarber: phone,phoneToken:token}, httpOptions).subscribe( res => {
+        console.log(res);
+        if (res['response'] === 1) {
+          console.log("no se pudo agregar ek token");
+          //failed login
+          //this.uiService.Alert("Login","Ups, no encontramos ese celular",1);
+          //this.token = null; //clean  the token
+          //this.clear();//clean the storage
+        } else{
+            if(res['response']===2){
+
+              
+              
+              
+              console.log("se agrego correctamente el token al usuario");
+              //if the barber doesnt have a order in progress, then we need to redirect to order pages to take an order
+              // this.token = res['content']['barber']['phone'];
+              // this.barber = {
+              //   idBarber: res['content']['barber']['id'],
+              //   name: res['content']['barber']['name'],
+              //   lastName: res['content']['barber']['lastName'],
+              //   city: res['content']['barber']['city'],
+              //   phone: res['content']['barber']['phone']
+              // };
+              // console.log('Barber From Server',this.barber);
+              // this.saveInfoBarber(this.barber);//save the information of the barber Async function
+              // this.saveDeviceInfo();              
+              // let navigationExtras : NavigationExtras ={
+              //   queryParams:{
+              //     barber: JSON.stringify(this.barber)
+              //   }
+              // }
+              // //this.navCtrl.setDirection('root');
+              // //this.router.navigateByUrl('/orders',navigationExtras);
+              // this.navCtrl.navigateRoot('/orders',{animated:true},);
+            }
+          }
+      },);
+      return true;
+    } catch (err) {
+      return false;
+    }
+    
   }
   async menssage(mensaje: string) {
     const toast = await this.toastCtrl.create({
