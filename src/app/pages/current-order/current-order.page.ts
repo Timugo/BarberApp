@@ -35,16 +35,30 @@ export class CurrentOrderPage implements OnInit {
     this.formfinishOrder = this.fb.group({
       comment: ['']
     });
-    this.checkIfOrderExistsInLocal();
     this.checkIfOrderExistsInServer();
-    this.loadCurrentOrder();
   }
-
+  async loadCurrentOrder(){
+    const { value } = await Storage.get({ key: 'currentOrder' });
+    this.getInfoOrder(parseInt(value));
+  }
+  async checkIfOrderExistsInServer(){
+    const ret = await Storage.get({ key: 'barber' });
+    const user = JSON.parse(ret.value);
+    if(user){
+      this.currentorderService.validateIfExistsOrder(user.idBarber).subscribe(res =>{
+        console.log("respuesta del servidor de si esta en una orden asociado"+ res["response"] + res["content"].id);
+        if(res['response'] == 1){
+          this.navCtrl.navigateRoot('/orders',{animated:true});
+        }else{
+          if(res['response'] == 2){
+            this.getInfoOrder(res["content"].id);
+          }
+        }
+      });
+    }
+  }
   getInfoOrder(idOrder:number){
     this.idCurrentOrder = idOrder.toString();
-    console.log("aca voy ",idOrder);
-    
-
     this.currentorderService.getInfoCurrentOrder(idOrder).subscribe(res => {
       this.mensaje = res;
       this.servicios = this.mensaje.content.order.services;
@@ -63,29 +77,39 @@ export class CurrentOrderPage implements OnInit {
     });
     this.presentToast("Numero Copiado!");
   }
-  async loadCurrentOrder(){
-    const { value } = await Storage.get({ key: 'currentOrder' });
-    this.getInfoOrder(parseInt(value));
-  }
-  async checkIfOrderExistsInLocal(){
-    const { value } = await Storage.get({ key: 'currentOrder' });
-    if(!value){
-      this.router.navigate(['/orders']);
-    }
-    
-  }
-  async checkIfOrderExistsInServer(){
+  async cancelCurrentOrder(){
     const ret = await Storage.get({ key: 'barber' });
     const user = JSON.parse(ret.value);
     if(user){
       this.currentorderService.validateIfExistsOrder(user.idBarber).subscribe(res =>{
+        console.log("respuesta del servidor de si esta en una orden asociado"+ res["response"] + res["content"].id);
         if(res['response'] == 1){
           this.navCtrl.navigateRoot('/orders',{animated:true});
+          this.message("Ups, el cliente cancelo la orden");
+        }else{
+          if(res['response'] == 2){
+            this.modalCancelOrder();
+          }
         }
       });
-      
     }
-    
+  }
+  async finishCurrentOrder(){
+    const ret = await Storage.get({ key: 'barber' });
+    const user = JSON.parse(ret.value);
+    if(user){
+      this.currentorderService.validateIfExistsOrder(user.idBarber).subscribe(res =>{
+        console.log("respuesta del servidor de si esta en una orden asociado"+ res["response"] + res["content"].id);
+        if(res['response'] == 1){
+          this.navCtrl.navigateRoot('/orders',{animated:true});
+          this.message("Ups, el cliente cancelo la orden");
+        }else{
+          if(res['response'] == 2){
+            this.modalFinishOrder();
+          }
+        }
+      });
+    }
   }
   async clearCurrentOrder() {
     await Storage.remove({ key: 'currentOrder' });
@@ -146,6 +170,7 @@ export class CurrentOrderPage implements OnInit {
     });
 
     await alert.present();
+    
   }
   async modalFinishOrder() {
     const alert = await this.alertController.create({
@@ -170,6 +195,15 @@ export class CurrentOrderPage implements OnInit {
     });
 
     await alert.present();
+  }
+  async message(mensaje: string) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 8000,
+      color: 'primary',
+      position: 'top'
+    });
+    toast.present();
   }
   cancelOrder2(idBarber : string){
     console.log("idBarber",idBarber);
@@ -202,7 +236,7 @@ export class CurrentOrderPage implements OnInit {
   }
   doRefresh(event) {
     
-    this.loadCurrentOrder();
+    this.checkIfOrderExistsInServer();
     setTimeout(() => {
       console.log('Async operation has ended');
       event.target.complete();
