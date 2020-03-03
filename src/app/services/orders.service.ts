@@ -28,6 +28,7 @@ export class OrdersService {
     console.log('orden', idOrder, 'barbero', idBarber);
     var order = idOrder.toString();
     var barber = idBarber.toString(); 
+    console.log(URL);
     return this.http.put(URL + '/assignBarberToOrder', {idOrder: order, idBarber: barber}, httpOptions);
   }
 

@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  url : 'https://www.timugo.tk'
+  url : 'http://167.172.216.181:3000',
+  message : "DEVELOPMENT MODE"
 };
 
 /*
