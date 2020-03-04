@@ -43,11 +43,6 @@ export class LoginService {
           this.clear();//clean the storage
         } else{
             if(res['response']===2){
-
-              
-              
-              
-              
               //if the barber doesnt have a order in progress, then we need to redirect to order pages to take an order
               this.token = res['content']['barber']['phone'];
               this.barber = {
@@ -60,13 +55,6 @@ export class LoginService {
               console.log('Barber From Server',this.barber);
               this.saveInfoBarber(this.barber);//save the information of the barber Async function
               this.saveDeviceInfo();              
-              let navigationExtras : NavigationExtras ={
-                queryParams:{
-                  barber: JSON.stringify(this.barber)
-                }
-              }
-              //this.navCtrl.setDirection('root');
-              //this.router.navigateByUrl('/orders',navigationExtras);
               this.navCtrl.navigateRoot('/orders',{animated:true},);
             }
           }
@@ -78,7 +66,7 @@ export class LoginService {
     
   }
   getBarberInfo(phone : string){
-    return this.http.get("https://timugo.tk/getBarberByPhone?phoneBarber="+phone);
+    return this.http.get(URL + "/getBarberByPhone?phoneBarber="+phone);
   }
   
   /* Storage Management */
