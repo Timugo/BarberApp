@@ -25,27 +25,13 @@ export class MenuComponent implements OnInit {
   barberId: string = "0";
   appVersion :string = "0.0.0";
   barber : Barber;
-  constructor(private route :ActivatedRoute,
+  constructor(
               private dataService : UiServiceService,
               private loginService : LoginService,
               private router : Router,
               public platform: Platform,) {
-                
-
-                // this.route.queryParams.subscribe(params =>{
-                //   if(params &&params.barber){
-                //     this.barber = JSON.parse(params.barber);
-                //     console.log( "despues de parsearlo ",this.barber);
-                //     this.loginService.getBarberInfo(this.barber.phone).subscribe((res)=>{
-                //       this.pointsBarber = res['content']['points']
-                //       this.imgBarber = URL +"/"+ res['content']['urlImg']
-                //       this.barberId = res['content']['id']
-                //       this.nameBarber =this.barber.name;
-                //     });
-                //   }
-                // });
                 this.getBarber2();
-               }
+              }
 
   ngOnInit() {
     this.componentes = this.dataService.getMenuOpts();
@@ -55,7 +41,7 @@ export class MenuComponent implements OnInit {
   async getBarber2() {
     const ret = await Storage.get({ key: 'barber' });
     const user = JSON.parse(ret.value);
-    console.log("haciendo fetch del barbero",user);
+    //console.log("haciendo fetch del barbero",user);
     if(user){
       await this.loginService.getBarberInfo(user.phone).subscribe((res)=>{
         this.pointsBarber = res['content']['points']
@@ -70,7 +56,7 @@ export class MenuComponent implements OnInit {
   }
   async getAppVersion(){
     var device = await Device.getInfo();
-    console.log(device);
+    //console.log(device);
     this.appVersion = device.appVersion || "web version"; 
     
   }

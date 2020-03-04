@@ -9,6 +9,8 @@ import { Observable } from 'rxjs';
 import { UiServiceService } from 'src/app/services/ui-service.service';
 import { Platform } from '@ionic/angular';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+//to handle production and development mode 
+import { environment} from '../../../environments/environment';
 
 const { Storage,PushNotifications } = Plugins;
 const httpOptions = {
@@ -16,6 +18,8 @@ const httpOptions = {
     'Content-Type':  'application/json'
   })
 };
+//this url change depends which enviroment (development or production)
+const  URL_API = environment.url;
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.page.html',
@@ -42,7 +46,6 @@ export class OrdersPage implements OnInit {
                private router: Router,
                private ordersService: OrdersService,
                public alertController: AlertController,
-               private route: ActivatedRoute,
                private navCtrl: NavController,
                private dataService : UiServiceService,
                private toastCtrl : ToastController,
@@ -52,15 +55,14 @@ export class OrdersPage implements OnInit {
               ) {
                 this.activeMenu = 'first';
                 this.menu.enable(true, this.activeMenu);
+                this.getBarber2(); 
     
               }
   
   ngOnInit() {
+    console.log(environment.message);
       
     this.componentes = this.dataService.getMenuOpts();  
-    //this.checkExistsOrderInProgress();
-    this.getBarber2(); 
-    
     //Try to register the device in all platforms except mobile web in the browser
     if(!this.platform.is("mobileweb")){
       // Register with Apple / Google to receive push via APNS/FCM
@@ -102,7 +104,7 @@ export class OrdersPage implements OnInit {
   }
   async savePhoneToken(token: string,phone:string) {
     try{
-      await this.http.put(URL + '/addPhoneTokenBarber', {phoneBarber: phone,phoneToken:token}, httpOptions).subscribe( res => {
+      await this.http.put(URL_API + '/addPhoneTokenBarber', {phoneBarber: phone,phoneToken:token}, httpOptions).subscribe( res => {
         console.log(res);
         if (res['response'] === 1) {
           console.log("no se pudo agregar ek token");
@@ -112,10 +114,6 @@ export class OrdersPage implements OnInit {
           //this.clear();//clean the storage
         } else{
             if(res['response']===2){
-
-              
-              
-              
               console.log("se agrego correctamente el token al usuario");
               //if the barber doesnt have a order in progress, then we need to redirect to order pages to take an order
               // this.token = res['content']['barber']['phone'];
@@ -144,7 +142,6 @@ export class OrdersPage implements OnInit {
     } catch (err) {
       return false;
     }
-    
   }
   async menssage(mensaje: string) {
     const toast = await this.toastCtrl.create({
@@ -178,7 +175,11 @@ export class OrdersPage implements OnInit {
   }
   getOrders(barber:Barber){
     this.barber = barber;
-    this.titulo = "Servicios";
+    if(environment.message =="DEVELOPMENT MODE"){
+      this.titulo = "Development Mode";
+    }else{
+      this.titulo = "Servicios"
+    }
     this.ordersService.getAvailableOrders(barber.city).subscribe( res => {
       this.mensaje = res;
       console.log('Fetch de Ordenes',this.mensaje);
@@ -210,7 +211,6 @@ export class OrdersPage implements OnInit {
     await alert.present();
 
   }
-
   async presentAlertConfirm(titulo: string, mensaje: string, codigoOrden: number) {
 
     const alert = await this.alertController.create({
@@ -231,12 +231,13 @@ export class OrdersPage implements OnInit {
           handler: () => {
             this.datalocalService.saveInfoCurrentOrder(codigoOrden);
             this.ordersService.assingBarberToOrder(codigoOrden,this.barber.idBarber).subscribe( res => {
+              console.log(res);
               this.mensaje2 = res;
               if (this.mensaje2.response === 2 ) {
                 this.router.navigate(['/current-order']);
                 this.lista.closeSlidingItems();
               } else if (this.mensaje2.response === 1) {
-                this.Alert('Timugo informa','La orden no se encontro o fue tomada por otro barbero. Por favor desliza la pantalla hacia abajo para recargar.') 
+                this.Alert('Upss','La orden no se encontro o fue tomada por otro barbero. Por favor desliza la pantalla hacia abajo para recargar.') 
               }
             });
           }
@@ -245,14 +246,12 @@ export class OrdersPage implements OnInit {
     });
     await alert.present();
   }  
-  
-
   tomarOrden(codigoOrden: number){
     this.presentAlertConfirm('Confirmacion la Orden','¿Deseas tomarla?',codigoOrden);
   }
-
   doRefresh(event) {
     this.ordersService.getAvailableOrders(this.barber.city).subscribe( res => {
+      console.log("refreshing orders");
       this.mensaje = res;
       if(this.mensaje.response === 1) {
         this.flagOrdenes = false;

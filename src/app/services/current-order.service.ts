@@ -1,40 +1,40 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
+//to handle production and development mode 
+import { environment} from '../../environments/environment';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type':  'application/json'
   })
 };
-
+const URL_API = environment.url;
 @Injectable({
   providedIn: 'root'
 })
 export class CurrentOrderService {
 
   
-  readonly URL_API = 'https://www.timugo.tk';
 
   constructor(private http: HttpClient) { }
 
   getInfoCurrentOrder(currentOrder: number){
-    return this.http.get(this.URL_API + '/getInfoTemporalOrder' + '?idOrder=' + currentOrder);
+    return this.http.get(URL_API + '/getInfoTemporalOrder' + '?idOrder=' + currentOrder);
   }
   
   validateIfExistsOrder(idBarber : number){
-    return this.http.get(this.URL_API + '/checkBarberOrder' + '?idBarber=' + idBarber);
+    return this.http.get(URL_API + '/checkBarberOrder' + '?idBarber=' + idBarber);
 
   }
 
   finishOrder(idOrder: number, comment: string, status: string) {
     var id = idOrder.toString();
-    return this.http.post(this.URL_API + '/finishOrder', {idOrder: id, comment: comment, status: status } ,httpOptions);
+    return this.http.post(URL_API + '/finishOrder', {idOrder: id, comment: comment, status: status } ,httpOptions);
   }
 
   cancelOrder(idOrder: number, idUser: number) {
     var id = idOrder.toString();
     console.log("aqui",idOrder,idUser);
-    return this.http.put(this.URL_API + '/cancelOrderBarber', {idOrder: id, idUser: idUser }, httpOptions );
+    return this.http.put(URL_API + '/cancelOrderBarber', {idOrder: id, idUser: idUser }, httpOptions );
   }
   
 }
