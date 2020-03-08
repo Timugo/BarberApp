@@ -1,4 +1,5 @@
 import { Barber, Componente } from './../../interfaces/barber';
+import { Track } from '../../interfaces/track';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataLocalService } from '../../services/data-local.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -11,6 +12,8 @@ import { Platform } from '@ionic/angular';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 //to handle production and development mode 
 import { environment} from '../../../environments/environment';
+//play audio
+import { Howl } from 'howler';
 
 const { Storage,PushNotifications } = Plugins;
 const httpOptions = {
@@ -26,19 +29,25 @@ const  URL_API = environment.url;
   styleUrls: ['./orders.page.scss'],
 })
 export class OrdersPage implements OnInit {
-  
   @ViewChild('lista') lista: IonList;
-  activeMenu :string;
-  ordenes: Observable<any>;
-  flagOrdenes: boolean;
-  flagNoOrdenes: boolean;
+  //Array of the sounds to play with HOWL library
+  playList: Track[] = [
+    {
+      name: 'hi',
+      path : '../../../assets/sounds/alert.mp3'
+    }
+  ];
+  player : Howl = null; // Audio Library
+  activeMenu :string; //To hide the side menu
+  ordenes: Observable<any>; //Array of orders (needs to import an interface)
+  flagOrdenes: boolean; //if exists orders
+  flagNoOrdenes: boolean; //if doesnt exists any orders
   mensaje: any;
-  mensaje2: any;
-  city: string;
-  barber: Barber;
-  titulo: string;
+  mensaje2: any; 
+  city: string; //city of the current barber
+  barber: Barber; //The current barber un the session -import a interface
+  titulo: string; //tittle of the page
   nameBarber:string="none"
-
   componentes: Observable<Componente[]>; //listo of components in the menu
 
 
@@ -61,7 +70,6 @@ export class OrdersPage implements OnInit {
   
   ngOnInit() {
     console.log(environment.message);
-      
     this.componentes = this.dataService.getMenuOpts();  
     //Try to register the device in all platforms except mobile web in the browser
     if(!this.platform.is("mobileweb")){
@@ -73,7 +81,6 @@ export class OrdersPage implements OnInit {
         (token: PushNotificationToken) => {
           console.log('======= FCM TOKEN =========');
           this.savePhoneToken(token.value,this.barber.phone);
-          
           console.log(token.value,this.barber.phone);
         }
       );
@@ -88,6 +95,7 @@ export class OrdersPage implements OnInit {
       PushNotifications.addListener('pushNotificationReceived',
         (notification: PushNotification) => {
           //alert('Push received: ' + JSON.stringify(notification));
+          //this.startTrack("../../../assets/sounds/alert.mp3");
           this.menssage(notification.body);
         }
       );
@@ -102,12 +110,20 @@ export class OrdersPage implements OnInit {
 
     /************************************************ */
   }
+  startTrack(src : String){
+    console.log("Estoy reproduciendo la musica");
+    this.player = new Howl({
+      src: src
+    });
+    this.player.play();
+  }
+
   async savePhoneToken(token: string,phone:string) {
     try{
       await this.http.put(URL_API + '/addPhoneTokenBarber', {phoneBarber: phone,phoneToken:token}, httpOptions).subscribe( res => {
         console.log(res);
         if (res['response'] === 1) {
-          console.log("no se pudo agregar ek token");
+          console.log("no se pudo agregar el token");
         } else{
             if(res['response']===2){
               console.log("se agrego correctamente el token al usuario");
@@ -156,7 +172,7 @@ export class OrdersPage implements OnInit {
     }else{
       this.titulo = "Servicios"
     }
-    this.ordersService.getAvailableOrders(barber.city).subscribe( res => {
+    this.ordersService.getAvailableOrders(barber.city,parseInt(barber.phone)).subscribe( res => {
       this.mensaje = res;
       console.log('Fetch de Ordenes',this.mensaje);
       if(this.mensaje.response === 1) {
@@ -206,7 +222,7 @@ export class OrdersPage implements OnInit {
           text: 'Tomar',
           handler: () => {
             this.datalocalService.saveInfoCurrentOrder(codigoOrden);
-            this.ordersService.assingBarberToOrder(codigoOrden,this.barber.idBarber).subscribe( res => {
+            this.ordersService.assingBarberToOrder(codigoOrden,parseInt(this.barber.phone)).subscribe( res => {
               console.log(res);
               this.mensaje2 = res;
               if (this.mensaje2.response === 2 ) {
@@ -226,7 +242,7 @@ export class OrdersPage implements OnInit {
     this.presentAlertConfirm('Confirmacion la Orden','¿Deseas tomarla?',codigoOrden);
   }
   doRefresh(event) {
-    this.ordersService.getAvailableOrders(this.barber.city).subscribe( res => {
+    this.ordersService.getAvailableOrders(this.barber.city,parseInt(this.barber.phone)).subscribe( res => {
       console.log("refreshing orders");
       this.mensaje = res;
       if(this.mensaje.response === 1) {
