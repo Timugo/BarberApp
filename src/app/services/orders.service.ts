@@ -19,17 +19,17 @@ export class OrdersService {
 
   constructor(private http: HttpClient) { }
 
-  getAvailableOrders(city: string) {
-    return this.http.get(URL + '/getAvailableOrdersByCity' + '?city=' + city);
+  getAvailableOrders(city: string,phone : number) {
+    return this.http.get(URL + '/getAvailableOrdersByCity' + '?city=' + city+ '&phoneBarber=' + phone);
   }
 
   
-  assingBarberToOrder(idOrder: number, idBarber: number){
-    console.log('orden', idOrder, 'barbero', idBarber);
+  assingBarberToOrder(idOrder: number, phoneBarber: number){
+    console.log('orden', idOrder, 'barbero', phoneBarber);
     var order = idOrder.toString();
-    var barber = idBarber.toString(); 
+    var barber = phoneBarber.toString(); 
     console.log(URL);
-    return this.http.put(URL + '/assignBarberToOrder', {idOrder: order, idBarber: barber}, httpOptions);
+    return this.http.put(URL + '/assignBarberToOrder', {idOrder: idOrder, phoneBarber: phoneBarber}, httpOptions);
   }
 
 }

@@ -21,8 +21,8 @@ export class CurrentOrderService {
     return this.http.get(URL_API + '/getInfoTemporalOrder' + '?idOrder=' + currentOrder);
   }
   
-  validateIfExistsOrder(idBarber : number){
-    return this.http.get(URL_API + '/checkBarberOrder' + '?idBarber=' + idBarber);
+  validateIfExistsOrder(phoneBarber : number){
+    return this.http.get(URL_API + '/checkBarberOrder' + '?phoneBarber=' + phoneBarber);
 
   }
 
