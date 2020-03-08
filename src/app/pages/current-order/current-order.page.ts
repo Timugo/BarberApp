@@ -45,7 +45,7 @@ export class CurrentOrderPage implements OnInit {
     const ret = await Storage.get({ key: 'barber' });
     const user = JSON.parse(ret.value);
     if(user){
-      this.currentorderService.validateIfExistsOrder(user.idBarber).subscribe(res =>{
+      this.currentorderService.validateIfExistsOrder(user.phone).subscribe(res =>{
         console.log("respuesta del servidor de si esta en una orden asociado"+ res["response"] + res["content"].id);
         if(res['response'] == 1){
           this.navCtrl.navigateRoot('/orders',{animated:true});
