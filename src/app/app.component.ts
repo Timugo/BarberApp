@@ -26,7 +26,7 @@ export class AppComponent {
     //if exists a barber save in the local storage
     if(user){
       // check if this barber is enrolled in a current order on progress
-      this.currentorderService.validateIfExistsOrder(user.idBarber).subscribe(res =>{
+      this.currentorderService.validateIfExistsOrder(parseInt(user.phone)).subscribe(res =>{
         //barber is in a current order
         if(res['response'] == 2){
           //navigate to the current order page

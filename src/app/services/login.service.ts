@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Barber, DeviceInfo } from '../interfaces/barber';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { AlertController, NavController } from '@ionic/angular';
 import { UiServiceService } from './ui-service.service';
+import { CurrentOrderService } from './current-order.service';
 
 
 
@@ -30,7 +31,8 @@ export class LoginService {
               public alertController: AlertController,
               private navCtrl: NavController,
               private uiService :UiServiceService,
-              private router:Router
+              private router:Router,
+              private currentOrderService : CurrentOrderService
               ) { }
   async login(telefono: number) {
     try{
@@ -44,7 +46,9 @@ export class LoginService {
         } else{
             if(res['response']===2){
               //if the barber doesnt have a order in progress, then we need to redirect to order pages to take an order
+              //save the token in the local variable
               this.token = res['content']['barber']['phone'];
+              // save barber and all properties in the interface
               this.barber = {
                 idBarber: res['content']['barber']['id'],
                 name: res['content']['barber']['name'],
@@ -54,8 +58,9 @@ export class LoginService {
               };
               console.log('Barber From Server',this.barber);
               this.saveInfoBarber(this.barber);//save the information of the barber Async function
-              this.saveDeviceInfo();              
-              this.navCtrl.navigateRoot('/orders',{animated:true},);
+              this.saveDeviceInfo(); 
+              this.navCtrl.navigateRoot('/orders',{animated:true});      
+              //this.checkIfBarberInOrder();
             }
           }
       },);

@@ -4,6 +4,7 @@ import { LoginService } from '../../services/login.service';
 import { AlertController, NavController, MenuController } from '@ionic/angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Plugins } from '@capacitor/core';
+import { CurrentOrderService } from 'src/app/services/current-order.service';
 
 
 const { Storage} = Plugins;
@@ -25,28 +26,25 @@ export class HomePage implements OnInit {
   constructor(private loginService: LoginService,
               private fb: FormBuilder,
               public alertController: AlertController,
-              private navCtrl: NavController,
-              public menu: MenuController
+              public menu: MenuController,
               ) { 
                 this.menu1Active();
               }
 
   ngOnInit() {
-    
+    //run validators to the form - phone field
     this.formLogin = this.fb.group({
       phone: [null, Validators.compose([Validators.required, Validators.minLength(10)])]
     });
-    
   }
+  //this function its activated by login button in the html
+  login(formLogin: FormGroup){
+      this.loginService.login(formLogin.value.phone);
+  } 
   //disable menu in the login page
   menu1Active() {
     this.activeMenu = 'first';
     this.menu.enable(false, this.activeMenu);
   
-  }
-
- 
-  login(formLogin: FormGroup) {
-    this.loginService.login(formLogin.value.phone);
   }
 }
