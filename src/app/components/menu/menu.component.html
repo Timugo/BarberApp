@@ -50,6 +50,8 @@
                     <ion-label>Calificanos</ion-label>  
                     
                   </ion-item>
+
+                 
                 </ion-menu-toggle>
                 <!-- <ion-item>
                   <ion-label>
@@ -67,6 +69,11 @@
       </ion-content>
       <ion-footer class="ion-no-border">
         <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-button color="danger" (click)="logOut()" expand="block">Cerrar Sesion</ion-button>
+            </ion-col>
+          </ion-row>
           <ion-row>
             <ion-col size="8">
               <ion-chip color="primary" outline=true>

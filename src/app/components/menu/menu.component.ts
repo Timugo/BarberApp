@@ -7,7 +7,7 @@ import { Plugins } from '@capacitor/core';
 import { LoginService } from 'src/app/services/login.service';
 import { environment } from 'src/environments/environment';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Platform } from '@ionic/angular';
+import { Platform, AlertController, NavController } from '@ionic/angular';
 
 //Native SDK plugins
 const { Toast,Browser,Storage,Device} = Plugins;
@@ -29,7 +29,10 @@ export class MenuComponent implements OnInit {
               private dataService : UiServiceService,
               private loginService : LoginService,
               private router : Router,
-              public platform: Platform,) {
+              public platform: Platform,
+              public alertController : AlertController,
+              public navCtrl : NavController
+              ) {
                 this.getBarber2();
               }
 
@@ -58,7 +61,6 @@ export class MenuComponent implements OnInit {
     var device = await Device.getInfo();
     //console.log(device);
     this.appVersion = device.appVersion || "web version"; 
-    
   }
   async contactSupport(){
     var message = "Hola, soy%20"+this.nameBarber +"%20barbero%20de%20timugo%20con%20ID:%20"+this.barberId+"%20y%20tengo%20el%20siguiente%20problema:%20(describir el problema)";
@@ -78,6 +80,37 @@ export class MenuComponent implements OnInit {
     await Toast.show({
       text: 'Sigue obteniendo mas puntos y obtendras beneficios :)'
     });
+  }
+  async logOut() {
+    const alert = await this.alertController.create({
+      mode:"ios",
+      header: "Cerrar Sesion",
+      message: "Realmente deseas salir?",
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel');
+          }
+        }, {
+          text: 'Ok',
+          handler: () => {
+            this.clear();
+            this.navCtrl.navigateRoot('/home',{animated:true});
+
+            
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+    
+  }
+  async clear() {
+    await Storage.clear();
   }
   
   
