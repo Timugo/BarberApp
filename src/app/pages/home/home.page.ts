@@ -4,10 +4,10 @@ import { LoginService } from '../../services/login.service';
 import { AlertController, NavController, MenuController } from '@ionic/angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Plugins } from '@capacitor/core';
-import { CurrentOrderService } from 'src/app/services/current-order.service';
 
 
-const { Storage} = Plugins;
+
+const {StatusBar} = Plugins;
 
 
 
@@ -29,6 +29,7 @@ export class HomePage implements OnInit {
               public menu: MenuController,
               ) { 
                 this.menu1Active();
+                this.hideStatusBar();
               }
 
   ngOnInit() {
@@ -45,6 +46,8 @@ export class HomePage implements OnInit {
   menu1Active() {
     this.activeMenu = 'first';
     this.menu.enable(false, this.activeMenu);
-  
+  }
+  hideStatusBar() {
+    StatusBar.hide();
   }
 }
