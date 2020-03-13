@@ -18,6 +18,14 @@ const routes: Routes = [
   {
     path: 'profile',
     loadChildren: () => import('./pages/profile/profile.module').then( m => m.ProfilePageModule)
+  },
+  {
+    path: 'balance-explain',
+    loadChildren: () => import('./pages/balance-explain/balance-explain.module').then( m => m.BalanceExplainPageModule)
+  },
+  {
+    path: 'balance-charge-explai',
+    loadChildren: () => import('./pages/balance-charge-explai/balance-charge-explai.module').then( m => m.BalanceChargeExplaiPageModule)
   }
 ];
 
