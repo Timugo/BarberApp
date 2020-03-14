@@ -4,6 +4,12 @@
       "name":"Perfil",
       "redirectTo":"/orders"
 
+    },
+    {
+      "icon":"time-outline",
+      "name":"Historial Ordenes",
+      "redirectTo":"/orders"
+
     }
 
 ]
