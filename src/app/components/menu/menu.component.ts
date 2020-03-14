@@ -25,6 +25,7 @@ export class MenuComponent implements OnInit {
   barberId: string = "0";
   appVersion :string = "0.0.0";
   barber : Barber;
+  balance : number = 50000;
   constructor(
               private dataService : UiServiceService,
               private loginService : LoginService,
@@ -108,6 +109,9 @@ export class MenuComponent implements OnInit {
 
     await alert.present();
     
+  }
+  navigateTo(){
+    this.navCtrl.navigateRoot('/balance-explain',{animated:true});
   }
   async clear() {
     await Storage.clear();
