@@ -49,7 +49,8 @@ export class OrdersPage implements OnInit {
   titulo: string; //tittle of the page
   nameBarber:string="none"
   componentes: Observable<Componente[]>; //listo of components in the menu
-  conection : string = "conectate";
+  conection : boolean ;
+  
 
 
   constructor( private datalocalService: DataLocalService,
