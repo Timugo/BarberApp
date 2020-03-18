@@ -2,27 +2,20 @@ import { Barber, Componente } from './../../interfaces/barber';
 import { Track } from '../../interfaces/track';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataLocalService } from '../../services/data-local.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { OrdersService } from '../../services/orders.service';
 import { AlertController, IonList, NavController, ToastController, MenuController } from '@ionic/angular';
-import { Plugins,PushNotification,PushNotificationToken,PushNotificationActionPerformed } from '@capacitor/core';
+import { Plugins } from '@capacitor/core';
 import { Observable } from 'rxjs';
 import { UiServiceService } from 'src/app/services/ui-service.service';
 import { Platform } from '@ionic/angular';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 //to handle production and development mode 
 import { environment} from '../../../environments/environment';
 //play audio
 import { Howl } from 'howler';
 
-const { Storage,PushNotifications } = Plugins;
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type':  'application/json'
-  })
-};
-//this url change depends which enviroment (development or production)
-const  URL_API = environment.url;
+const { Storage} = Plugins;
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.page.html',
@@ -66,6 +59,7 @@ export class OrdersPage implements OnInit {
               ) {
                 this.activeMenu = 'first';
                 this.menu.enable(true, this.activeMenu);
+                //get current barber info 
                 this.getBarber2(); 
     
               }
@@ -73,44 +67,7 @@ export class OrdersPage implements OnInit {
   ngOnInit() {
     console.log(environment.message);
     this.componentes = this.dataService.getMenuOpts();  
-    //Try to register the device in all platforms except mobile web in the browser
-    if(!this.platform.is("mobileweb")){
-      // Register with Apple / Google to receive push via APNS/FCM
-      PushNotifications.register();
-
-      // On succcess, we should be able to receive notifications
-      PushNotifications.addListener('registration',
-        (token: PushNotificationToken) => {
-          console.log('======= FCM TOKEN =========');
-          this.savePhoneToken(token.value,this.barber.phone);
-          console.log(token.value,this.barber.phone);
-        }
-      );
-      // Some issue with our setup and push will not work
-      PushNotifications.addListener('registrationError',
-        (error: any) => {
-          alert('Error on registration: ' + JSON.stringify(error));
-        }
-      );
-
-      // Show us the notification payload if the app is open on our device
-      PushNotifications.addListener('pushNotificationReceived',
-        (notification: PushNotification) => {
-          //alert('Push received: ' + JSON.stringify(notification));
-          //this.startTrack("../../../assets/sounds/alert.mp3");
-          this.menssage(notification.body);
-        }
-      );
-      // Method called when tapping on a notification
-      PushNotifications.addListener('pushNotificationActionPerformed',
-        (notification: PushNotificationActionPerformed) => {
-          alert('Push action performed: ' + JSON.stringify(notification));
-        }
-      );
-    }
     
-
-    /************************************************ */
   }
   startTrack(src : String){
     console.log("Estoy reproduciendo la musica");
@@ -120,23 +77,7 @@ export class OrdersPage implements OnInit {
     this.player.play();
   }
 
-  async savePhoneToken(token: string,phone:string) {
-    try{
-      await this.http.put(URL_API + '/addPhoneTokenBarber', {phoneBarber: phone,phoneToken:token}, httpOptions).subscribe( res => {
-        console.log(res);
-        if (res['response'] === 1) {
-          console.log("no se pudo agregar el token");
-        } else{
-            if(res['response']===2){
-              console.log("se agrego correctamente el token al usuario");
-            }
-          }
-      },);
-      return true;
-    } catch (err) {
-      return false;
-    }
-  }
+  
   async menssage(mensaje: string) {
     const toast = await this.toastCtrl.create({
       message: mensaje,
