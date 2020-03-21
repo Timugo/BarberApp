@@ -9,13 +9,16 @@ import { Plugins } from '@capacitor/core';
 import { Observable } from 'rxjs';
 import { UiServiceService } from 'src/app/services/ui-service.service';
 import { Platform } from '@ionic/angular';
-import { HttpClient} from '@angular/common/http';
+
 //to handle production and development mode 
 import { environment} from '../../../environments/environment';
 //play audio
 import { Howl } from 'howler';
+//import { Socket } from 'ngx-socket-io';
 
-const { Storage} = Plugins;
+const { Storage, LocalNotifications} = Plugins;
+///local notification configuration
+
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.page.html',
@@ -55,7 +58,7 @@ export class OrdersPage implements OnInit {
                private toastCtrl : ToastController,
                public platform: Platform,
                private menu:MenuController,
-               private http: HttpClient,
+               //private socket : Socket
               ) {
                 this.activeMenu = 'first';
                 this.menu.enable(true, this.activeMenu);
@@ -64,7 +67,9 @@ export class OrdersPage implements OnInit {
     
               }
   
+              
   ngOnInit() {
+    //this.socket.connect();
     console.log(environment.message);
     this.componentes = this.dataService.getMenuOpts();  
     
@@ -77,7 +82,22 @@ export class OrdersPage implements OnInit {
     this.player.play();
   }
 
-  
+  async connectBarber(){
+    const notifs = await LocalNotifications.schedule({
+      notifications: [
+        {
+          title: "Timugo",
+          body: "Estas Conectado para recibir Pedidos",
+          id: 1,
+          schedule: { at: new Date(Date.now()+ 1000 * 5) },
+          sound:"../../../assets/sounds/alert.mp3",
+          attachments: null,
+          actionTypeId: "",
+          extra: null
+        }
+      ]
+    });
+  }
   async menssage(mensaje: string) {
     const toast = await this.toastCtrl.create({
       message: mensaje,
@@ -99,13 +119,6 @@ export class OrdersPage implements OnInit {
       this.getOrders(user);
     }else{
       this.navCtrl.navigateRoot('/home',{animated:true},);
-    }
-  }
-  async checkExistsOrderInProgress(){
-    const { value } = await Storage.get({ key: 'currentOrder' });
-    if(value){
-      this.navCtrl.navigateRoot('/current-order',{animated:true});
-
     }
   }
   getOrders(barber:Barber){
