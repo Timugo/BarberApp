@@ -6,10 +6,15 @@ import { Platform } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { Barber } from './interfaces/barber';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+
 
 const { SplashScreen,PushNotifications,Storage  } = Plugins
 //this url change depends which enviroment (development or production)
 const  URL_API = environment.url;
+//import the socket io configuration 
+const config: SocketIoConfig = { url: URL_API+':8988', options: {} };
+//https options to send in the headers of the requests
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type':  'application/json'
