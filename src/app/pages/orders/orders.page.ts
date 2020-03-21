@@ -14,7 +14,7 @@ import { Platform } from '@ionic/angular';
 import { environment} from '../../../environments/environment';
 //play audio
 import { Howl } from 'howler';
-//import { Socket } from 'ngx-socket-io';
+import { Socket } from 'ngx-socket-io';
 
 const { Storage, LocalNotifications} = Plugins;
 ///local notification configuration
@@ -58,7 +58,7 @@ export class OrdersPage implements OnInit {
                private toastCtrl : ToastController,
                public platform: Platform,
                private menu:MenuController,
-               //private socket : Socket
+               private socket : Socket
               ) {
                 this.activeMenu = 'first';
                 this.menu.enable(true, this.activeMenu);
@@ -69,7 +69,7 @@ export class OrdersPage implements OnInit {
   
               
   ngOnInit() {
-    //this.socket.connect();
+    this.socket.connect();
     console.log(environment.message);
     this.componentes = this.dataService.getMenuOpts();  
     
