@@ -7,9 +7,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BalanceChargeExplaiPage implements OnInit {
 
+  paymentChoice : string = "Nequi (Recomendado)";
+
   constructor() { }
 
   ngOnInit() {
   }
+  changeMethod(ev: any){
+    this.paymentChoice = ev.detail.value;
+    if(ev.detail.value == "Nequi"){
+      this.paymentChoice = this.paymentChoice + " (Recomendado)"
+    }
+    console.log(this.paymentChoice);
+  }
+
+  
 
 }
