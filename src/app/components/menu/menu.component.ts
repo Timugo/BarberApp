@@ -110,8 +110,8 @@ export class MenuComponent implements OnInit {
     await alert.present();
     
   }
-  navigateTo(){
-    this.navCtrl.navigateRoot('/balance-explain',{animated:true});
+  navigateTo(option : string){  
+    this.navCtrl.navigateRoot(`/${option}`,{animated:true});
   }
   async clear() {
     await Storage.clear();
