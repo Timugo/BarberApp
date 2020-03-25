@@ -26,6 +26,10 @@ const routes: Routes = [
   {
     path: 'balance-charge-explai',
     loadChildren: () => import('./pages/balance-charge-explai/balance-charge-explai.module').then( m => m.BalanceChargeExplaiPageModule)
+  },
+  {
+    path: 'payments',
+    loadChildren: () => import('./pages/payments/payments.module').then( m => m.PaymentsPageModule)
   }
 ];
 
