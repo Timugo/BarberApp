@@ -111,7 +111,7 @@ export class MenuComponent implements OnInit {
     
   }
   navigateTo(option : string){  
-    this.navCtrl.navigateRoot(`/${option}`,{animated:true});
+    this.router.navigate([`/${option}`]);
   }
   async clear() {
     await Storage.clear();

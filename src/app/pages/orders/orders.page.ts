@@ -88,6 +88,7 @@ export class OrdersPage implements OnInit {
     
               }          
   ngOnInit() {
+    //this.router.navigate(['/payments']);
     console.log(environment.message);
     //Charge the options to display in the side menu
     this.componentes = this.dataService.getMenuOpts();  
