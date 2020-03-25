@@ -12,6 +12,9 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ComponentsModule } from './components/components.module';
 import { environment } from 'src/environments/environment';
+//This is used to deploy and PWA
+import { ServiceWorkerModule } from '@angular/service-worker';
+
 //socket io implementation
 //import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
  
@@ -32,6 +35,7 @@ const URL_API = environment.url;
     ComponentsModule,
     HttpClientModule,
     IonicStorageModule.forRoot(),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     //SocketIoModule.forRoot(config)
   ],
   providers: [
