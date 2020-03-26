@@ -142,7 +142,7 @@ export class OrdersPage implements OnInit {
       this.getOrders(user);
     }else{
       //if not, then redirect barber to home login page
-      this.navCtrl.navigateRoot('/home',{animated:true},);
+      this.navCtrl.navigateRoot('/first',{animated:true},);
     }
   }
   //function to recieve new orders and refresh
