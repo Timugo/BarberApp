@@ -113,7 +113,7 @@ export class AppComponent {
       });  
     }else{
       // if doesnt exists any registered barber then navigate to login page
-      this.navCtrl.navigateRoot('/home',{animated:true});  
+      this.navCtrl.navigateRoot('/first',{animated:true});  
     } 
   }
   //save the token phone in the databasse
@@ -123,26 +123,28 @@ export class AppComponent {
     //if exists a barber save in the local storage
     if(user){
       this.barber = user;
-    }else{
-      this.message("Problema con el almacenamiento local, contacta con el administrador")
-    }
-    try{
-      await this.http.put(URL_API + '/addPhoneTokenBarber', {phoneBarber:this.barber.phone,phoneToken:token}, httpOptions).subscribe( res => {
-        console.log(res);
-        if (res['response'] === 1) {
-          console.log("no se pudo agregar el token");
-        } else{
-            if(res['response']===2){
-              console.log("se agrego correctamente el token al usuario");
-            }else{
-              this.message("Error de Conexion");
+      try{
+        await this.http.put(URL_API + '/addPhoneTokenBarber', {phoneBarber:this.barber.phone,phoneToken:token}, httpOptions).subscribe( res => {
+          console.log(res);
+          if (res['response'] === 1) {
+            console.log("no se pudo agregar el token");
+          } else{
+              if(res['response']===2){
+                console.log("se agrego correctamente el token al usuario");
+              }else{
+                this.message("Error de Conexion");
+              }
             }
-          }
-      },);
-      return true;
-    } catch (err) {
-      return false;
+        },);
+        return true;
+      } catch (err) {
+        return false;
+      }
+    }else{
+      console.log("Problema con el almacenamiento local, contacta con el administrador");
+      //this.message("Problema con el almacenamiento local, contacta con el administrador")
     }
+    
   }
   //Display a toast message
   async message(mensaje: string) {
