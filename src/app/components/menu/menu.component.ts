@@ -98,8 +98,10 @@ export class MenuComponent implements OnInit {
         }, {
           text: 'Ok',
           handler: () => {
+            //clear the local storage
             this.clear();
-            this.navCtrl.navigateRoot('/home',{animated:true});
+            //redirect to first login page
+            this.navCtrl.navigateRoot('/first',{animated:true});
 
             
           }
