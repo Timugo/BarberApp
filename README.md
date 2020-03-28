@@ -14,7 +14,10 @@
 
 ## for a stencil / vanilla JS app
 - npm i @ionic/core@latest --save
+- npm install @ionic/angular@latest @ionic/angular-toolkit@latest --save
 
+# Update Angular 
+- ng update @angular/cli @angular/core
 # How to run app 
 
 - ionic serve (development server)
