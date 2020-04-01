@@ -130,6 +130,7 @@ export class AppComponent {
             console.log("no se pudo agregar el token");
           } else{
               if(res['response']===2){
+                console.log("Token= "+token);
                 console.log("se agrego correctamente el token al usuario");
               }else{
                 this.message("Error de Conexion");

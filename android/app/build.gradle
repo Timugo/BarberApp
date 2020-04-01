@@ -37,6 +37,8 @@ dependencies {
     implementation project(':capacitor-cordova-android-plugins')
     //Dont Upgrade to 'com.google.firebase:firebase-analytics:17.2.2' the app crashes
     implementation 'com.google.firebase:firebase-analytics:17.2.0'
+    //optional
+    implementation 'com.google.firebase:firebase-messaging:20.1.4'
 
 }
 
