@@ -3,14 +3,43 @@
     <ion-buttons slot="start">
       <ion-back-button mode="ios" text="Volver" defaultHref="/orders"></ion-back-button>
     </ion-buttons>
-    <ion-title>Tu Saldo</ion-title>
+    <ion-title>Recarga</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-header collapse="condense" >
     <ion-toolbar>
-      <ion-title size="large">Tu Saldo</ion-title>
+      <ion-title size="large">Recarga</ion-title>
     </ion-toolbar>
   </ion-header>
+  <ion-grid>
+    <ion-row>
+      <ion-col offset="1">
+        <ion-text>
+          <h1>Como quieres recargar</h1>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row >
+      <ion-col size="6">
+        <ion-card mode="ios" (click)="navigateTo('first-nequi')" >
+          <ion-img src="assets/img/paymentOption1.svg"></ion-img>
+          <ion-card-header>
+            <ion-card-subtitle>Opcion 1</ion-card-subtitle>
+            <ion-card-title>App Nequi</ion-card-title>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6">
+        <ion-card mode="ios" (click)="navigateTo('phisical-payment')" >
+          <ion-img src="assets/img/paymentOption2.svg"></ion-img>
+          <ion-card-header>
+            <ion-card-subtitle>Opcion 2</ion-card-subtitle>
+            <ion-card-title>Punto Fisico</ion-card-title>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
