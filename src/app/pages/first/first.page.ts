@@ -13,17 +13,17 @@ export class FirstPage implements OnInit {
   };
   slides=[
     {
-      img:'assets/img/slide1.png',
+      img:'assets/img/slide1.svg',
       title:"Conectate<br> cuando quieras",
       subtitle:"Basta que te conectes solo <br> <b>cuando quieras</b> trabajar"
     },
     {
-      img:'assets/img/slide22.png',
-      title:"Trabaja <br> cuando puedas",
+      img:'assets/img/slide2.svg',
+      title:"Gestionamos <br> tus clientes",
       subtitle:"Tu solo preocupate por <b>conectarte</b>,<br> nosotros <b>hacemos</b> el resto."
     },
     {
-      img:'assets/img/slide3.png',
+      img:'assets/img/slide3.svg',
       title:"Gana dinero",
       subtitle:"Basta de pagar <b>altas comisiones</b>,<br> ahora tu manejas tus <b>ganancias</b>"
     }
