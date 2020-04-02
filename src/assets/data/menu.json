@@ -10,6 +10,12 @@
       "name":"Historial Ordenes",
       "redirectTo":"/orders"
 
+    },
+    {
+      "icon":"time-outline",
+      "name":"Historial de Pagos",
+      "redirectTo":"/payments-history"
+
     }
 
 ]
