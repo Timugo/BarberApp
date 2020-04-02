@@ -34,7 +34,16 @@ const routes: Routes = [
   {
     path: 'first',
     loadChildren: () => import('./pages/first/first.module').then( m => m.FirstPageModule)
-  }
+  },
+  {
+    path: 'first-nequi',
+    loadChildren: () => import('./pages/first-nequi/first-nequi.module').then( m => m.FirstNequiPageModule)
+  },
+  {
+    path: 'phisical-payment',
+    loadChildren: () => import('./pages/phisical-payment/phisical-payment.module').then( m => m.PhisicalPaymentPageModule)
+  },
+  
 ];
 
 @NgModule({
