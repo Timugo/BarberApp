@@ -22,7 +22,7 @@ import { SlideDrawerComponent } from './slide-drawer/slide-drawer.component';
   imports: [
     CommonModule,
     IonicModule,
-    RouterModule//without this the [router Link  Doesnt work in ionic items] 
+    RouterModule,//without this the [router Link  Doesnt work in ionic items],
   ]
 })
 export class ComponentsModule { }

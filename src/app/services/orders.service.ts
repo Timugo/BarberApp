@@ -22,6 +22,9 @@ export class OrdersService {
   getAvailableOrders(city: string,phone : number) {
     return this.http.get(URL + '/getAvailableOrdersByCity' + '?city=' + city+ '&phoneBarber=' + phone);
   }
+  getBalance(phoneBarber:number){
+    return this.http.get(URL +'/getBarberBalance'+'?phoneBarber='+phoneBarber);
+  }
   checkConnection(phoneBarber:number){
     return this.http.get(URL + '/checkIfBarberConnect'+'?phoneBarber=' + phoneBarber);
   }
