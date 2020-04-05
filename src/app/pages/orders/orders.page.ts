@@ -93,6 +93,25 @@ export class OrdersPage implements OnInit {
     this.componentes = this.dataService.getMenuOpts();  
     
   }
+  //Check if the barber is currently connected or disconected
+  checkBarberConection(barber:Barber){
+    this.ordersService.checkConnection(parseInt(barber.phone)).subscribe((response)=>{
+      if(response["response"] == 2){
+        this.conection = true;
+      }else{
+        this.conection = false;
+      }
+    });
+  }
+  connect(){
+    this.ordersService.connectOrDisconnect(parseInt(this.barber.phone)).subscribe((res)=>{
+      if(res["response"] ==2 ){
+        this.conection = res["content"]["user"]["connected"];
+      }
+      //reload Order after connect or disconnect
+      this.getOrders(this.barber)
+    });
+  }
   //PLay sounds
   startTrack(src : String){
     console.log("Estoy reproduciendo la musica");
@@ -139,6 +158,8 @@ export class OrdersPage implements OnInit {
     if(user){
       //then we can search new orders
       this.getOrders(user);
+      //Check if barber is connected 
+      this.checkBarberConection(user);
     }else{
       //if not, then redirect barber to home login page
       this.navCtrl.navigateRoot('/first',{animated:true},);

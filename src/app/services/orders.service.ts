@@ -22,8 +22,12 @@ export class OrdersService {
   getAvailableOrders(city: string,phone : number) {
     return this.http.get(URL + '/getAvailableOrdersByCity' + '?city=' + city+ '&phoneBarber=' + phone);
   }
-
-  
+  checkConnection(phoneBarber:number){
+    return this.http.get(URL + '/checkIfBarberConnect'+'?phoneBarber=' + phoneBarber);
+  }
+  connectOrDisconnect(phoneBarber : number){
+    return this.http.put(URL + '/connectOrDisconnectBarber', { phoneBarber: phoneBarber}, httpOptions)
+  }
   assingBarberToOrder(idOrder: number, phoneBarber: number){
     console.log('orden', idOrder, 'barbero', phoneBarber);
     var order = idOrder.toString();

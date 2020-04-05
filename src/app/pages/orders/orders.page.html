@@ -42,7 +42,7 @@
           <ion-label *ngIf="conection">Conectado</ion-label>
           <ion-label *ngIf="!conection">Desconectado</ion-label>
         
-          <ion-toggle [(ngModel)]="conection" id="toggle" mode="ios" slot="end"></ion-toggle>
+          <ion-toggle [(ngModel)]="conection" (click)="connect()"   id="toggle" mode="ios" slot="end"></ion-toggle>
       </ion-item>
     </ion-card-content>
   </ion-card>
@@ -104,8 +104,8 @@
   </ion-list> -->
   
 
-  <ion-text class="noOrders" *ngIf="flagNoOrdenes" color="primary">
-    <h1> Desliza para buscar Ordenes</h1>
+  <ion-text class="noOrders" *ngIf="!conection" color="danger">
+    <h3> Debes conectarte para recibir ordenes</h3>
   </ion-text>
 
  
