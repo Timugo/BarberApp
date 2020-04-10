@@ -1,9 +1,31 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>second-nequi</ion-title>
+    <ion-buttons slot="start">
+      <!-- <ion-back-button mode="ios" text="Volver" ></ion-back-button> -->
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-header collapse="condense" class="ion-no-border" >
+  </ion-header>
 
+  <ion-grid>
+    <ion-row>
+      <ion-col offsset="1">
+        <ion-text >
+          <h3>Segundo Paso</h3>
+          <p>Acepta el pago en <b>tu app NEQUI</b></p>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center">
+      <ion-col offset="1" size="10">
+        <ion-button (click)="checkPayment()" class="colorButton" size="large" expand="block">Confirma Aqui</ion-button>
+      </ion-col>
+    </ion-row>
+    
+  </ion-grid>
+
+ 
 </ion-content>
