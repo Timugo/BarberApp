@@ -26,7 +26,22 @@ export class DataLocalService {
       value: city
     });
   }
-
+  //Save Payment QR code
+  async saveInfoQr(codeQr: string){
+    await Storage.set({
+      key: 'codeQr',
+      value:codeQr
+    });
+  
+  }
+  async getItem(item : string) {
+    const { value } = await Storage.get({ key: item });
+    return value;
+  }
+  async removeItem(item:string) {
+    await Storage.remove({ key: item });
+  }
+  
   async getBarber() {
     const ret = await Storage.get({ key: 'barber' });
     const user = JSON.parse(ret.value);
