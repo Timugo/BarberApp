@@ -1,5 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController, ToastController, NavController } from '@ionic/angular';
+import { Router } from '@angular/router';
+//Services
+import { PaymentsService } from 'src/app/services/payments.service';
+import { DataLocalService } from "src/app/services/data-local.service";
+//Imterfaces
+import { Barber } from 'src/app/interfaces/barber';
+//PLugins
+import { Plugins } from '@capacitor/core';
+
+const { Storage } = Plugins;
 
 @Component({
   selector: 'app-first-nequi',
@@ -8,14 +18,69 @@ import { AlertController, ToastController } from '@ionic/angular';
 })
 export class FirstNequiPage implements OnInit {
   money : number = 20000;
+  barber : Barber;
   constructor(
-    private alertCtrl : AlertController 
+    private alertCtrl : AlertController,
+    private router : Router,
+    //services
+    private paymentService :PaymentsService,
+    private localDataService : DataLocalService,
+    //to display todast
+    private toastCtrl : ToastController,
+    //navigation Controller.
+    private navCtrl : NavController
   ) { }
 
   ngOnInit() {
   }
-  holiwas(){
-    console.log("holi");
+  navigateTo(option : string){  
+    this.router.navigate([`/${option}`]);
+  }
+  rootNavigate(page : string){
+    this.navCtrl.navigateRoot(`/${page}`,{animated:true});
+  }
+  async beginPayment(){
+    // get barber from local storage
+    this.barber = await this.searchBarber();
+    //begin payment from paymentService Service
+    this.paymentService.makePushPayment(this.barber.phone.toString(),this.money.toString()).subscribe((res)=>{
+      //handle responses
+      console.log(res);
+      if(res.response == 2){
+        if(res.content.message == "REJECTED"){
+          this.presentToast(res.content.description,"danger",4000);
+        }else if(res.content.message == "ACCEPTED"){
+          //save code payment in local storage
+          this.localDataService.saveInfoQr(res.content.codeQR);
+          //navigate to the next page
+          this.rootNavigate("second-nequi");
+          //display confirmation message
+          this.presentToast(res.content.description,"primary",5000);
+        }
+      }else{
+        this.presentToast("Un error ha ocurrido por favor intenta mas tarde y contacta con soporte","danger",6000)
+      }
+    });
+
+  }
+  //Search barber in the local storage
+  async searchBarber(){
+    const ret = await Storage.get({ key: 'barber' });
+    const user = JSON.parse(ret.value);
+    //if the barber exists in local storage
+    if(user){ 
+      return user;
+    }else{
+      return "";
+    }
+  }
+  async presentToast(message:string, color : string,duration : number) {
+    const toast = await this.toastCtrl.create({
+      color : color,
+      message: message,
+      duration: duration
+    });
+    toast.present();
   }
   decreaseMoney(){
     if(this.money > 20000){
@@ -27,7 +92,6 @@ export class FirstNequiPage implements OnInit {
   addMoney(){
     this.money = this.money + 1000;
   }
-
   async presentAlert() {
     const alert = await this.alertCtrl.create({
       header: 'Recuerda',

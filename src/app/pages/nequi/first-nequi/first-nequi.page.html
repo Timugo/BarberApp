@@ -51,16 +51,17 @@
     </ion-row>
   </ion-grid>
 
- 
 </ion-content>
+
 <ion-footer class="ion-no-border">
   <ion-grid>
-    <ion-row >
-      <ion-col (click)="holiwas()" size="6" class="nextText" >
-        <h1><b>Siguiente</b></h1> 
+    <ion-row>
+      <ion-col size="7">
       </ion-col>
-      <ion-col (click)="holiwas()" size="2" class="iconText">
-        <ion-icon size="large" class="iconNext" name="arrow-forward-outline"></ion-icon>
+      <ion-col>
+        <ion-button (click)="beginPayment()" shape="round" fill="outline">
+          Sigue  <ion-icon size="small" name="arrow-forward-outline"></ion-icon>
+        </ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
