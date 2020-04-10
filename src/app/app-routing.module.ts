@@ -9,11 +9,11 @@ const routes: Routes = [
   },
   {
     path: 'orders',
-    loadChildren: () => import('./pages/orders/orders.module').then( m => m.OrdersPageModule)
+    loadChildren: () => import('./pages/order/orders/orders.module').then( m => m.OrdersPageModule)
   },
   {
     path: 'current-order',
-    loadChildren: () => import('./pages/current-order/current-order.module').then( m => m.CurrentOrderPageModule)
+    loadChildren: () => import('./pages/order/current-order/current-order.module').then( m => m.CurrentOrderPageModule)
   },
   {
     path: 'profile',
@@ -21,11 +21,11 @@ const routes: Routes = [
   },
   {
     path: 'balance-explain',
-    loadChildren: () => import('./pages/balance-explain/balance-explain.module').then( m => m.BalanceExplainPageModule)
+    loadChildren: () => import('./pages/balance/balance-explain/balance-explain.module').then( m => m.BalanceExplainPageModule)
   },
   {
     path: 'balance-charge-explai',
-    loadChildren: () => import('./pages/balance-charge-explai/balance-charge-explai.module').then( m => m.BalanceChargeExplaiPageModule)
+    loadChildren: () => import('./pages/balance/balance-charge-explai/balance-charge-explai.module').then( m => m.BalanceChargeExplaiPageModule)
   },
   {
     path: 'payments',
@@ -37,11 +37,15 @@ const routes: Routes = [
   },
   {
     path: 'first-nequi',
-    loadChildren: () => import('./pages/first-nequi/first-nequi.module').then( m => m.FirstNequiPageModule)
+    loadChildren: () => import('./pages/nequi/first-nequi/first-nequi.module').then( m => m.FirstNequiPageModule)
   },
   {
     path: 'phisical-payment',
-    loadChildren: () => import('./pages/phisical-payment/phisical-payment.module').then( m => m.PhisicalPaymentPageModule)
+    loadChildren: () => import('./pages/nequi/phisical-payment/phisical-payment.module').then( m => m.PhisicalPaymentPageModule)
+  },
+  {
+    path: 'second-nequi',
+    loadChildren: () => import('./pages/nequi/second-nequi/second-nequi.module').then( m => m.SecondNequiPageModule)
   },
   
 ];

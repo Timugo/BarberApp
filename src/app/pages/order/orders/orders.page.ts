@@ -1,15 +1,15 @@
 //Interfaces to be Used to manage data
-import { Barber, Componente } from './../../interfaces/barber';
-import { Track } from '../../interfaces/track';
+import { Barber, Componente } from '../../../interfaces/barber';
+import { Track } from '../../../interfaces/track';
 //Angular Stuff
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertController, IonList, NavController, ToastController, MenuController } from '@ionic/angular';
 //Hanlding Local data with a service
-import { DataLocalService } from '../../services/data-local.service';
+import { DataLocalService } from '../../../services/data-local.service';
 //manage Routes and redirections
 import { Router } from '@angular/router';
 //Services From server
-import { OrdersService } from '../../services/orders.service';
+import { OrdersService } from '../../../services/orders.service';
 //Capacitor plugins ALlows to use Native Android and ios SDKS 
 import { Plugins } from '@capacitor/core';
 //To handle Data
@@ -19,7 +19,7 @@ import { UiServiceService } from 'src/app/services/ui-service.service';
 //Platform can detect in which device is ionc running (android, ios web , tablet etc)
 import { Platform } from '@ionic/angular';
 //to handle production and development mode 
-import { environment} from '../../../environments/environment';
+import { environment} from '../../../../environments/environment';
 //Library to Play local audios
 import { Howl } from 'howler';
 //socket importation
