@@ -59,8 +59,9 @@
       <ion-col size="7">
       </ion-col>
       <ion-col>
-        <ion-button (click)="beginPayment()" shape="round" fill="outline">
-          Sigue  <ion-icon size="small" name="arrow-forward-outline"></ion-icon>
+        <ion-button disabled={{buttonState}} (click)="beginPayment()" shape="round" fill="outline">
+          Sigue  
+          <ion-icon size="small" name="arrow-forward-outline"></ion-icon>
         </ion-button>
       </ion-col>
     </ion-row>

@@ -28,14 +28,14 @@ export class SecondNequiPage implements OnInit {
     this.navCtrl.navigateRoot(`/${page}`,{animated:true});
   }
   async checkPayment(){
+    this.allertsService.presentLoading("Comprobando Pago..");
     //Fetch code Qr from local storage
     this.codeQr = await this.localDataService.getItem("codeQr");
     //Check push payment 
     this.paymentService.checkPushPayment(this.codeQr).subscribe((res)=>{
-      console.log(res);
       if(res.response == 2){
         if(res.content.message == "APPROVED"){
-          console.log("la transaccion se acepto urra");
+          this.allertsService.dismissLoading();
           //show confirm toast
           this.allertsService.showToast(res.content.description + " Recuerda que puede tomar hasta 10 minutos en verse reflejado","success",7000)
           //delete Qr payment code after success
@@ -43,21 +43,21 @@ export class SecondNequiPage implements OnInit {
           //Refirect Page to home
           this.rootNavigate("/orders");          
         } else if(res.content.message == "ACCEPTED") {
+          this.allertsService.dismissLoading();
           // show toast
           this.allertsService.showToast(res.content.description,"secondary",4000);
-          console.log(res.content.message , res.content.description);
         } else if ( res.content.message == "REJECTED"){
+          this.allertsService.dismissLoading();
           //go home
           this.rootNavigate("/orders");
           //delete Qr payment code after failed
           this.localDataService.removeItem("codeQr");          
           //SHow toast
           this.allertsService.showToast(res.content.description,"danger",4000)
-          console.log(res.content.message , res.content.description);
         }
       }else{
+        this.allertsService.dismissLoading();
         this.allertsService.showToast("ERROR DE TRANSACCION INTENTA MAS TARDE","danger",5000);
-        console.log("ERROR DE TRANSACCION INTENTA MAS TARDE");
       }
     }); 
   }

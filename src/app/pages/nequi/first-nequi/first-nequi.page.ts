@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ToastController, NavController } from '@ionic/angular';
+import { AlertController, ToastController, NavController, LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 //Services
 import { PaymentsService } from 'src/app/services/payments.service';
@@ -8,6 +8,7 @@ import { DataLocalService } from "src/app/services/data-local.service";
 import { Barber } from 'src/app/interfaces/barber';
 //PLugins
 import { Plugins } from '@capacitor/core';
+import { UiServiceService } from 'src/app/services/ui-service.service';
 
 const { Storage } = Plugins;
 
@@ -19,16 +20,19 @@ const { Storage } = Plugins;
 export class FirstNequiPage implements OnInit {
   money : number = 20000;
   barber : Barber;
+  buttonState : boolean = false;
   constructor(
     private alertCtrl : AlertController,
     private router : Router,
     //services
     private paymentService :PaymentsService,
     private localDataService : DataLocalService,
+    private allertsService : UiServiceService,
     //to display todast
     private toastCtrl : ToastController,
     //navigation Controller.
-    private navCtrl : NavController
+    private navCtrl : NavController,
+    private loadingCtrl : LoadingController,
   ) { }
 
   ngOnInit() {
@@ -40,8 +44,13 @@ export class FirstNequiPage implements OnInit {
     this.navCtrl.navigateRoot(`/${page}`,{animated:true});
   }
   async beginPayment(){
+    //present loading
+    this.allertsService.presentLoading("Procesando..");
+    //disable button
+    this.buttonState = true;
     // get barber from local storage
     this.barber = await this.searchBarber();
+    
     //begin payment from paymentService Service
     this.paymentService.makePushPayment(this.barber.phone.toString(),this.money.toString()).subscribe((res)=>{
       //handle responses
@@ -49,7 +58,12 @@ export class FirstNequiPage implements OnInit {
       if(res.response == 2){
         if(res.content.message == "REJECTED"){
           this.presentToast(res.content.description,"danger",4000);
+          //re- enable next button
+          this.buttonState = false;
+          this.allertsService.dismissLoading();
         }else if(res.content.message == "ACCEPTED"){
+          //dismiss loading
+          this.allertsService.dismissLoading();
           //save code payment in local storage
           this.localDataService.saveInfoQr(res.content.codeQR);
           //navigate to the next page
@@ -58,11 +72,13 @@ export class FirstNequiPage implements OnInit {
           this.presentToast(res.content.description,"primary",5000);
         }
       }else{
-        this.presentToast("Un error ha ocurrido por favor intenta mas tarde y contacta con soporte","danger",6000)
+        this.presentToast("Un error ha ocurrido por favor intenta mas tarde y contacta con soporte","danger",6000);
+        this.allertsService.dismissLoading();
       }
     });
 
   }
+
   //Search barber in the local storage
   async searchBarber(){
     const ret = await Storage.get({ key: 'barber' });
@@ -101,5 +117,15 @@ export class FirstNequiPage implements OnInit {
     });
 
     await alert.present();
+  
   }
+  async showLoading() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Procesando...',
+      duration: 10000000
+    });
+    await loading.present();
+    const { role, data } = await loading.onDidDismiss();    
+  }
+ 
 }
