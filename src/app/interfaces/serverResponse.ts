@@ -1,3 +1,4 @@
+import { OrderHistory } from "./order";
 export interface Response {
     response: number;
     content: {
@@ -6,4 +7,9 @@ export interface Response {
         codeQR:string
     }
 
+}
+
+export interface ResponseOrderHistory {
+    response : number;
+    content : [OrderHistory]
 }

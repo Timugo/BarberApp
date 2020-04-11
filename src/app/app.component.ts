@@ -88,7 +88,6 @@ export class AppComponent {
     const user = JSON.parse(ret.value);
     //if exists a barber save in the local storage
     if(user){
-      console.log("Desde el inicio mando el barbero"+ JSON.stringify(user));
       //Set the current barber interface= barber save in the device storage
       this.barber = user;
       // check if this barber is enrolled in a current order on progress
