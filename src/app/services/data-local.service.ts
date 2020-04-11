@@ -45,6 +45,7 @@ export class DataLocalService {
   async getBarber() {
     const ret = await Storage.get({ key: 'barber' });
     const user = JSON.parse(ret.value);
+    return user;
   }
 
   

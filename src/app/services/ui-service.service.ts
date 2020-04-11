@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController, ToastController, LoadingController } from '@ionic/angular';
 import { HttpClient} from '@angular/common/http';
 import { Componente} from '../interfaces/barber';
 @Injectable({
   providedIn: 'root'
 })
 export class UiServiceService {
-
+  //fot loading
+  isLoading = false;
   constructor(
               private alertController:AlertController,
               private http: HttpClient,
               private toastCtrl : ToastController,
+              public loadingController: LoadingController
             ) { }
 
   async Alert(titulo: string, mensaje: string, accion: number) {
@@ -43,5 +45,30 @@ export class UiServiceService {
     
     return this.http.get<Componente[]>("/assets/data/menu.json");
   }
+
+  async presentLoading(message :string) {
+    this.isLoading = true;
+    return await this.loadingController.create({
+      message: message,
+      spinner :"dots",
+      
+      // duration: 5000,
+    }).then(a => {
+      a.present().then(() => {
+        console.log('presented');
+        if (!this.isLoading) {
+          a.dismiss().then(() => console.log('abort presenting'));
+        }
+      });
+    });
+  }
+
+  async dismissLoading() {
+    this.isLoading = false;
+    return await this.loadingController.dismiss().then(() => console.log('dismissed'));
+  }
+
+  
+
   
 }
