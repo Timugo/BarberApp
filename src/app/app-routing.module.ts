@@ -47,6 +47,10 @@ const routes: Routes = [
     path: 'second-nequi',
     loadChildren: () => import('./pages/nequi/second-nequi/second-nequi.module').then( m => m.SecondNequiPageModule)
   },
+  {
+    path: 'order-history',
+    loadChildren: () => import('./pages/order/order-history/order-history.module').then( m => m.OrderHistoryPageModule)
+  },
   
 ];
 

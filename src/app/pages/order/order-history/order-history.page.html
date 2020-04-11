@@ -1,0 +1,44 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button mode="ios" text="Volver" defaultHref="/orders"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Tus Ordenes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-header collapse="condense" >
+    <ion-toolbar>
+      <ion-title size="large">Tus Ordenes</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-card>
+    <ion-item *ngFor="let order of orderHistory" >
+      <ion-icon color="primary" name="navigate-circle-outline" slot="start"></ion-icon>
+      <ion-label>
+        <ion-text color="medium">
+          <h3> {{order.nameClient}}</h3>
+        </ion-text>
+        <ion-text color="medium">
+          <h3>{{order.dateBeginOrder}}</h3>
+        </ion-text>
+        <ion-label>
+          <h4><ion-icon color="black" name="home-outline" slot="start"></ion-icon> {{order.address}}</h4>
+        </ion-label>
+        <ion-text color="black">
+          <h1>{{order.price | currency}}</h1>    
+        </ion-text>
+        <ion-text color="primary">
+          <h2>Servicios</h2>
+        </ion-text>
+
+        <ion-label *ngFor="let service of order.services">
+          <h4><ion-icon color="primary" slot="start" name="checkmark-outline"></ion-icon> {{service.nameService}} x {{service.quantity}} = {{service.price * service.quantity | currency}} </h4>
+        </ion-label>
+      </ion-label>
+      
+    </ion-item>
+  </ion-card>
+</ion-content>

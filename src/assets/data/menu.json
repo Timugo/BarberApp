@@ -8,7 +8,7 @@
     {
       "icon":"time-outline",
       "name":"Historial Ordenes",
-      "redirectTo":"/orders"
+      "redirectTo":"/order-history"
 
     },
     {
