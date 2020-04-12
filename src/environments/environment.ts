@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  url : 'https://www.timugotest.xyz',
+  url : 'https://sandbox.timugo.com',
   //url : 'http://localhost:3000',
   message : "DEVELOPMENT MODE"
 };
