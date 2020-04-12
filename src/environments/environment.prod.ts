@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  url : 'https://www.timugo.com',
+  url : 'https://api.timugo.com',
   message : "PRODUCTION MODE"
 };

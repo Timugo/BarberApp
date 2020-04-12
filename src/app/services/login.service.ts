@@ -81,6 +81,7 @@ export class LoginService {
       value:JSON.stringify(barbero)
     });
   }
+  //clean local storage
   async clear() {
     await Storage.clear();
   }
