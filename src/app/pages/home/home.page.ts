@@ -1,15 +1,10 @@
 import { Barber } from './../../interfaces/barber';
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../services/login.service';
-import { AlertController, NavController, MenuController } from '@ionic/angular';
+import { AlertController, MenuController, Platform } from '@ionic/angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Plugins } from '@capacitor/core';
-
-
-
 const {StatusBar} = Plugins;
-
-
 
 @Component({
   selector: 'app-home',
@@ -27,6 +22,7 @@ export class HomePage implements OnInit {
               private fb: FormBuilder,
               public alertController: AlertController,
               public menu: MenuController,
+              public platform: Platform,
               ) { 
                 this.menu1Active();
                 this.hideStatusBar();
@@ -48,6 +44,9 @@ export class HomePage implements OnInit {
     this.menu.enable(false, this.activeMenu);
   }
   hideStatusBar() {
-    StatusBar.hide();
+    //ONly hide status bar if the platform is diferent to webd
+    if(!this.platform.is("mobileweb")){
+      StatusBar.hide();
+    }
   }
 }

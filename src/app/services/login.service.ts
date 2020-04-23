@@ -36,7 +36,7 @@ export class LoginService {
               ) { }
   async login(telefono: number) {
     try{
-      await this.http.post(URL + '/loginBarber', {phone: telefono}, httpOptions).subscribe( res => {
+      this.http.post(URL + '/loginBarber', {phone: telefono}, httpOptions).subscribe( res => {
         console.log(res);
         if (res['response'] === 1) {
           //failed login
