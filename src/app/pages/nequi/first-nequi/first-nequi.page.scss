@@ -1,0 +1,29 @@
+.cardPayment{
+    --background: rgb(0,100,224);
+    --background: linear-gradient(90deg, rgba(0,100,224,1) 0%, rgba(5,112,229,1) 25%, rgba(10,131,238,1) 50%, rgba(19,157,247,1) 75%, rgba(25,174,255,1) 100%);
+    
+}
+h3{
+    font-size: 35px;
+    color: var(--ion-text-color, #000000);
+}
+//Text in the slides
+p{
+    margin-bottom: 40px;
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--ion-color-step-600, #60646b); 
+    b {
+        color: var(--ion-text-color, #000000);
+      }
+}
+.iconNext{
+    font-size: 16px;
+}
+.nextText{
+    left: 50%;
+}
+.iconText{
+    left: 35%;
+    top:20px;
+}

@@ -1,28 +1,33 @@
-import { Barber, Componente } from './../../interfaces/barber';
-import { Track } from '../../interfaces/track';
+//Interfaces to be Used to manage data
+import { Barber, Componente } from '../../../interfaces/barber';
+import { Track } from '../../../interfaces/track';
+//Angular Stuff
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { DataLocalService } from '../../services/data-local.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { OrdersService } from '../../services/orders.service';
 import { AlertController, IonList, NavController, ToastController, MenuController } from '@ionic/angular';
-import { Plugins,PushNotification,PushNotificationToken,PushNotificationActionPerformed } from '@capacitor/core';
+//Hanlding Local data with a service
+import { DataLocalService } from '../../../services/data-local.service';
+//manage Routes and redirections
+import { Router } from '@angular/router';
+//Services From server
+import { OrdersService } from '../../../services/orders.service';
+//Capacitor plugins ALlows to use Native Android and ios SDKS 
+import { Plugins } from '@capacitor/core';
+//To handle Data
 import { Observable } from 'rxjs';
+//Display things like modlas toasts etc
 import { UiServiceService } from 'src/app/services/ui-service.service';
+//Platform can detect in which device is ionc running (android, ios web , tablet etc)
 import { Platform } from '@ionic/angular';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 //to handle production and development mode 
-import { environment} from '../../../environments/environment';
-//play audio
+import { environment} from '../../../../environments/environment';
+//Library to Play local audios
 import { Howl } from 'howler';
+//socket importation
+//import { Socket } from 'ngx-socket-io';
+//Using 
+const { Storage, LocalNotifications} = Plugins;
+///local notification configuration
 
-const { Storage,PushNotifications } = Plugins;
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type':  'application/json'
-  })
-};
-//this url change depends which enviroment (development or production)
-const  URL_API = environment.url;
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.page.html',
@@ -49,68 +54,65 @@ export class OrdersPage implements OnInit {
   titulo: string; //tittle of the page
   nameBarber:string="none"
   componentes: Observable<Componente[]>; //listo of components in the menu
-  conection : string = "conectate";
+  conection : boolean ;
+  
 
 
-  constructor( private datalocalService: DataLocalService,
-               private router: Router,
-               private ordersService: OrdersService,
-               public alertController: AlertController,
-               private navCtrl: NavController,
-               private dataService : UiServiceService,
-               private toastCtrl : ToastController,
-               public platform: Platform,
-               private menu:MenuController,
-               private http: HttpClient,
+  constructor(
+              // TO hanlge local data
+              private datalocalService: DataLocalService,
+              //TO do redirections
+              private router: Router,
+              // Order services to do request to server
+              private ordersService: OrdersService,
+              //display allerts
+              public alertController: AlertController,
+              //To handle Pages navigations
+              private navCtrl: NavController,
+              //TO ddo request to server
+              private dataService : UiServiceService,
+              //to display todast
+              private toastCtrl : ToastController,
+              //detects whichs is the current platform running
+              public platform: Platform,
+              //SIde menu controller
+              private menu:MenuController,
+               //private socket : Socket
               ) {
+                //Named the current side menu
                 this.activeMenu = 'first';
+                //Enable side menu to handle it
                 this.menu.enable(true, this.activeMenu);
+                //get current barber info 
                 this.getBarber2(); 
     
-              }
-  
+              }          
   ngOnInit() {
     console.log(environment.message);
+    //Charge the options to display in the side menu
     this.componentes = this.dataService.getMenuOpts();  
-    //Try to register the device in all platforms except mobile web in the browser
-    if(!this.platform.is("mobileweb")){
-      // Register with Apple / Google to receive push via APNS/FCM
-      PushNotifications.register();
-
-      // On succcess, we should be able to receive notifications
-      PushNotifications.addListener('registration',
-        (token: PushNotificationToken) => {
-          console.log('======= FCM TOKEN =========');
-          this.savePhoneToken(token.value,this.barber.phone);
-          console.log(token.value,this.barber.phone);
-        }
-      );
-      // Some issue with our setup and push will not work
-      PushNotifications.addListener('registrationError',
-        (error: any) => {
-          alert('Error on registration: ' + JSON.stringify(error));
-        }
-      );
-
-      // Show us the notification payload if the app is open on our device
-      PushNotifications.addListener('pushNotificationReceived',
-        (notification: PushNotification) => {
-          //alert('Push received: ' + JSON.stringify(notification));
-          //this.startTrack("../../../assets/sounds/alert.mp3");
-          this.menssage(notification.body);
-        }
-      );
-      // Method called when tapping on a notification
-      PushNotifications.addListener('pushNotificationActionPerformed',
-        (notification: PushNotificationActionPerformed) => {
-          alert('Push action performed: ' + JSON.stringify(notification));
-        }
-      );
-    }
     
-
-    /************************************************ */
   }
+  //Check if the barber is currently connected or disconected
+  checkBarberConection(barber:Barber){
+    this.ordersService.checkConnection(parseInt(barber.phone)).subscribe((response)=>{
+      if(response["response"] == 2){
+        this.conection = true;
+      }else{
+        this.conection = false;
+      }
+    });
+  }
+  connect(){
+    this.ordersService.connectOrDisconnect(parseInt(this.barber.phone)).subscribe((res)=>{
+      if(res["response"] ==2 ){
+        this.conection = res["content"]["user"]["connected"];
+      }
+      //reload Order after connect or disconnect
+      this.getOrders(this.barber)
+    });
+  }
+  //PLay sounds
   startTrack(src : String){
     console.log("Estoy reproduciendo la musica");
     this.player = new Howl({
@@ -118,25 +120,28 @@ export class OrdersPage implements OnInit {
     });
     this.player.play();
   }
-
-  async savePhoneToken(token: string,phone:string) {
-    try{
-      await this.http.put(URL_API + '/addPhoneTokenBarber', {phoneBarber: phone,phoneToken:token}, httpOptions).subscribe( res => {
-        console.log(res);
-        if (res['response'] === 1) {
-          console.log("no se pudo agregar el token");
-        } else{
-            if(res['response']===2){
-              console.log("se agrego correctamente el token al usuario");
-            }
-          }
-      },);
-      return true;
-    } catch (err) {
-      return false;
-    }
+  //Coonection of the barber to recieve new orders 
+  async connectBarber(){
+    //First the barber need to listen the socket so he can now recieve new orders if he is active
+    //this.socket.connect();
+    //If the barber recieve new order so here we are displaying local notification to anounce it
+    const notifs = await LocalNotifications.schedule({
+      notifications: [
+        {
+          title: "Timugo",
+          body: "Estas Conectado para recibir Pedidos",
+          id: 1,
+          schedule: { at: new Date(Date.now()+ 1000 * 5) },
+          sound:"../../../assets/sounds/alert.mp3",
+          attachments: null,
+          actionTypeId: "",
+          extra: null
+        }
+      ]
+    });
   }
-  async menssage(mensaje: string) {
+  //Display a toast allert
+  async message(mensaje: string) {
     const toast = await this.toastCtrl.create({
       message: mensaje,
       duration: 8000,
@@ -145,27 +150,22 @@ export class OrdersPage implements OnInit {
     });
     toast.present();
   }
-  async getCity() {
-    const { value } = await Storage.get({ key: 'city' });
-    this.city = value;
-   
-  }
+  //Get barber information from local storage
   async getBarber2() {
     const ret = await Storage.get({ key: 'barber' });
     const user = JSON.parse(ret.value);
+    //if the barber exists in local storage
     if(user){
+      //then we can search new orders
       this.getOrders(user);
+      //Check if barber is connected 
+      this.checkBarberConection(user);
     }else{
-      this.navCtrl.navigateRoot('/home',{animated:true},);
+      //if not, then redirect barber to home login page
+      this.navCtrl.navigateRoot('/first',{animated:true},);
     }
   }
-  async checkExistsOrderInProgress(){
-    const { value } = await Storage.get({ key: 'currentOrder' });
-    if(value){
-      this.navCtrl.navigateRoot('/current-order',{animated:true});
-
-    }
-  }
+  //function to recieve new orders and refresh
   getOrders(barber:Barber){
     this.barber = barber;
     if(environment.message =="DEVELOPMENT MODE"){
@@ -187,6 +187,7 @@ export class OrdersPage implements OnInit {
     });
 
   }
+  //display an allert 
   async Alert(titulo: string, mensaje: string) {
     const alert = await this.alertController.create({
       header: titulo,
@@ -195,15 +196,20 @@ export class OrdersPage implements OnInit {
         {
           text: 'OK',
           handler: ( ) => {
+            //if press OK button
             console.log('Confirm Okay');
           }
         }
       ]
     });
-
+    //show the allert ins screen
     await alert.present();
-
   }
+  //TO Confirme take order
+  tomarOrden(codigoOrden: number){
+    this.presentAlertConfirm('Confirmacion la Orden','¿Deseas tomarla?',codigoOrden);
+  }
+  //second step to take the order
   async presentAlertConfirm(titulo: string, mensaje: string, codigoOrden: number) {
 
     const alert = await this.alertController.create({
@@ -226,10 +232,15 @@ export class OrdersPage implements OnInit {
             this.ordersService.assingBarberToOrder(codigoOrden,parseInt(this.barber.phone)).subscribe( res => {
               console.log(res);
               this.mensaje2 = res;
+              //if the barber took the order correctly
               if (this.mensaje2.response === 2 ) {
+                //then redirect to current order page to see the order info
                 this.router.navigate(['/current-order']);
+                //close sliding items in the list
                 this.lista.closeSlidingItems();
+                //if existe an error
               } else if (this.mensaje2.response === 1) {
+                //display an allert
                 this.Alert('Upss','La orden no se encontro o fue tomada por otro barbero. Por favor desliza la pantalla hacia abajo para recargar.') 
               }
             });
@@ -239,9 +250,7 @@ export class OrdersPage implements OnInit {
     });
     await alert.present();
   }  
-  tomarOrden(codigoOrden: number){
-    this.presentAlertConfirm('Confirmacion la Orden','¿Deseas tomarla?',codigoOrden);
-  }
+  //PUll to refresh implementation
   doRefresh(event) {
     this.ordersService.getAvailableOrders(this.barber.city,parseInt(this.barber.phone)).subscribe( res => {
       console.log("refreshing orders");
@@ -254,6 +263,7 @@ export class OrdersPage implements OnInit {
         this.flagOrdenes = true;
         this.flagNoOrdenes = false;
       }
+      //Wait to refresh (just a estetic view)
       setTimeout(() => {
         event.target.complete();
       }, 3000);

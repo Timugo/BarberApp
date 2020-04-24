@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 //to handle production and development mode 
 import { environment} from '../../environments/environment';
+
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type':  'application/json'
@@ -22,8 +23,7 @@ export class CurrentOrderService {
   }
   
   validateIfExistsOrder(phoneBarber : number){
-    return this.http.get(URL_API + '/checkBarberOrder' + '?phoneBarber=' + phoneBarber);
-
+     return this.http.get(URL_API + '/checkBarberOrder' + '?phoneBarber=' + phoneBarber);
   }
 
   finishOrder(idOrder: number, comment: string, status: string) {

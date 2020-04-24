@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { CurrentOrderPageRoutingModule } from './current-order-routing.module';
 
 import { CurrentOrderPage } from './current-order.page';
-import { ComponentsModule } from '../../components/components.module';
+import { ComponentsModule } from '../../../components/components.module';
 
 @NgModule({
   imports: [

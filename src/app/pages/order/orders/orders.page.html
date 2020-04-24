@@ -5,12 +5,6 @@
     <ion-buttons slot="start">
       <ion-menu-button menu="first"></ion-menu-button>
     </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-text>
-        <h3>{{conection}}</h3>
-      </ion-text>
-      <ion-toggle color="primary" mode="ios"></ion-toggle>
-    </ion-buttons>
     <ion-title>{{titulo}}</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -18,7 +12,7 @@
 <app-menu></app-menu>
 <!--content of the page id="principal" here and no in router-link -->
 
-<ion-content id="container2" fullscreen="true">
+<ion-content id="container" fullscreen="true">
 
   <!--Personal IOS header  NO CUSTOM-->
   <ion-header collapse="condense" class="ion-no-border">
@@ -37,6 +31,21 @@
     </ion-refresher-content>  
   </ion-refresher>
 
+  <ion-card mode="ios">
+    
+  
+    <ion-card-content>
+      <ion-item lines="none">
+        <ion-icon  *ngIf="conection" style="color: #66bb6a;" name="happy" slot="start"></ion-icon>
+        <ion-icon *ngIf="!conection" style="color: #ef5350;" name="sad" slot="start"></ion-icon>
+        
+          <ion-label *ngIf="conection">Conectado</ion-label>
+          <ion-label *ngIf="!conection">Desconectado</ion-label>
+        
+          <ion-toggle [(ngModel)]="conection" (click)="connect()"   id="toggle" mode="ios" slot="end"></ion-toggle>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
   <ion-list *ngIf="flagOrdenes" #lista  style="background-color: #f9f8f8;" mode="ios" class="animated fadeIn fast"> 
     <ion-item-sliding *ngFor="let orden of ordenes">
       <ion-card mode="ios">
@@ -95,8 +104,8 @@
   </ion-list> -->
   
 
-  <ion-text class="noOrders" *ngIf="flagNoOrdenes" color="primary">
-    <h1> Desliza para buscar Ordenes</h1>
+  <ion-text class="noOrders" *ngIf="!conection" color="danger">
+    <h3> Debes conectarte para recibir ordenes</h3>
   </ion-text>
 
  

@@ -1,0 +1,198 @@
+<ion-header translucent class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button mode="ios" text="Volver" defaultHref="/orders"></ion-back-button>
+    </ion-buttons>
+    <ion-title size="large">
+      Como Recargar
+    </ion-title>
+  </ion-toolbar>
+  
+</ion-header>
+
+<ion-content>
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">
+        Como Recargar
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-segment (ionChange)="changeMethod($event)" mode="ios"value="Nequi" >
+    <ion-segment-button value="Nequi">
+      Nequi
+    </ion-segment-button>
+    <ion-segment-button value="Punto Fisico">
+      Punto Fisico
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-grid>
+   <ion-row> 
+     <ion-col>
+        <ion-text color="primary">
+          <h1>Recargar mediante <b>{{paymentChoice}}</b></h1>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- Tutorial For Nequi Ap -->
+  <ion-grid *ngIf="paymentChoice == 'Nequi (Recomendado)'">
+    <ion-row>
+      <ion-col>
+        <ion-card mode="ios" >
+          <!-- <ion-img src="https://s3.amazonaws.com/nequi-wp-colombia/wp-content/uploads/2018/01/facebook.jpg"></ion-img> -->
+          <ion-card-header>
+            <ion-card-subtitle>Primer Paso</ion-card-subtitle>
+            <ion-card-title>Abre tu App <ion-icon name="phone-portrait-outline"></ion-icon></ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            Abre tu APP Timugo - Barberos y luego dirigete a la seccion de recargar en la parte superior de la barra lateral
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-icon style="font-size: 30px;" name="ellipsis-vertical-outline"></ion-icon>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-card mode="ios">
+          <!-- <ion-img src="https://s3.amazonaws.com/nequi-wp-colombia/wp-content/uploads/2018/01/facebook.jpg"></ion-img> -->
+          <ion-card-header>
+            
+            <ion-card-subtitle>Segundo Paso</ion-card-subtitle>
+            <ion-card-title>Pon el Dinero<ion-icon name="wallet-outline"></ion-icon></ion-card-title>
+          </ion-card-header>
+        
+          <ion-card-content>
+            Pon la cantidad de dinero que quieres recargar a tu saldo actual
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-icon style="font-size: 30px;" name="ellipsis-vertical-outline"></ion-icon>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-card mode="ios">
+          <!-- <ion-img src="https://s3.amazonaws.com/nequi-wp-colombia/wp-content/uploads/2018/01/facebook.jpg"></ion-img> -->
+          <ion-card-header>
+            
+            <ion-card-subtitle>Tercer Paso</ion-card-subtitle>
+            <ion-card-title>Elige el Metodo <ion-icon name="card-outline"></ion-icon></ion-card-title>
+          </ion-card-header>
+        
+          <ion-card-content>
+            Elige Nequi como metodo de recarga y dale Listo.(Recuerda que este metodo de pago es el mas rapido y no debes desplazarte a ningun sitio!!)
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-icon style="font-size: 30px;" name="ellipsis-vertical-outline"></ion-icon>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-card mode="ios">
+          <ion-img src="https://s3.amazonaws.com/nequi-wp-colombia/wp-content/uploads/2018/01/facebook.jpg"></ion-img>
+          <ion-card-header>
+            
+            <ion-card-subtitle>Cuarto Paso</ion-card-subtitle>
+            <ion-card-title>Acepta el Pago <ion-icon name="shield-checkmark-outline"></ion-icon></ion-card-title>
+          </ion-card-header>
+        
+          <ion-card-content>
+            Te llegara una notificacion indicandote el pago, deberas darle en aceptar y listo (**Recuerda que el pago puede demorarse hasta 10 minutos en que lo confirmemos)
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+  <!-- Tutorial for Phisical Point -->
+  <ion-grid *ngIf="paymentChoice == 'Punto Fisico'">
+    <ion-row>
+      <ion-col>
+        <h2>Proximamente podras recargar en un punto fisico.</h2>
+      </ion-col>
+    </ion-row>
+    <!-- <ion-row>
+      <ion-col>
+        <ion-card mode="ios" >
+          <ion-img src="https://www.grupobancolombia.com/wps/wcm/connect/d690896a-f50e-493d-ac19-a0b1490e8670/corresponsal-bancario.jpg?MOD=AJPERES&CACHEID=ROOTWORKSPACE-d690896a-f50e-493d-ac19-a0b1490e8670-mnFzRxP"></ion-img>
+          <ion-card-header>
+            <ion-card-subtitle>Primer Paso</ion-card-subtitle>
+            <ion-card-title>Abre tu App <ion-icon name="phone-portrait-outline"></ion-icon></ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            Abre tu APP Timugo - Barberos y luego dirigete a la seccion de recargar en la parte superior de la barra lateral
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-icon style="font-size: 30px;" name="ellipsis-vertical-outline"></ion-icon>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-card mode="ios">
+          <ion-img src="https://www.grupobancolombia.com/wps/wcm/connect/d690896a-f50e-493d-ac19-a0b1490e8670/corresponsal-bancario.jpg?MOD=AJPERES&CACHEID=ROOTWORKSPACE-d690896a-f50e-493d-ac19-a0b1490e8670-mnFzRxP"></ion-img>
+          <ion-card-header>
+            
+            <ion-card-subtitle>Segundo Paso</ion-card-subtitle>
+            <ion-card-title>Abre tu App <ion-icon name="phone-portrait-outline"></ion-icon></ion-card-title>
+          </ion-card-header>
+        
+          <ion-card-content>
+            Abre tu APP Timugo - Barberos y luego dirigete a la seccion de recargar en la parte superior de la barra lateral
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-icon style="font-size: 30px;" name="ellipsis-vertical-outline"></ion-icon>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-card mode="ios">
+          <ion-img src="https://www.grupobancolombia.com/wps/wcm/connect/d690896a-f50e-493d-ac19-a0b1490e8670/corresponsal-bancario.jpg?MOD=AJPERES&CACHEID=ROOTWORKSPACE-d690896a-f50e-493d-ac19-a0b1490e8670-mnFzRxP"></ion-img>
+          <ion-card-header>
+            
+            <ion-card-subtitle>Tercer Paso</ion-card-subtitle>
+            <ion-card-title>Abre tu App <ion-icon name="phone-portrait-outline"></ion-icon></ion-card-title>
+          </ion-card-header>
+        
+          <ion-card-content>
+            Abre tu APP Timugo - Barberos y luego dirigete a la seccion de recargar en la parte superior de la barra lateral
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row> -->
+
+  </ion-grid>
+  
+</ion-content>

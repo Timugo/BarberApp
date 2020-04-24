@@ -4,6 +4,18 @@
       "name":"Perfil",
       "redirectTo":"/orders"
 
+    },
+    {
+      "icon":"time-outline",
+      "name":"Historial Ordenes",
+      "redirectTo":"/order-history"
+
+    },
+    {
+      "icon":"time-outline",
+      "name":"Historial de Pagos",
+      "redirectTo":"/payments-history"
+
     }
 
 ]

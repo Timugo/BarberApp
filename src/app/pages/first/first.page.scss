@@ -1,0 +1,44 @@
+ion-slide{
+    display: block;
+}
+img{
+    max-height: 400px;
+}
+//Title ins the slider
+h3{
+    font-size: 35px;
+    color: var(--ion-text-color, #000000);
+}
+//Text in the slides
+p{
+    margin-bottom: 40px;
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--ion-color-step-600, #60646b); 
+    b {
+        color: var(--ion-text-color, #000000);
+      }
+}
+//SLide img this feature separe the image from the top 
+.slide-img-padding{
+    padding: 20px;
+}
+ion-slides{
+    //Color of the small balls in the bottom of text
+    --bullet-background : grey;
+    --bulet-background-active: #8890b2;
+}
+//Responsive design for small screens
+@media screen and (max-height : 775px){
+    img{
+        width: 40%;
+    }
+}
+//Section Footer (buttons)
+.btn-primary{
+    height: 60px;
+}
+
+
+
+

@@ -5,6 +5,7 @@ import { UiServiceService } from 'src/app/services/ui-service.service';
 import { Observable } from 'rxjs';
 import { Plugins } from '@capacitor/core';
 import { LoginService } from 'src/app/services/login.service';
+import { OrdersService } from "src/app/services/orders.service";
 import { environment } from 'src/environments/environment';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Platform, AlertController, NavController } from '@ionic/angular';
@@ -21,13 +22,16 @@ export class MenuComponent implements OnInit {
   componentes : Observable<Componente[]>;
   nameBarber : string ="Barber";
   imgBarber : string = "/assets/logo.png";
-  pointsBarber :string = "0";
+  pointsBarber :number = 0;
   barberId: string = "0";
   appVersion :string = "0.0.0";
   barber : Barber;
+  balance : number = 0;
+  colorBalance : string = "success";
   constructor(
               private dataService : UiServiceService,
               private loginService : LoginService,
+              private orderServices : OrdersService,
               private router : Router,
               public platform: Platform,
               public alertController : AlertController,
@@ -46,7 +50,18 @@ export class MenuComponent implements OnInit {
     const user = JSON.parse(ret.value);
     //console.log("haciendo fetch del barbero",user);
     if(user){
-      await this.loginService.getBarberInfo(user.phone).subscribe((res)=>{
+      this.orderServices.getBalance(user.phone).subscribe((res)=>{
+        console.log("res from side menu" + res["content"]);
+        if( res["response"] ==2 ){
+          this.balance = res["content"]["balance"];
+          this.pointsBarber = res["content"]["points"];
+          if(this.balance < 0){
+            this.colorBalance = "danger";
+          }
+
+        }
+      });
+      this.loginService.getBarberInfo(user.phone).subscribe((res)=>{
         this.pointsBarber = res['content']['points']
         this.imgBarber = URL +"/"+ res['content']['urlImg']
         this.barberId = res['content']['id']
@@ -97,8 +112,10 @@ export class MenuComponent implements OnInit {
         }, {
           text: 'Ok',
           handler: () => {
+            //clear the local storage
             this.clear();
-            this.navCtrl.navigateRoot('/home',{animated:true});
+            //redirect to first login page
+            this.navCtrl.navigateRoot('/first',{animated:true});
 
             
           }
@@ -108,6 +125,9 @@ export class MenuComponent implements OnInit {
 
     await alert.present();
     
+  }
+  navigateTo(option : string){  
+    this.router.navigate([`/${option}`]);
   }
   async clear() {
     await Storage.clear();

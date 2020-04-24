@@ -36,7 +36,7 @@ export class LoginService {
               ) { }
   async login(telefono: number) {
     try{
-      await this.http.post(URL + '/loginBarber', {phone: telefono}, httpOptions).subscribe( res => {
+      this.http.post(URL + '/loginBarber', {phone: telefono}, httpOptions).subscribe( res => {
         console.log(res);
         if (res['response'] === 1) {
           //failed login
@@ -81,6 +81,7 @@ export class LoginService {
       value:JSON.stringify(barbero)
     });
   }
+  //clean local storage
   async clear() {
     await Storage.clear();
   }
