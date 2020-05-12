@@ -20,32 +20,26 @@
       refreshingText="Actualizando..">
     </ion-refresher-content>
   </ion-refresher>
-  <ion-card>
+
+  <!-- Order Description Card -->
+  <ion-card mode="ios">
     <ion-card-header>
-      <ion-card-subtitle>{{currentOrder?.nameClient}} </ion-card-subtitle>
+      <ion-card-subtitle>{{currentOrder?.nameClient}}
+        <ion-button  (click)="callClient()" size="small" fill="clear">
+          <ion-icon name="call-outline"></ion-icon>
+          Llamar
+        </ion-button>  
+      </ion-card-subtitle>
+      <!-- Legacy support for address with Old Address -->
       <ion-card-title>{{currentOrder?.address}}</ion-card-title>
+      <!-- New Address Full Format -->
+      <ion-card-title>{{currentOrder?.newAddress.address}}</ion-card-title>
+      <ion-card-subtitle>{{currentOrder?.newAddress.description}} </ion-card-subtitle>
     </ion-card-header>
-  
+
     <ion-card-content>
-
-      
-      
-              
-      <ion-button (click)="copyToCLipboard()" fill="outline">
-        <ion-icon name="call-outline"></ion-icon>
-        {{currentOrder?.phoneClient}}
-      </ion-button>
-      <ion-button  fill="outline">
-        Como llegar 
-        <ion-icon name="navigate-circle-outline"></ion-icon>
-      </ion-button>      
-      <br>
-    
-    
-
-      <ion-card-title>Servicios</ion-card-title>
-      
-      <ion-item *ngFor="let servicio of servicios">
+      <ion-card-title color="primary">Servicios</ion-card-title>  
+      <ion-item *ngFor="let servicio of currentOrder?.services">
         <ion-icon name="caret-forward-outline" slot="start"></ion-icon>
         <ion-label> {{servicio?.nameService}} x {{servicio?.quantity}} </ion-label>
       </ion-item>
@@ -58,20 +52,23 @@
       </ion-item>
       <ion-card-title> {{currentOrder?.price | currency}}</ion-card-title>
       <ion-card-subtitle>Valor Total</ion-card-subtitle>
-
+      <ion-button  fill="outline">
+        Como llegar 
+        <ion-icon name="navigate-circle-outline"></ion-icon>
+      </ion-button>    
     </ion-card-content>
   </ion-card>
-  <ion-footer class="ion-no-border">
-    <ion-grid>
-      <ion-row>
-        <ion-col size="6">
-          <ion-button expand="block" color="danger" type="submit" (click)="cancelCurrentOrder()"> Cancelar </ion-button>
-        </ion-col>
-        <ion-col size="6">
-          <ion-button type="submit" expand="block" (click)="finishCurrentOrder()"> Finalizar </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-footer>
-
+  
 </ion-content>
+<ion-footer class="ion-no-border">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button fill="clear" expand="block" color="medium" type="submit" (click)="cancelCurrentOrder()"> Cancelar </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button type="submit" expand="block" (click)="finishCurrentOrder()"> Finalizar </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>
