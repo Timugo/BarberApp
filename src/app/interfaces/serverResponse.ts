@@ -8,7 +8,13 @@ export interface Response {
     }
 
 }
-
+export interface GetCurrentOrderResponse {
+    response : number,
+    content : {
+        barber : any,
+        order : OrderHistory
+    }
+}
 export interface ResponseOrderHistory {
     response : number;
     content : [OrderHistory]

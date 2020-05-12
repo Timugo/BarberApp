@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 //to handle production and development mode 
 import { environment} from '../../environments/environment';
+/* Interfaces */
+import { GetCurrentOrderResponse } from '../interfaces/serverResponse';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -19,7 +21,7 @@ export class CurrentOrderService {
   constructor(private http: HttpClient) { }
 
   getInfoCurrentOrder(currentOrder: number){
-    return this.http.get(URL_API + '/getInfoTemporalOrder' + '?idOrder=' + currentOrder);
+    return this.http.get<GetCurrentOrderResponse>(URL_API + '/getInfoTemporalOrder' + '?idOrder=' + currentOrder);
   }
   
   validateIfExistsOrder(phoneBarber : number){
