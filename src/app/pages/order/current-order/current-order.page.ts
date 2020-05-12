@@ -208,8 +208,6 @@ export class CurrentOrderPage implements OnInit {
     this.cancelOrder2(user.idBarber);
   }
   cancelOrder2(idBarber : string){
-    console.log("idBarber",idBarber);
-    var idOrder = this.idCurrentOrder;
     this.currentorderService.cancelOrder(parseInt(this.idCurrentOrder),parseInt(idBarber)).subscribe(res => {
       this.mensaje2 = res;
       if ( this.mensaje2.response === 2) {
@@ -224,16 +222,14 @@ export class CurrentOrderPage implements OnInit {
     var idOrder = this.idCurrentOrder;
     var comment = this.formfinishOrder.value.comment || "sin comentario";
     var status = "Finished";
-    console.log(idOrder,comment);
-    this.currentorderService.finishOrder(parseInt(idOrder), comment, status).subscribe( res => {
-      this.mensaje2 = res;
-      if ( this.mensaje2.response === 2 ) {
-        this.Alert('Tu Orden','Tu orden finalizo con exito, acumulaste 50 puntos',1);
-        //clear key Order
-        this.clearCurrentOrder();
-      } 
-      console.log(res);
-    });
+    this.currentorderService.finishOrder(parseInt(idOrder), comment, status)
+      .subscribe( response => {
+        if ( response.response === 2 ) {
+          this.Alert('Tu Orden','Tu orden finalizo con exito, acumulaste 50 puntos',1);
+          //clear key Order
+          this.clearCurrentOrder();
+        } 
+      });
     
   }
   doRefresh(event) {

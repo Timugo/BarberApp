@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 //to handle production and development mode 
 import { environment} from '../../environments/environment';
 /* Interfaces */
-import { GetCurrentOrderResponse } from '../interfaces/serverResponse';
+import { GetCurrentOrderResponse, GenericResponse } from '../interfaces/serverResponse';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -30,9 +30,8 @@ export class CurrentOrderService {
 
   finishOrder(idOrder: number, comment: string, status: string) {
     var id = idOrder.toString();
-    return this.http.post(URL_API + '/finishOrder', {idOrder: id, comment: comment, status: status } ,httpOptions);
+    return this.http.post<GenericResponse>(URL_API + '/finishOrCancellOrder', {idOrder: id, comment: comment, status: status } ,httpOptions);
   }
-
   cancelOrder(idOrder: number, idUser: number) {
     var id = idOrder.toString();
     console.log("aqui",idOrder,idUser);

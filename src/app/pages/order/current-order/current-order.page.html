@@ -31,10 +31,12 @@
         </ion-button>  
       </ion-card-subtitle>
       <!-- Legacy support for address with Old Address -->
-      <ion-card-title>{{currentOrder?.address}}</ion-card-title>
+      <ion-card-title *ngIf="currentOrder?.address">{{currentOrder?.address}}</ion-card-title>
       <!-- New Address Full Format -->
-      <ion-card-title>{{currentOrder?.newAddress.address}}</ion-card-title>
-      <ion-card-subtitle>{{currentOrder?.newAddress.description}} </ion-card-subtitle>
+      <div *ngIf="currentOrder?.newAddress">
+        <ion-card-title>{{currentOrder?.newAddress.address}}</ion-card-title>
+        <ion-card-subtitle>{{currentOrder?.newAddress.description}} </ion-card-subtitle>
+      </div>
     </ion-card-header>
 
     <ion-card-content>

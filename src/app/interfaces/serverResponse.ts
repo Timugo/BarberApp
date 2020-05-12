@@ -8,6 +8,12 @@ export interface Response {
     }
 
 }
+export interface GenericResponse {
+    response : number,
+    content :{
+        message : string
+    }
+}
 export interface GetCurrentOrderResponse {
     response : number,
     content : {
