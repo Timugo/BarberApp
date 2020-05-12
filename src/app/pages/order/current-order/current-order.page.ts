@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { Barber } from 'src/app/interfaces/barber';
 import { ToastController } from '@ionic/angular';
-
+import { OrderHistory } from "../../../interfaces/order";
 const { Storage,Clipboard } = Plugins;
 @Component({
   selector: 'app-current-order',
@@ -17,9 +17,8 @@ export class CurrentOrderPage implements OnInit {
 
   mensaje: any;
   mensaje2: any;
-  currentOrder: any;
+  currentOrder: OrderHistory;
   formfinishOrder: FormGroup;
-  servicios: any[];
   barber:Barber;
   idCurrentOrder :string;
 
@@ -45,8 +44,7 @@ export class CurrentOrderPage implements OnInit {
     const ret = await Storage.get({ key: 'barber' });
     const user = JSON.parse(ret.value);
     if(user){
-      await this.currentorderService.validateIfExistsOrder(parseInt(user.phone)).subscribe(res =>{
-        console.log("respuesta del servidor de si esta en una orden asociado"+ res["response"]);
+      this.currentorderService.validateIfExistsOrder(parseInt(user.phone)).subscribe(res =>{
         if(res['response'] == 1){
           this.navCtrl.navigateRoot('/orders',{animated:true});
         }else{
@@ -60,23 +58,27 @@ export class CurrentOrderPage implements OnInit {
   getInfoOrder(idOrder:number){
     this.idCurrentOrder = idOrder.toString();
     this.currentorderService.getInfoCurrentOrder(idOrder).subscribe(res => {
-      this.mensaje = res;
-      this.servicios = this.mensaje.content.order.services;
-      this.currentOrder = {
-        nameClient: this.mensaje.content.order.nameClient,
-        address: this.mensaje.content.order.address,
-        phoneClient: this.mensaje.content.order.phoneClient,
-        price: this.mensaje.content.order.price, 
-      };
-      
+      console.log(res);
+      /* All info of current order */
+      this.currentOrder = res.content.order;
     });
   }
-  copyToCLipboard(){
-    Clipboard.write({
-      string: this.currentOrder.phoneClient.toString()
-    });
-    this.presentToast("Numero Copiado!");
+  /*
+    This function open a new window to
+    redirect phone app with the client
+    phone
+  */
+  callClient(){
+    window.open('tel:' + this.currentOrder.phoneClient);
+    // Clipboard.write({
+    //   string: this.currentOrder.phoneClient.toString()
+    // });
+    // this.presentToast("Numero Copiado!");
   }
+  /*
+    This function cancel the current order,
+    and show the alert message to barber
+  */
   async cancelCurrentOrder(){
     const ret = await Storage.get({ key: 'barber' });
     const user = JSON.parse(ret.value);
