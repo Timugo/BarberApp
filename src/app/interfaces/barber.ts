@@ -7,6 +7,14 @@ export interface Barber {
     phone:string;
 
 }
+/* Barber from the server */
+export interface BarberResponse {
+    id: number;
+    name: string;
+    lastName: string;
+    city: string;
+    phone:string;
+}
 export interface Componente{
     icon:string;
     name:string;

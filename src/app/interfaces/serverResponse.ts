@@ -14,6 +14,18 @@ export interface GenericResponse {
         message : string
     }
 }
+export interface LoginResponse {
+	response : number,
+	content :{
+		barber : {
+			id : number,
+			name : string,
+			lastName :string,
+			city : string,
+			phone : string
+		}
+  }
+}
 export interface GetCurrentOrderResponse {
     response : number,
     content : {
