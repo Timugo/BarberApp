@@ -96,9 +96,8 @@ export class OrdersPage implements OnInit {
     
   }
   /*
-    This function check if exists
-    named QR prop in the local Storage 
-    if exists, then redirect the 
+    This function check if exists a propertie
+    named QR in the local Storage if exists, then redirect the 
     view to current payment page
   */
   checkPayment(){
