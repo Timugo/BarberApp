@@ -22,8 +22,14 @@ export class SecondNequiPage implements OnInit {
               ) { }
 
   ngOnInit() {
+    /* Check the payment automatic */
+    this.checkPayment();
   }
 
+  /*
+    This function redirect to a page
+    (the redirection cant be undone)
+  */
   rootNavigate(page : string){
     this.navCtrl.navigateRoot(`/${page}`,{animated:true});
   }
@@ -59,6 +65,10 @@ export class SecondNequiPage implements OnInit {
         this.allertsService.dismissLoading();
         this.allertsService.showToast("ERROR DE TRANSACCION INTENTA MAS TARDE","danger",5000);
       }
+    },err=>{
+      console.log(err);
+      this.allertsService.dismissLoading();
+      this.allertsService.showToast("ERROR DE TRANSACCION INTENTA MAS TARDE","danger",5000);
     }); 
   }
   
