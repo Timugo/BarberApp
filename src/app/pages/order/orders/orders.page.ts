@@ -85,14 +85,31 @@ export class OrdersPage implements OnInit {
                 this.menu.enable(true, this.activeMenu);
                 //get current barber info 
                 this.getBarber2(); 
+               
     
               }          
   ngOnInit() {
-    console.log(environment.message);
+     /* Check if barber is Charging money */
+     this.checkPayment();
     //Charge the options to display in the side menu
     this.componentes = this.dataService.getMenuOpts();  
     
   }
+  /*
+    This function check if exists
+    named QR prop in the local Storage 
+    if exists, then redirect the 
+    view to current payment page
+  */
+  checkPayment(){
+    this.datalocalService.getItem('codeQr')
+      .then(response =>{
+        if(response){
+          this.navCtrl.navigateRoot('/second-nequi',{animated:true},);
+        }
+      })
+      .catch(err => console.log(err));
+  }   
   //Check if the barber is currently connected or disconected
   checkBarberConection(barber:Barber){
     this.ordersService.checkConnection(parseInt(barber.phone)).subscribe((response)=>{
