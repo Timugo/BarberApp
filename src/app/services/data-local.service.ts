@@ -11,8 +11,7 @@ export class DataLocalService {
   barbero: Barber;
   codigo: number;
 
-  constructor() {
-  }
+  constructor() {}
 
   async saveInfoBarber(barbero: Barber){
     await Storage.set({
@@ -48,8 +47,6 @@ export class DataLocalService {
     return user;
   }
 
-  
-  
   async saveInfoCurrentOrder(idOrder : number) {
     await Storage.set({
       key: 'currentOrder',

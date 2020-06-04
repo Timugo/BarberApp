@@ -5,6 +5,7 @@ export interface Barber {
     lastName: string;
     city: string;
     phone:string;
+    balance:number;
 
 }
 /* Barber from the server */

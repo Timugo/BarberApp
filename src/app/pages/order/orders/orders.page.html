@@ -9,7 +9,7 @@
   </ion-toolbar>
 </ion-header>
 <!--Menu component in conponents/menu-->
-<app-menu></app-menu>
+<app-menu [balance]="this.barber?.balance"></app-menu>
 <!--content of the page id="principal" here and no in router-link -->
 
 <ion-content id="container" fullscreen="true">
@@ -32,8 +32,6 @@
   </ion-refresher>
 
   <ion-card >
-    
-  
     <ion-card-content>
       <ion-item lines="none">
         <ion-icon  *ngIf="conection" style="color: #66bb6a;" name="happy" slot="start"></ion-icon>
@@ -46,8 +44,9 @@
       </ion-item>
     </ion-card-content>
   </ion-card>
+
   <ion-list *ngIf="flagOrdenes" #lista  style="background-color: #f9f8f8;" class="animated fadeIn fast"> 
-    <ion-item-sliding *ngFor="let orden of ordenes">
+    <ion-item-sliding *ngFor="let orden of ordenes" (click)="tomarOrden(orden.id)">
       <ion-card>
         <ion-item>
           <ion-label>

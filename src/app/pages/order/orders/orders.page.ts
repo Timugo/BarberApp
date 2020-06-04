@@ -23,6 +23,7 @@ import { Plugins } from '@capacitor/core';
 import { environment} from '../../../../environments/environment';
 //Library to Play local audios
 import { Howl } from 'howler';
+import { LoginService } from 'src/app/services/login.service';
 //socket importation
 //import { Socket } from 'ngx-socket-io';
 //Using 
@@ -62,25 +63,17 @@ export class OrdersPage implements OnInit {
 
 
   constructor(
-    // TO hanlge local data
+    
     private datalocalService: DataLocalService,
-    //TO do redirections
+    private loginService : LoginService,
     private router: Router,
-    // Order services to do request to server
     private ordersService: OrdersService,
-    //display allerts
     public alertController: AlertController,
-    //To handle Pages navigations
     private navCtrl: NavController,
-    //TO ddo request to server
     private dataService : UiServiceService,
-    //to display todast
     private toastCtrl : ToastController,
-    //detects whichs is the current platform running
     public platform: Platform,
-    //SIde menu controller
     private menu:MenuController,
-      //private socket : Socket
   ) {
     //Named the current side menu
     this.activeMenu = 'first';
@@ -90,8 +83,8 @@ export class OrdersPage implements OnInit {
     this.getBarber2(); 
   }          
   ngOnInit() {
-     /* Check if barber is Charging money */
-     this.checkPayment();
+    /* Check if barber is Charging money */
+    this.checkPayment();
     //Charge the options to display in the side menu
     this.componentes = this.dataService.getMenuOpts();  
     
@@ -154,10 +147,16 @@ export class OrdersPage implements OnInit {
   }
   //Get barber information from local storage
   async getBarber2() {
-    const ret = await Storage.get({ key: 'barber' });
-    const user = JSON.parse(ret.value);
+    const user : Barber = await this.datalocalService.getBarber();
     //if the barber exists in local storage
     if(user){
+      /* Get Barber Balance  */
+      this.loginService.getBarberInfo(user.phone)
+        .subscribe(res=>{
+          /* Set the propertie balance  */
+          this.barber.balance = res["content"]["balance"];
+          
+        })
       //then we can search new orders
       this.getOrders(user);
       //Check if barber is connected 
@@ -177,7 +176,6 @@ export class OrdersPage implements OnInit {
     }
     this.ordersService.getAvailableOrders(barber.city,parseInt(barber.phone)).subscribe( res => {
       this.mensaje = res;
-      console.log('Fetch de Ordenes',this.mensaje);
       if(this.mensaje.response === 1) {
         this.flagOrdenes = false;
         this.flagNoOrdenes = true;
@@ -231,7 +229,6 @@ export class OrdersPage implements OnInit {
           handler: () => {
             this.datalocalService.saveInfoCurrentOrder(codigoOrden);
             this.ordersService.assingBarberToOrder(codigoOrden,parseInt(this.barber.phone)).subscribe( res => {
-              console.log(res);
               this.mensaje2 = res;
               //if the barber took the order correctly
               if (this.mensaje2.response === 2 ) {
@@ -255,6 +252,7 @@ export class OrdersPage implements OnInit {
     Function to make pull to refresh page
   */
   doRefresh(event) {
+    this.getBarber2(); 
     this.ordersService.getAvailableOrders(this.barber.city,parseInt(this.barber.phone))
       .subscribe( res => {
         this.mensaje = res;
@@ -271,6 +269,7 @@ export class OrdersPage implements OnInit {
           event.target.complete();
         }, 2000);
 
+        
       },
       err =>{
         console.log(err);

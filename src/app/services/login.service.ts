@@ -105,6 +105,7 @@ export class LoginService {
       city : barber.city,
       lastName : barber.lastName,
       name : barber.name,
+      balance : 0,
     }
     /* Save the barber in local storage */
     await Storage.set({
