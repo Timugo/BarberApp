@@ -1,24 +1,25 @@
+/* Angular Dependencies */ 
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { 
+  AlertController,
+  IonList,
+  NavController,
+  ToastController,
+  MenuController
+} from '@ionic/angular';
+import { Platform } from '@ionic/angular';
+import { Router } from '@angular/router';
 //Interfaces to be Used to manage data
 import { Barber, Componente } from '../../../interfaces/barber';
 import { Track } from '../../../interfaces/track';
-//Angular Stuff
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { AlertController, IonList, NavController, ToastController, MenuController } from '@ionic/angular';
-//Hanlding Local data with a service
+import { Observable } from 'rxjs';
+/* Services */
 import { DataLocalService } from '../../../services/data-local.service';
-//manage Routes and redirections
-import { Router } from '@angular/router';
-//Services From server
 import { OrdersService } from '../../../services/orders.service';
+import { UiServiceService } from 'src/app/services/ui-service.service';
 //Capacitor plugins ALlows to use Native Android and ios SDKS 
 import { Plugins } from '@capacitor/core';
-//To handle Data
-import { Observable } from 'rxjs';
-//Display things like modlas toasts etc
-import { UiServiceService } from 'src/app/services/ui-service.service';
-//Platform can detect in which device is ionc running (android, ios web , tablet etc)
-import { Platform } from '@ionic/angular';
-//to handle production and development mode 
+/* Enviroments  */
 import { environment} from '../../../../environments/environment';
 //Library to Play local audios
 import { Howl } from 'howler';
@@ -34,7 +35,9 @@ const { Storage, LocalNotifications} = Plugins;
   styleUrls: ['./orders.page.scss'],
 })
 export class OrdersPage implements OnInit {
+  /* External variables */
   @ViewChild('lista') lista: IonList;
+  /* Page variables */
   //Array of the sounds to play with HOWL library
   playList: Track[] = [
     {
@@ -59,35 +62,33 @@ export class OrdersPage implements OnInit {
 
 
   constructor(
-              // TO hanlge local data
-              private datalocalService: DataLocalService,
-              //TO do redirections
-              private router: Router,
-              // Order services to do request to server
-              private ordersService: OrdersService,
-              //display allerts
-              public alertController: AlertController,
-              //To handle Pages navigations
-              private navCtrl: NavController,
-              //TO ddo request to server
-              private dataService : UiServiceService,
-              //to display todast
-              private toastCtrl : ToastController,
-              //detects whichs is the current platform running
-              public platform: Platform,
-              //SIde menu controller
-              private menu:MenuController,
-               //private socket : Socket
-              ) {
-                //Named the current side menu
-                this.activeMenu = 'first';
-                //Enable side menu to handle it
-                this.menu.enable(true, this.activeMenu);
-                //get current barber info 
-                this.getBarber2(); 
-               
-    
-              }          
+    // TO hanlge local data
+    private datalocalService: DataLocalService,
+    //TO do redirections
+    private router: Router,
+    // Order services to do request to server
+    private ordersService: OrdersService,
+    //display allerts
+    public alertController: AlertController,
+    //To handle Pages navigations
+    private navCtrl: NavController,
+    //TO ddo request to server
+    private dataService : UiServiceService,
+    //to display todast
+    private toastCtrl : ToastController,
+    //detects whichs is the current platform running
+    public platform: Platform,
+    //SIde menu controller
+    private menu:MenuController,
+      //private socket : Socket
+  ) {
+    //Named the current side menu
+    this.activeMenu = 'first';
+    //Enable side menu to handle it
+    this.menu.enable(true, this.activeMenu);
+    //get current barber info 
+    this.getBarber2(); 
+  }          
   ngOnInit() {
      /* Check if barber is Charging money */
      this.checkPayment();
@@ -140,21 +141,6 @@ export class OrdersPage implements OnInit {
   async connectBarber(){
     //First the barber need to listen the socket so he can now recieve new orders if he is active
     //this.socket.connect();
-    //If the barber recieve new order so here we are displaying local notification to anounce it
-    const notifs = await LocalNotifications.schedule({
-      notifications: [
-        {
-          title: "Timugo",
-          body: "Estas Conectado para recibir Pedidos",
-          id: 1,
-          schedule: { at: new Date(Date.now()+ 1000 * 5) },
-          sound:"../../../assets/sounds/alert.mp3",
-          attachments: null,
-          actionTypeId: "",
-          extra: null
-        }
-      ]
-    });
   }
   //Display a toast allert
   async message(mensaje: string) {
@@ -227,7 +213,6 @@ export class OrdersPage implements OnInit {
   }
   //second step to take the order
   async presentAlertConfirm(titulo: string, mensaje: string, codigoOrden: number) {
-
     const alert = await this.alertController.create({
       mode:"ios",
       translucent:false,
@@ -266,23 +251,29 @@ export class OrdersPage implements OnInit {
     });
     await alert.present();
   }  
-  //PUll to refresh implementation
+  /*
+    Function to make pull to refresh page
+  */
   doRefresh(event) {
-    this.ordersService.getAvailableOrders(this.barber.city,parseInt(this.barber.phone)).subscribe( res => {
-      console.log("refreshing orders");
-      this.mensaje = res;
-      if(this.mensaje.response === 1) {
-        this.flagOrdenes = false;
-        this.flagNoOrdenes = true;
-      } else if ( this.mensaje.response === 2 ) {
-        this.ordenes = this.mensaje.content;
-        this.flagOrdenes = true;
-        this.flagNoOrdenes = false;
-      }
-      //Wait to refresh (just a estetic view)
-      setTimeout(() => {
-        event.target.complete();
-      }, 3000);
-    });
+    this.ordersService.getAvailableOrders(this.barber.city,parseInt(this.barber.phone))
+      .subscribe( res => {
+        this.mensaje = res;
+        if(this.mensaje.response === 1) {
+          this.flagOrdenes = false;
+          this.flagNoOrdenes = true;
+        } else if ( this.mensaje.response === 2 ) {
+          this.ordenes = this.mensaje.content;
+          this.flagOrdenes = true;
+          this.flagNoOrdenes = false;
+        }
+        //Wait to refresh (just a estetic view)
+        setTimeout(() => {
+          event.target.complete();
+        }, 2000);
+
+      },
+      err =>{
+        console.log(err);
+      });
   }
 }

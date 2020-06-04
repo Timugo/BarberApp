@@ -1,6 +1,6 @@
 <!--Personal ANDROID header  NO CUSTOM-->
 
-<ion-header translucent="true" mode="ios" class="ion-no-border">
+<ion-header translucent="true" class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button menu="first"></ion-menu-button>
@@ -31,7 +31,7 @@
     </ion-refresher-content>  
   </ion-refresher>
 
-  <ion-card mode="ios">
+  <ion-card >
     
   
     <ion-card-content>
@@ -42,13 +42,13 @@
           <ion-label *ngIf="conection">Conectado</ion-label>
           <ion-label *ngIf="!conection">Desconectado</ion-label>
         
-          <ion-toggle [(ngModel)]="conection" (click)="connect()"   id="toggle" mode="ios" slot="end"></ion-toggle>
+          <ion-toggle [(ngModel)]="conection" (click)="connect()"   id="toggle" slot="end"></ion-toggle>
       </ion-item>
     </ion-card-content>
   </ion-card>
-  <ion-list *ngIf="flagOrdenes" #lista  style="background-color: #f9f8f8;" mode="ios" class="animated fadeIn fast"> 
+  <ion-list *ngIf="flagOrdenes" #lista  style="background-color: #f9f8f8;" class="animated fadeIn fast"> 
     <ion-item-sliding *ngFor="let orden of ordenes">
-      <ion-card mode="ios">
+      <ion-card>
         <ion-item>
           <ion-label>
             <ion-text color="primary">
@@ -87,8 +87,8 @@
     </ion-item-sliding>
     
   </ion-list>
-  <!-- <ion-list mode="ios" *ngIf="flagNoOrdenes">
-    <ion-card mode="ios"  *ngFor="let item of [1,1,1,1]">
+  <!-- <ion-list *ngIf="flagNoOrdenes">
+    <ion-card   *ngFor="let item of [1,1,1,1]">
       <ion-item>
         <ion-label>
           <h3> <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text></h3>

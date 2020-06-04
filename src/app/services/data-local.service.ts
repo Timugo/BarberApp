@@ -56,7 +56,9 @@ export class DataLocalService {
       value: idOrder.toString()
     });
   }
-    //this.storage.set('currentorder', codigo);
+  async clearStorage(){
+    return await Storage.clear();
+  }
   
 
   
