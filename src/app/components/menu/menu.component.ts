@@ -9,6 +9,7 @@ import { OrdersService } from "src/app/services/orders.service";
 import { environment } from 'src/environments/environment';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Platform, AlertController, NavController } from '@ionic/angular';
+import { DataLocalService } from 'src/app/services/data-local.service';
 
 //Native SDK plugins
 const { Toast,Browser,Storage,Device} = Plugins;
@@ -35,7 +36,8 @@ export class MenuComponent implements OnInit {
               private router : Router,
               public platform: Platform,
               public alertController : AlertController,
-              public navCtrl : NavController
+              public navCtrl : NavController,
+              public storageService : DataLocalService
               ) {
                 this.getBarber2();
               }
@@ -48,10 +50,8 @@ export class MenuComponent implements OnInit {
   async getBarber2() {
     const ret = await Storage.get({ key: 'barber' });
     const user = JSON.parse(ret.value);
-    //console.log("haciendo fetch del barbero",user);
     if(user){
       this.orderServices.getBalance(user.phone).subscribe((res)=>{
-        console.log("res from side menu" + res["content"]);
         if( res["response"] ==2 ){
           this.balance = res["content"]["balance"];
           this.pointsBarber = res["content"]["points"];
@@ -74,7 +74,6 @@ export class MenuComponent implements OnInit {
   }
   async getAppVersion(){
     var device = await Device.getInfo();
-    //console.log(device);
     this.appVersion = device.appVersion || "web version"; 
   }
   async contactSupport(){
@@ -98,7 +97,6 @@ export class MenuComponent implements OnInit {
   }
   async logOut() {
     const alert = await this.alertController.create({
-      mode:"ios",
       header: "Cerrar Sesion",
       message: "Realmente deseas salir?",
       buttons: [
@@ -113,11 +111,9 @@ export class MenuComponent implements OnInit {
           text: 'Ok',
           handler: () => {
             //clear the local storage
-            this.clear();
+            this.storageService.clearStorage();
             //redirect to first login page
             this.navCtrl.navigateRoot('/first',{animated:true});
-
-            
           }
         }
       ]
@@ -129,10 +125,4 @@ export class MenuComponent implements OnInit {
   navigateTo(option : string){  
     this.router.navigate([`/${option}`]);
   }
-  async clear() {
-    await Storage.clear();
-  }
-  
-  
-
 }
