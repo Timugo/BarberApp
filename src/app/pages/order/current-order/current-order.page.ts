@@ -1,18 +1,24 @@
+// Angular dependencies
 import { Component, OnInit } from '@angular/core';
-import { CurrentOrderService } from 'src/app/services/current-order.service';
 import { FormGroup, FormBuilder,} from '@angular/forms';
 import { AlertController, NavController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { Plugins } from '@capacitor/core';
-import { Barber } from 'src/app/interfaces/barber';
 import { ToastController } from '@ionic/angular';
+// Services
+import { CurrentOrderService } from 'src/app/services/current-order.service';
+// Interfaces
+import { Barber } from 'src/app/interfaces/barber';
 import { OrderHistory } from "../../../interfaces/order";
+// Capacitor dependencies
+import { Plugins } from '@capacitor/core';
 const { Storage,Clipboard,Device } = Plugins;
+
 @Component({
   selector: 'app-current-order',
   templateUrl: './current-order.page.html',
   styleUrls: ['./current-order.page.scss'],
 })
+
 export class CurrentOrderPage implements OnInit {
 
   mensaje: any;
@@ -22,13 +28,14 @@ export class CurrentOrderPage implements OnInit {
   barber:Barber;
   idCurrentOrder :string;
 
-  constructor(private currentorderService: CurrentOrderService,
-              private fb: FormBuilder,
-              private alertController: AlertController,
-              private router: Router,
-              private navCtrl : NavController,
-              private toastController: ToastController
-              ) { }
+  constructor(
+    private currentorderService: CurrentOrderService,
+    private fb: FormBuilder,
+    private alertController: AlertController,
+    private router: Router,
+    private navCtrl : NavController,
+    private toastController: ToastController
+  ) { }
 
   ngOnInit() {
     this.formfinishOrder = this.fb.group({
@@ -55,6 +62,10 @@ export class CurrentOrderPage implements OnInit {
       });
     }
   }
+  /*
+    Get the info of current order 
+    from server request
+  */
   getInfoOrder(idOrder:number){
     this.idCurrentOrder = idOrder.toString();
     this.currentorderService.getInfoCurrentOrder(idOrder).subscribe(res => {
@@ -125,35 +136,8 @@ export class CurrentOrderPage implements OnInit {
   async clearCurrentOrder() {
     await Storage.remove({ key: 'currentOrder' });
   }
-  async presentToast(message:string) {
-    const toast = await this.toastController.create({
-      message: message,
-      duration: 2000
-    });
-    toast.present();
-  }
-  async Alert(titulo: string, mensaje: string, accion: number) {
-    const alert = await this.alertController.create({
-      header: titulo,
-      // subHeader: 'Subtitle',
-      message: mensaje,
-      // buttons: ['OK']
-      buttons: [
-        {
-          text: 'OK',
-          handler: ( ) => {
-            if (accion == 1) {
-              this.router.navigate(['/orders']);
-            }
-          }
-        }
-      ]
-    });
-    await alert.present();
-  }
   async modalCancelOrder() {
     const alert = await this.alertController.create({
-      mode:"ios",
       header: "Cancelar",
       subHeader:" Realmente deseas cancelar la orden?",
       message: "Recuerda que cancelar ordenes repetidamente resta puntos",
@@ -174,13 +158,10 @@ export class CurrentOrderPage implements OnInit {
         }
       ]
     });
-
     await alert.present();
-    
   }
   async modalFinishOrder() {
     const alert = await this.alertController.create({
-      mode:"ios",
       header: "Terminal la Orden",
       message: "Finaliza la orden solamente si ya recibiste el dinero por parte del cliente",
       buttons: [
@@ -201,15 +182,6 @@ export class CurrentOrderPage implements OnInit {
     });
 
     await alert.present();
-  }
-  async message(mensaje: string) {
-    const toast = await this.toastController.create({
-      message: mensaje,
-      duration: 8000,
-      color: 'primary',
-      position: 'top'
-    });
-    toast.present();
   }
   async cancelOrder() {
     const ret = await Storage.get({ key: 'barber' });
@@ -234,7 +206,7 @@ export class CurrentOrderPage implements OnInit {
     this.currentorderService.finishOrder(parseInt(idOrder), comment, status)
       .subscribe( response => {
         if ( response.response === 2 ) {
-          this.Alert('Tu Orden','Tu orden finalizo con exito, acumulaste 50 puntos',1);
+          this.Alert('Genial!','La orden finalizo con exito',1);
           //clear key Order
           this.clearCurrentOrder();
         } 
@@ -242,11 +214,47 @@ export class CurrentOrderPage implements OnInit {
     
   }
   doRefresh(event) {
-    
     this.checkIfOrderExistsInServer();
     setTimeout(() => {
       console.log('Async operation has ended');
       event.target.complete();
     }, 1000);
+  }
+  /*
+    Extra components function
+  */
+  async presentToast(message:string) {
+
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000
+    });
+    toast.present();
+  }
+  async message(mensaje: string) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 8000,
+      color: 'primary',
+      position: 'top'
+    });
+    toast.present();
+  }
+  async Alert(titulo: string, mensaje: string, accion: number) {
+    const alert = await this.alertController.create({
+      header: titulo,
+      message: mensaje,
+      buttons: [
+        {
+          text: 'OK',
+          handler: ( ) => {
+            if (accion == 1) {
+              this.router.navigate(['/orders']);
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 }
