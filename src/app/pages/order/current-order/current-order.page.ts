@@ -7,7 +7,7 @@ import { Plugins } from '@capacitor/core';
 import { Barber } from 'src/app/interfaces/barber';
 import { ToastController } from '@ionic/angular';
 import { OrderHistory } from "../../../interfaces/order";
-const { Storage,Clipboard } = Plugins;
+const { Storage,Clipboard,Device } = Plugins;
 @Component({
   selector: 'app-current-order',
   templateUrl: './current-order.page.html',
@@ -69,11 +69,20 @@ export class CurrentOrderPage implements OnInit {
     phone
   */
   callClient(){
-    window.open('tel:' + this.currentOrder.phoneClient);
-    // Clipboard.write({
-    //   string: this.currentOrder.phoneClient.toString()
-    // });
-    // this.presentToast("Numero Copiado!");
+    // Check the device information
+    Device.getInfo()
+      .then(info=>{
+        // Android Case
+        if(info.platform == "android"){
+          window.open('tel:' + this.currentOrder.phoneClient);
+        } else if ( info.platform == "ios") {
+          //Ios case
+          Clipboard.write({
+            string: this.currentOrder.phoneClient.toString()
+          });
+          this.presentToast("Numero Copiado!");
+        }
+      })
   }
   /*
     This function cancel the current order,
