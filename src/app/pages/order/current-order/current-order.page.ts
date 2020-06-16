@@ -21,7 +21,6 @@ const { Storage,Clipboard,Device } = Plugins;
 
 export class CurrentOrderPage implements OnInit {
 
-  mensaje: any;
   currentOrder: OrderHistory;
   barber:Barber;
   idCurrentOrder :string;
@@ -39,34 +38,19 @@ export class CurrentOrderPage implements OnInit {
     this.checkIfOrderExistsInServer();
   }
 
-  async checkIfOrderExistsInServer(){
-    const barber: Barber = await this.storageService.getObject("barber");
-    if(barber){
-      this.currentorderService.validateIfExistsOrder(parseInt(barber.phone))
-        .subscribe(res =>{
-          if(res.response == 1){
-            this.navCtrl.navigateRoot('/orders',{animated:true});
-          }else{
-            if(res.response == 2){
-              this.getInfoOrder(res.content["id"]);
-            }
-          }
-        },error=>{
-          this.Alert('Error!','No se pudo traer la informacion de la orden, por favor contacta con soporte.');
-        });
-    }
-  }
   /*
     Get the info of current order 
     from server request
   */
   getInfoOrder(idOrder:number){
     this.idCurrentOrder = idOrder.toString();
-    this.currentorderService.getInfoCurrentOrder(idOrder).subscribe(res => {
-      console.log(res);
-      /* All info of current order */
-      this.currentOrder = res.content.order;
-    });
+    this.currentorderService.getInfoCurrentOrder(idOrder)
+      .subscribe(res => {
+        /* All info of current order */
+        this.currentOrder = res.content.order;
+      },err=>{
+        this.Alert('Error!','No se pudo obtener la informacion de la orden, por favor contacta con soporte.');
+      });
   }
   /*
   *  This function open a new window to
@@ -91,9 +75,49 @@ export class CurrentOrderPage implements OnInit {
         }
       });
   }
+  finishOrder() {
+    var idOrder = this.idCurrentOrder;
+    var status = "Finished";
+    this.currentorderService.finishOrder(parseInt(idOrder), status)
+      .subscribe( response => {
+        if ( response.response === 2 ) {
+          this.Alert('Genial!','La orden finalizo con exito');
+          //clear key Order
+          this.storageService.removeItem('currentOrder');
+        } 
+      },err=>{
+        this.Alert('Error!','La orden no se pudo finalizar, por favor contacta con soporte');
+      });
+    
+  }
+  doRefresh(event : any) {
+    this.checkIfOrderExistsInServer();
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      event.target.complete();
+    }, 1000);
+  }
+  async checkIfOrderExistsInServer(){
+    const barber: Barber = await this.storageService.getObject("barber");
+    if(barber){
+      this.currentorderService.validateIfExistsOrder(parseInt(barber.phone))
+        .subscribe(res =>{
+          if(res.response == 1){
+            this.navCtrl.navigateRoot('/orders',{animated:true});
+          }else{
+            if(res.response == 2){
+              this.getInfoOrder(res.content["id"]);
+            }
+          }
+        },error=>{
+          this.Alert('Error!','No se pudo traer la informacion de la orden, por favor contacta con soporte.');
+        });
+    }
+  }
   /*
-  *  This function cancel the current order,
-  *  and show the alert message to barber
+  *  This function Check the status of current order in the server,
+  *  if order was cancelled by client, then redirecto to orders
+  *  if order is active, then show the Cancel Alert
   */
   async cancelCurrentOrder(){
     const barber: Barber = await this.storageService.getObject("barber");
@@ -111,6 +135,11 @@ export class CurrentOrderPage implements OnInit {
         });
     }
   }
+  /*
+  *  This function Check the status of current order in the server,
+  *  if order was cancelled by client, then redirecto to orders
+  *  if order is active, then show the finish Alert
+  */
   async finishCurrentOrder(){
     const barber: Barber = await this.storageService.getObject("barber");
     if(barber){
@@ -145,28 +174,6 @@ export class CurrentOrderPage implements OnInit {
         this.Alert('Error!','La orden no se pudo cancelar, por favor contacta con soporte');
       });  
     
-  }
-  finishOrder() {
-    var idOrder = this.idCurrentOrder;
-    var status = "Finished";
-    this.currentorderService.finishOrder(parseInt(idOrder), status)
-      .subscribe( response => {
-        if ( response.response === 2 ) {
-          this.Alert('Genial!','La orden finalizo con exito');
-          //clear key Order
-          this.storageService.removeItem('currentOrder');
-        } 
-      },err=>{
-        this.Alert('Error!','La orden no se pudo finalizar, por favor contacta con soporte');
-      });
-    
-  }
-  doRefresh(event : any) {
-    this.checkIfOrderExistsInServer();
-    setTimeout(() => {
-      console.log('Async operation has ended');
-      event.target.complete();
-    }, 1000);
   }
   /*
     Extra components function
