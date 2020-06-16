@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 //services
-import { OrdersService } from 'src/app/services/orders.service';
+import { OrdersService } from 'src/app/pages/order/Services/orders.service';
 import { DataLocalService } from 'src/app/services/data-local.service';
 import { UiServiceService } from 'src/app/services/ui-service.service';
 //interfaces

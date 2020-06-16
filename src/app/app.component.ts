@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, ToastController } from '@ionic/angular';
-import { CurrentOrderService } from './services/current-order.service';
+import { OrdersService } from './pages/order/Services/orders.service';
 import { Plugins,PushNotification,PushNotificationToken,PushNotificationActionPerformed } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
@@ -29,7 +29,7 @@ export class AppComponent {
   barber: Barber; //The current barber un the session -import a interface
   constructor(
               private navCtrl : NavController,
-              private currentorderService: CurrentOrderService,
+              private currentorderService: OrdersService,
               private toastCtrl : ToastController,
               public platform: Platform,
               private http: HttpClient,

@@ -14,7 +14,7 @@ import { Barber, Componente } from '../../../interfaces/barber';
 import { Observable } from 'rxjs';
 /* Services */
 import { DataLocalService } from '../../../services/data-local.service';
-import { OrdersService } from '../../../services/orders.service';
+import { OrdersService } from '../Services/orders.service';
 import { UiServiceService } from 'src/app/services/ui-service.service';
 //Capacitor plugins 
 import { Plugins } from '@capacitor/core';
