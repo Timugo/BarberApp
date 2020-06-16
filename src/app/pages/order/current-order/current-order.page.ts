@@ -8,7 +8,7 @@ import { ToastController } from '@ionic/angular';
 import { CurrentOrderService } from 'src/app/services/current-order.service';
 // Interfaces
 import { Barber } from 'src/app/interfaces/barber';
-import { OrderHistory } from "../../../interfaces/order";
+import { OrderHistory } from "../interfaces/order";
 // Capacitor dependencies
 import { Plugins } from '@capacitor/core';
 const { Storage,Clipboard,Device } = Plugins;

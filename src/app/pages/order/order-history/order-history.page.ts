@@ -4,7 +4,7 @@ import { OrdersService } from 'src/app/services/orders.service';
 import { DataLocalService } from 'src/app/services/data-local.service';
 import { UiServiceService } from 'src/app/services/ui-service.service';
 //interfaces
-import { OrderHistory } from 'src/app/interfaces/order';
+import { OrderHistory } from 'src/app/pages/order/interfaces/order';
 import { Barber } from 'src/app/interfaces/barber';
 
 @Component({

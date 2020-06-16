@@ -11,24 +11,22 @@ import { Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
 //Interfaces to be Used to manage data
 import { Barber, Componente } from '../../../interfaces/barber';
-import { Track } from '../../../interfaces/track';
 import { Observable } from 'rxjs';
 /* Services */
 import { DataLocalService } from '../../../services/data-local.service';
 import { OrdersService } from '../../../services/orders.service';
 import { UiServiceService } from 'src/app/services/ui-service.service';
-//Capacitor plugins ALlows to use Native Android and ios SDKS 
+//Capacitor plugins 
 import { Plugins } from '@capacitor/core';
 /* Enviroments  */
 import { environment} from '../../../../environments/environment';
 //Library to Play local audios
-import { Howl } from 'howler';
 import { LoginService } from 'src/app/services/login.service';
 //socket importation
 //import { Socket } from 'ngx-socket-io';
 //Using 
-const { Storage, LocalNotifications} = Plugins;
-///local notification configuration
+const { LocalNotifications} = Plugins;
+
 
 @Component({
   selector: 'app-orders',
@@ -40,13 +38,6 @@ export class OrdersPage implements OnInit {
   @ViewChild('lista') lista: IonList;
   /* Page variables */
   //Array of the sounds to play with HOWL library
-  playList: Track[] = [
-    {
-      name: 'hi',
-      path : '../../../assets/sounds/alert.mp3'
-    }
-  ];
-  player : Howl = null; // Audio Library
   activeMenu :string; //To hide the side menu
   ordenes: Observable<any>; //Array of orders (needs to import an interface)
   flagOrdenes: boolean; //if exists orders
@@ -59,11 +50,8 @@ export class OrdersPage implements OnInit {
   nameBarber:string="none"
   componentes: Observable<Componente[]>; //listo of components in the menu
   conection : boolean ;
-  
-
 
   constructor(
-    
     private datalocalService: DataLocalService,
     private loginService : LoginService,
     private router: Router,
@@ -87,7 +75,6 @@ export class OrdersPage implements OnInit {
     this.checkPayment();
     //Charge the options to display in the side menu
     this.componentes = this.dataService.getMenuOpts();  
-    
   }
   /*
     This function check if exists a propertie
@@ -121,14 +108,6 @@ export class OrdersPage implements OnInit {
       //reload Order after connect or disconnect
       this.getOrders(this.barber)
     });
-  }
-  //PLay sounds
-  startTrack(src : String){
-    console.log("Estoy reproduciendo la musica");
-    this.player = new Howl({
-      src: src
-    });
-    this.player.play();
   }
   //Coonection of the barber to recieve new orders 
   async connectBarber(){
@@ -212,7 +191,6 @@ export class OrdersPage implements OnInit {
   //second step to take the order
   async presentAlertConfirm(titulo: string, mensaje: string, codigoOrden: number) {
     const alert = await this.alertController.create({
-      mode:"ios",
       translucent:false,
       header: titulo,
       message: mensaje,
@@ -251,7 +229,7 @@ export class OrdersPage implements OnInit {
   /*
     Function to make pull to refresh page
   */
-  doRefresh(event) {
+  doRefresh(event : any) {
     this.getBarber2(); 
     this.ordersService.getAvailableOrders(this.barber.city,parseInt(this.barber.phone))
       .subscribe( res => {
