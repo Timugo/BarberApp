@@ -157,14 +157,13 @@ export class OrdersPage implements OnInit {
   getOrders(){
     this.ordersService.getAvailableOrders(this.barber.city,parseInt(this.barber.phone))
       .subscribe( res => {
-       
+        // Bad Request
         if(res.response === 1) {
           this.flagOrdenes = false;
           this.flagNoOrdenes = true;
         } else if ( res.response === 2 ) {
+          //Set the orders with the server content
           this.ordenes = res.content;
-          //this.ordenes = res.content;
-          
           this.flagOrdenes = true;
           this.flagNoOrdenes = false;
         }
@@ -236,7 +235,6 @@ export class OrdersPage implements OnInit {
     Function to make pull to refresh page
   */
   doRefresh(event : any) {
-    this.getBarber2(); 
     setTimeout(() => {
       this.getOrders();
       event.target.complete();

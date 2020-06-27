@@ -60,12 +60,18 @@
               <h2>Direccion</h2>
             </ion-text>
             <ion-label>
-              <h4><ion-icon color="primary" name="home-outline" slot="start"></ion-icon> {{orden.address}}</h4>
+              <!-- New Address -->
+              <div *ngIf="orden.newAddress">
+                <h4><ion-icon color="primary" name="home-outline" slot="start"></ion-icon> {{orden.newAddress.address}}</h4>
+              </div>
+              <!-- Old Retrocompatiblity Address -->
+              <div *ngIf="orden.address">
+                <h4><ion-icon color="primary" name="home-outline" slot="start"></ion-icon> {{orden.address}}</h4>
+              </div>
             </ion-label>
             <ion-text color="primary">
               <h2>Servicios</h2>
             </ion-text>
-           
             <ion-label *ngFor="let servicio of orden.services">
               <h4><ion-icon color="primary" slot="start" name="checkmark-outline"></ion-icon> {{servicio.nameService}} x {{servicio.quantity}} </h4>
             </ion-label>
