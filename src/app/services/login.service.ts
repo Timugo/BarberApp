@@ -5,14 +5,15 @@ import { AlertController, NavController } from '@ionic/angular';
 /* Enviroment object */
 import { environment } from 'src/environments/environment';
 /* Interfaces */
-import { Barber, DeviceInfo, BarberResponse } from '../interfaces/barber';
+import { DeviceInfo, BarberResponse, Barber } from '../interfaces/barber';
 /* Capacitor Plugins */
 import { Plugins } from '@capacitor/core';
 /* Services */
 import { UiServiceService } from './ui-service.service';
 import { GenericResponse, LoginResponse } from '../interfaces/serverResponse';
+import { DataLocalService } from "../services/data-local.service";
 /* Declaration of used plugins */
-const { Storage,Device } = Plugins;
+const { Device } = Plugins;
 /* Headers of https request */
 const httpOptions = {
   headers: new HttpHeaders({
@@ -35,6 +36,7 @@ export class LoginService {
     public alertController: AlertController,
     private navCtrl: NavController,
     private uiService :UiServiceService,
+    private storageService : DataLocalService,
   ) { }
 
   /*
@@ -53,7 +55,7 @@ export class LoginService {
           /* Clean the current phone token */
           this.token = null;
           /* Clean the local storage */
-          this.clear();
+          this.storageService.clearStorage();
           /* Login success */
         } else if (res.response===2) {
             /* 
@@ -76,8 +78,15 @@ export class LoginService {
                 // save barber and all properties in the interface
                 this.barber = res.content.barber
                 /* save the information of the barber Async function */
-                this.saveInfoBarber(this.barber);
-                /* Save the Device info in the local storage */
+                let barber : Barber = {
+                  idBarber : this.barber.id,
+                  phone : this.barber.phone,
+                  city : this.barber.city,
+                  lastName : this.barber.lastName,
+                  name : this.barber.name,
+                  balance : 0,
+                };
+                this.storageService.saveObject("barber",barber);
                 this.saveDeviceInfo(); 
                 /* Redirect to Home page */
                 this.navCtrl.navigateRoot(`/${pageToNavigate}`,{animated:true});     
@@ -93,35 +102,12 @@ export class LoginService {
     return this.http.get<GenericResponse>(URL + '/checkBarberOrder' + '?phoneBarber=' + phoneBarber);
   }
   getBarberInfo(phone : string){
-    return this.http.get(URL + "/getBarberByPhone?phoneBarber="+phone);
-  }
-  
-  /* Storage Management */
-  async saveInfoBarber(barber: BarberResponse){
-    /* FIlter only neccesary data */
-    let barbero : Barber = {
-      idBarber : barber.id,
-      phone : barber.phone,
-      city : barber.city,
-      lastName : barber.lastName,
-      name : barber.name,
-      balance : 0,
-    }
-    /* Save the barber in local storage */
-    await Storage.set({
-      key: 'barber',
-      value:JSON.stringify(barbero)
-    });
-  }
-  //clean local storage
-  async clear() {
-    await Storage.clear();
-  }
+    return this.http.get<GenericResponse>(URL + "/getBarberByPhone?phoneBarber="+phone);
+  } 
   async saveDeviceInfo(){
     var device = await Device.getInfo();
     device['phone']=this.barber.phone;
-    this.http.put<GenericResponse>(URL + '/saveBarberDeviceInfo', device, httpOptions).subscribe((res)=>{
-    });
+    this.http.put<GenericResponse>(URL + '/saveBarberDeviceInfo', device, httpOptions);
   }
    
 
