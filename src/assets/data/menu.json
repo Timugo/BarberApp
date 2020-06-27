@@ -1,20 +1,9 @@
 [
-    {
-      "icon":"person-outline",
-      "name":"Perfil",
-      "redirectTo":"/orders"
-
-    },
+    
     {
       "icon":"clipboard-outline",
       "name":"Historial Ordenes",
       "redirectTo":"/order-history"
-
-    },
-    {
-      "icon":"card-outline",
-      "name":"Historial de Pagos",
-      "redirectTo":"/payments-history"
 
     }
 

@@ -1,6 +1,6 @@
-import { Barber } from './../../interfaces/barber';
+import { Barber } from '../../../interfaces/barber';
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from '../../services/login.service';
+import { LoginService } from '../../../services/login.service';
 import { AlertController, MenuController, Platform } from '@ionic/angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Plugins } from '@capacitor/core';

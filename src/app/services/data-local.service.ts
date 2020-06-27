@@ -8,15 +8,12 @@ const { Storage } = Plugins;
 })
 export class DataLocalService {
 
-  barbero: Barber;
-  codigo: number;
-
   constructor() {}
 
-  async saveInfoBarber(barbero: Barber){
+  async saveObject(key: string,object : any){
     await Storage.set({
-      key: 'barber',
-      value:JSON.stringify(barbero)
+      key,
+      value:JSON.stringify(object)
     });
   }
   async saveCity(city:string) {

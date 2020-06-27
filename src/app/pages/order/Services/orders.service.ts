@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ResponseOrderHistory, GetCurrentOrderResponse, GenericResponse } from "src/app/interfaces/serverResponse";
+import { GetOrdersRepository } from '../interfaces/responses';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -20,7 +21,7 @@ export class OrdersService {
   constructor(private http: HttpClient) { }
 
   getAvailableOrders(city: string,phone : number) {
-    return this.http.get(URL + '/getAvailableOrdersByCity' + '?city=' + city+ '&phoneBarber=' + phone);
+    return this.http.get<GetOrdersRepository>(URL + '/getAvailableOrdersByCity' + '?city=' + city+ '&phoneBarber=' + phone);
   }
   getOrdersHistory(phoneBarber:number){
     return this.http.get<ResponseOrderHistory>(URL +'/getHistoryOrdersBarber'+'?phoneBarber='+phoneBarber);
@@ -35,11 +36,7 @@ export class OrdersService {
     return this.http.put(URL + '/connectOrDisconnectBarber', { phoneBarber: phoneBarber}, httpOptions)
   }
   assingBarberToOrder(idOrder: number, phoneBarber: number){
-    console.log('orden', idOrder, 'barbero', phoneBarber);
-    var order = idOrder.toString();
-    var barber = phoneBarber.toString(); 
-    console.log(URL);
-    return this.http.put(URL + '/assignBarberToOrder', {idOrder: idOrder, phoneBarber: phoneBarber}, httpOptions);
+    return this.http.put<GenericResponse>(URL + '/assignBarberToOrder', {idOrder: idOrder, phoneBarber: phoneBarber}, httpOptions);
   }
 
   getInfoCurrentOrder(currentOrder: number){
