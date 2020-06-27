@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Registro</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content>
+  
+  <form #form="ngForm" (submit)="onSubmit(form)">
+  <ion-grid >
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="stacked">Nombre</ion-label>
+          <ion-input name="name" ngModel></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="stacked">Apellido</ion-label>
+          <ion-input name="lastName" ngModel></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="stacked">Documento</ion-label>
+          <ion-input name="document" ngModel></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="stacked">Email</ion-label>
+          <ion-input name="email"ngModel></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label position="stacked">Celular</ion-label>
+          <ion-input name="phone" ngModel></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button type="submit" expand="block" fill="solid" >
+          Registrarme
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  </form>
+</ion-content>
+<ion-footer>

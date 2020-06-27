@@ -5,7 +5,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: 'home',
-    loadChildren: () => import('./pages/home/home.module').then( m => m.HomePageModule)
+    loadChildren: () => import('./pages/login/home/home.module').then( m => m.HomePageModule)
   },
   {
     path: 'orders',
@@ -33,7 +33,7 @@ const routes: Routes = [
   },
   {
     path: 'first',
-    loadChildren: () => import('./pages/first/first.module').then( m => m.FirstPageModule)
+    loadChildren: () => import('./pages/login/first/first.module').then( m => m.FirstPageModule)
   },
   {
     path: 'first-nequi',
@@ -50,6 +50,10 @@ const routes: Routes = [
   {
     path: 'order-history',
     loadChildren: () => import('./pages/order/order-history/order-history.module').then( m => m.OrderHistoryPageModule)
+  },
+  {
+    path: 'register',
+    loadChildren: () => import('./pages/login/register/register.module').then( m => m.RegisterPageModule)
   },
   
 ];
