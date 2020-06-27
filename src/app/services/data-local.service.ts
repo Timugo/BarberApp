@@ -37,15 +37,23 @@ export class DataLocalService {
     const { value } = await Storage.get({ key: item });
     return value;
   }
-  async removeItem(item:string) {
-    await Storage.remove({ key: item });
-  }
   
   async getBarber() {
     const ret = await Storage.get({ key: 'barber' });
     const user = JSON.parse(ret.value);
     return user;
   }
+
+  async getObject(key:string) {
+		const ret:any = await Storage.get({ key });
+		const object = JSON.parse(ret.value);
+		return object;
+  }
+  
+  //delete an item from the local storage and return true of error
+	async removeItem(key:string) {
+		await Storage.remove({ key })
+	}
 
   async saveInfoCurrentOrder(idOrder : number) {
     await Storage.set({

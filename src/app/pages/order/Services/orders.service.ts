@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { ResponseOrderHistory } from "src/app/interfaces/serverResponse";
+import { ResponseOrderHistory, GetCurrentOrderResponse, GenericResponse } from "src/app/interfaces/serverResponse";
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -40,6 +40,25 @@ export class OrdersService {
     var barber = phoneBarber.toString(); 
     console.log(URL);
     return this.http.put(URL + '/assignBarberToOrder', {idOrder: idOrder, phoneBarber: phoneBarber}, httpOptions);
+  }
+
+  getInfoCurrentOrder(currentOrder: number){
+    return this.http.get<GetCurrentOrderResponse>(URL + '/getInfoTemporalOrder' + '?idOrder=' + currentOrder);
+  }
+  
+  validateIfExistsOrder(phoneBarber : number){
+     return this.http.get<GenericResponse>(URL + '/checkBarberOrder' + '?phoneBarber=' + phoneBarber);
+  }
+
+  finishOrder(idOrder: number, status: string) {
+    var id = idOrder.toString();
+    return this.http.post<GenericResponse>(URL + '/finishOrCancellOrder', {idOrder: id, status: status } ,httpOptions);
+  }
+
+  cancelOrder(idOrder: number, idUser: number) {
+    var id = idOrder.toString();
+    console.log("aqui",idOrder,idUser);
+    return this.http.put<GenericResponse>(URL + '/cancelOrderBarber', {idOrder: id, idUser: idUser }, httpOptions );
   }
 
 }

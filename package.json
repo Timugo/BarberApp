@@ -27,7 +27,6 @@
     "@ionic/storage": "^2.2.0",
     "@types/googlemaps": "^3.39.7",
     "core-js": "^2.5.4",
-    "howler": "^2.2.0",
     "ngx-socket-io": "^3.0.1",
     "rxjs": "^6.5.5",
     "serve": "^11.3.2",

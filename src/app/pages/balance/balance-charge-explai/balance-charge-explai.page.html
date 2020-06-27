@@ -1,7 +1,7 @@
 <ion-header translucent class="ion-no-border">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button mode="ios" text="Volver" defaultHref="/orders"></ion-back-button>
+      <ion-back-button  text="Volver" defaultHref="/orders"></ion-back-button>
     </ion-buttons>
     <ion-title size="large">
       Como Recargar
@@ -19,7 +19,7 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-segment (ionChange)="changeMethod($event)" mode="ios"value="Nequi" >
+  <ion-segment (ionChange)="changeMethod($event)" value="Nequi" >
     <ion-segment-button value="Nequi">
       Nequi
     </ion-segment-button>
@@ -41,7 +41,7 @@
   <ion-grid *ngIf="paymentChoice == 'Nequi (Recomendado)'">
     <ion-row>
       <ion-col>
-        <ion-card mode="ios" >
+        <ion-card  >
           <!-- <ion-img src="https://s3.amazonaws.com/nequi-wp-colombia/wp-content/uploads/2018/01/facebook.jpg"></ion-img> -->
           <ion-card-header>
             <ion-card-subtitle>Primer Paso</ion-card-subtitle>
@@ -62,7 +62,7 @@
 
     <ion-row>
       <ion-col>
-        <ion-card mode="ios">
+        <ion-card >
           <!-- <ion-img src="https://s3.amazonaws.com/nequi-wp-colombia/wp-content/uploads/2018/01/facebook.jpg"></ion-img> -->
           <ion-card-header>
             
@@ -85,7 +85,7 @@
 
     <ion-row>
       <ion-col>
-        <ion-card mode="ios">
+        <ion-card >
           <!-- <ion-img src="https://s3.amazonaws.com/nequi-wp-colombia/wp-content/uploads/2018/01/facebook.jpg"></ion-img> -->
           <ion-card-header>
             
@@ -108,7 +108,7 @@
 
     <ion-row>
       <ion-col>
-        <ion-card mode="ios">
+        <ion-card >
           <ion-img src="https://s3.amazonaws.com/nequi-wp-colombia/wp-content/uploads/2018/01/facebook.jpg"></ion-img>
           <ion-card-header>
             
@@ -134,7 +134,7 @@
     </ion-row>
     <!-- <ion-row>
       <ion-col>
-        <ion-card mode="ios" >
+        <ion-card  >
           <ion-img src="https://www.grupobancolombia.com/wps/wcm/connect/d690896a-f50e-493d-ac19-a0b1490e8670/corresponsal-bancario.jpg?MOD=AJPERES&CACHEID=ROOTWORKSPACE-d690896a-f50e-493d-ac19-a0b1490e8670-mnFzRxP"></ion-img>
           <ion-card-header>
             <ion-card-subtitle>Primer Paso</ion-card-subtitle>
@@ -155,7 +155,7 @@
 
     <ion-row>
       <ion-col>
-        <ion-card mode="ios">
+        <ion-card >
           <ion-img src="https://www.grupobancolombia.com/wps/wcm/connect/d690896a-f50e-493d-ac19-a0b1490e8670/corresponsal-bancario.jpg?MOD=AJPERES&CACHEID=ROOTWORKSPACE-d690896a-f50e-493d-ac19-a0b1490e8670-mnFzRxP"></ion-img>
           <ion-card-header>
             
@@ -178,7 +178,7 @@
 
     <ion-row>
       <ion-col>
-        <ion-card mode="ios">
+        <ion-card >
           <ion-img src="https://www.grupobancolombia.com/wps/wcm/connect/d690896a-f50e-493d-ac19-a0b1490e8670/corresponsal-bancario.jpg?MOD=AJPERES&CACHEID=ROOTWORKSPACE-d690896a-f50e-493d-ac19-a0b1490e8670-mnFzRxP"></ion-img>
           <ion-card-header>
             

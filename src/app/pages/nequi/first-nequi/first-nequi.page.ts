@@ -111,7 +111,6 @@ export class FirstNequiPage implements OnInit {
   async presentAlert() {
     const alert = await this.alertCtrl.create({
       header: 'Recuerda',
-      mode:"ios",
       message: 'La recarga minima es de $20.000',
       buttons: ['OK']
     });
