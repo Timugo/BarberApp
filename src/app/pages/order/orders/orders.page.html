@@ -34,7 +34,7 @@
   <ion-card >
     <ion-card-content>
       <ion-item lines="none">
-        <ion-icon  *ngIf="conection" style="color: #66bb6a;" name="happy" slot="start"></ion-icon>
+        <ion-icon *ngIf="conection" style="color: #66bb6a;" name="happy" slot="start"></ion-icon>
         <ion-icon *ngIf="!conection" style="color: #ef5350;" name="sad" slot="start"></ion-icon>
         
           <ion-label *ngIf="conection">Conectado</ion-label>
